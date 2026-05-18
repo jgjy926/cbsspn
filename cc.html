@@ -26,6 +26,11 @@
         .glass-card:hover {
             border-color: rgba(99, 102, 241, 0.35); /* Indigo glow highlight */
         }
+        /* Card selector active highlight state */
+        .active-filter-card {
+            border-color: #6366f1 !important;
+            box-shadow: 0 0 12px rgba(99, 102, 241, 0.25);
+        }
         /* Gradient overlays based on screenshot palette */
         .grad-purple-glow {
             background: linear-gradient(135deg, #0e131f 0%, #151c2e 50%, #2e1e4f 100%);
@@ -112,7 +117,19 @@
 
         <!-- Dashboard Content -->
         <section id="tabContent-dashboard" class="space-y-8">
-            <!-- KPIs Header Cards Grid -->
+            <!-- Universal Dashboard Filtering Deck -->
+            <div class="space-y-3">
+                <div class="flex justify-between items-center">
+                    <h4 class="text-xs font-bold text-indigo-400 uppercase tracking-widest"><i class="fa-solid fa-filter mr-1.5"></i>Filter Workspace View by Card</h4>
+                    <span id="activeFilterBadge" class="text-[9px] bg-indigo-950 text-indigo-300 border border-indigo-850 px-2 py-0.5 rounded-md font-bold uppercase">All Cards Active</span>
+                </div>
+                <!-- Grid of selectable filter cards -->
+                <div id="dashboardFilterDeck" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+
+            <!-- KPIs Header Cards Grid (Styled exactly like the screenshot indicator cards with RM currency) -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
                     <div class="flex justify-between items-start">
@@ -164,11 +181,25 @@
                         <canvas id="cashbackTrendChart"></canvas>
                     </div>
                 </div>
-                <!-- Category Share Column -->
-                <div class="glass-card rounded-2xl p-6">
-                    <h4 class="text-sm font-bold uppercase tracking-wider text-slate-200 mb-6">Category Yield Distribution</h4>
-                    <div class="h-[280px] w-full relative flex items-center justify-center">
-                        <canvas id="categoryPieChart"></canvas>
+                <!-- Dual Category/Card Share Column -->
+                <div class="glass-card rounded-2xl p-6 space-y-6">
+                    <div class="flex justify-between items-center border-b border-slate-900 pb-2">
+                        <h4 class="text-sm font-bold uppercase tracking-wider text-slate-200">Yield Breakdown</h4>
+                        <span class="text-[10px] text-indigo-400 font-mono">Dual Analytics</span>
+                    </div>
+                    <div class="grid grid-cols-1 gap-6">
+                        <div class="space-y-2">
+                            <span class="text-[9px] uppercase tracking-widest text-slate-500 font-bold block text-center">Cashback Contribution by Card</span>
+                            <div class="h-[140px] relative flex items-center justify-center">
+                                <canvas id="cardCashbackPieChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="space-y-2 border-t border-slate-900 pt-4">
+                            <span class="text-[9px] uppercase tracking-widest text-slate-500 font-bold block text-center">Category Yield Distribution</span>
+                            <div class="h-[140px] relative flex items-center justify-center">
+                                <canvas id="categoryPieChart"></canvas>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -223,11 +254,16 @@
                 <p class="text-xs text-slate-500 mb-6">Optimized workflow designed for speedy manual insertions on mobile and touch devices.</p>
 
                 <form id="quickLogForm" onsubmit="handleTransactionSubmit(event)" class="space-y-4">
-                    <!-- Date Picker with calendar selector -->
+                    <!-- Date Picker with secure, click-friendly calendar wrapper (Fixes programmatic showPicker in iframe) -->
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5" for="txDate">Transaction Date</label>
-                        <input type="date" id="txDate" required onchange="calculateRealtimeCashback()"
-                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-sm">
+                        <div class="relative cursor-pointer">
+                            <input type="date" id="txDate" required onchange="calculateRealtimeCashback()"
+                                class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-4 pr-10 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-sm cursor-pointer block [color-scheme:dark]">
+                            <div class="absolute right-3.5 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none">
+                                <i class="fa-solid fa-calendar-days text-sm"></i>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Card Picker -->
@@ -261,7 +297,7 @@
                         <span class="text-[10px] text-slate-500 block mt-1">Configure these categories inside the Settings Panel anytime!</span>
                     </div>
 
-                    <!-- Amount and Description Grid -->
+                    <!-- Amount and Description Grid (Description/Vendor now optional) -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5" for="txAmount">Transaction Amount</label>
@@ -272,8 +308,8 @@
                             </div>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5" for="txDescription">Description / Vendor</label>
-                            <input type="text" id="txDescription" required placeholder="e.g. Starbucks, Uber"
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5" for="txDescription">Description / Vendor <span class="text-[9px] text-slate-500 font-normal lowercase">(optional)</span></label>
+                            <input type="text" id="txDescription" placeholder="e.g. Starbucks, Uber (optional)"
                                 class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-sm">
                         </div>
                     </div>
@@ -348,11 +384,16 @@
                 </h4>
                 
                 <form id="sspnForm" onsubmit="handleSspnSubmit(event)" class="space-y-4">
-                    <!-- Date -->
+                    <!-- Date (Date Picker with secure calendar selector trigger wrapper) -->
                     <div>
                         <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1" for="sspnDate">Transaction Date</label>
-                        <input type="date" id="sspnDate" required
-                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-xs">
+                        <div class="relative cursor-pointer">
+                            <input type="date" id="sspnDate" required
+                                class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-4 pr-10 py-2 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-xs cursor-pointer block [color-scheme:dark]">
+                            <div class="absolute right-3.5 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none">
+                                <i class="fa-solid fa-calendar-days text-xs"></i>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Dynamic Channels -->
@@ -433,7 +474,7 @@
                 </form>
             </div>
 
-            <!-- SSPN Mini Card Deck on Mobile viewports (Ledger representation with Edit button) -->
+            <!-- SSPN Mini Card Deck on Mobile viewports -->
             <div class="space-y-4">
                 <div class="flex justify-between items-center">
                     <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest">Active Ledger Entries</h4>
@@ -577,7 +618,7 @@
                                 <p class="text-[9px] text-slate-500 mt-1">If "Min Tx" is set, transactions with amount less than this setting earn no cashback. If Milestone Spend is reached, Milestone rate takes precedence.</p>
                             </div>
 
-                            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl shadow-lg transition duration-200 text-xs uppercase tracking-widest mt-6">
+                            <button type="submit" class="w-full bg-[#6366f1] hover:bg-[#5053df] text-white font-bold py-3 rounded-xl shadow-lg transition duration-200 text-xs uppercase tracking-widest mt-6">
                                 Create Credit Card Template
                             </button>
                         </form>
@@ -613,7 +654,7 @@
                     </div>
 
                     <div class="border-t border-slate-800/80 pt-4 flex gap-3">
-                        <button onclick="handleCloudSync('push')" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 px-4 rounded-xl text-xs uppercase tracking-wider transition shadow">
+                        <button onclick="handleCloudSync('push')" class="flex-1 bg-[#6366f1] hover:bg-[#5053df] text-white font-bold py-2.5 px-4 rounded-xl text-xs uppercase tracking-wider transition shadow">
                             <i class="fa-solid fa-cloud-arrow-up mr-1.5"></i>Push to Cloud
                         </button>
                         <button onclick="handleCloudSync('pull')" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-2.5 px-4 rounded-xl text-xs uppercase tracking-wider transition border border-slate-700">
@@ -630,7 +671,7 @@
                     </div>
 
                     <div class="space-y-4">
-                        <h4 class="text-xs font-bold text-indigo-400 uppercase tracking-widest border-b border-slate-800 pb-2">Step-by-Step Configuration</h4>
+                        <h4 class="text-xs font-bold text-[#6366f1] uppercase tracking-widest border-b border-slate-800 pb-2">Step-by-Step Configuration</h4>
                         <ol class="list-decimal list-inside space-y-2 text-xs text-slate-400">
                             <li>Sign in to your <strong class="text-slate-200">Koofr</strong> dashboard, head to <strong class="text-slate-200">Preferences → Security</strong>, and generate an <strong class="text-slate-200">App Password</strong> for WebDAV.</li>
                             <li>Sign up at <strong class="text-slate-200">Cloudflare Workers</strong> and instantiate a new Worker.</li>
@@ -756,7 +797,7 @@ async function handleRequest(request) {
                     <div class="flex gap-2">
                         <input type="text" id="addDeviceInput" placeholder="e.g. Primary Mobile, Laptop"
                             class="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
-                        <button onclick="addConfigItem('device')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-3 py-1.5 rounded-lg text-xs tracking-wider transition">Add</button>
+                        <button onclick="addConfigItem('device')" class="bg-[#6366f1] hover:bg-[#5053df] text-white font-bold px-3 py-1.5 rounded-lg text-xs tracking-wider transition">Add</button>
                     </div>
                     <div id="deviceConfigList" class="flex flex-wrap gap-1.5 p-2 bg-slate-950/50 rounded-xl border border-slate-900 max-h-[90px] overflow-y-auto"></div>
                 </div>
@@ -767,7 +808,7 @@ async function handleRequest(request) {
                     <div class="flex gap-2">
                         <input type="text" id="addMethodInput" placeholder="e.g. Debit Card, E-Wallet"
                             class="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
-                        <button onclick="addConfigItem('method')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-3 py-1.5 rounded-lg text-xs tracking-wider transition">Add</button>
+                        <button onclick="addConfigItem('method')" class="bg-[#6366f1] hover:bg-[#5053df] text-white font-bold px-3 py-1.5 rounded-lg text-xs tracking-wider transition">Add</button>
                     </div>
                     <div id="methodConfigList" class="flex flex-wrap gap-1.5 p-2 bg-slate-950/50 rounded-xl border border-slate-900 max-h-[90px] overflow-y-auto"></div>
                 </div>
@@ -778,7 +819,7 @@ async function handleRequest(request) {
                     <div class="flex gap-2">
                         <input type="text" id="newCategoryInput" placeholder="e.g. ☕ Cafe & Treats"
                             class="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
-                        <button onclick="handleAddInternalCategory()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-3 py-1.5 rounded-lg text-xs tracking-wider transition">Add</button>
+                        <button onclick="handleAddInternalCategory()" class="bg-[#6366f1] hover:bg-[#5053df] text-white font-bold px-3 py-1.5 rounded-lg text-xs tracking-wider transition">Add</button>
                     </div>
                     <div id="categoryConfigList" class="flex flex-wrap gap-1.5 p-2 bg-slate-950/50 rounded-xl border border-slate-900 max-h-[95px] overflow-y-auto"></div>
                 </div>
@@ -800,6 +841,9 @@ async function handleRequest(request) {
         let cards = [];
         let internalCategories = [];
         let sspnRecords = [];
+
+        // Global selected dashboard card filter state
+        let activeDashboardCardId = "all";
 
         // Track editing SSPN entry
         let editingSspnId = null;
@@ -923,6 +967,7 @@ async function handleRequest(request) {
         // Chart declarations
         let trendChartInstance = null;
         let pieChartInstance = null;
+        let cardPieChartInstance = null;
 
         window.onload = function() {
             setPresetDateInputs();
@@ -934,6 +979,7 @@ async function handleRequest(request) {
             window.addEventListener('resize', () => {
                 if (trendChartInstance) trendChartInstance.resize();
                 if (pieChartInstance) pieChartInstance.resize();
+                if (cardPieChartInstance) cardPieChartInstance.resize();
             });
         };
 
@@ -1024,7 +1070,7 @@ async function handleRequest(request) {
                 
                 if (id === targetTabId) {
                     element.classList.remove('hidden');
-                    button.className = "px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 bg-indigo-600 text-white shadow-md";
+                    button.className = "px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 bg-[#6366f1] text-white shadow-md";
                 } else {
                     element.classList.add('hidden');
                     button.className = "px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-slate-100";
@@ -1953,6 +1999,10 @@ async function handleRequest(request) {
             }
 
             cards = cards.filter(c => c.id !== cardId);
+            // Fallback dashboard filter if currently selected card is deleted
+            if (activeDashboardCardId === cardId) {
+                activeDashboardCardId = "all";
+            }
             saveStateToLocalStorage();
             refreshLedgerAndCalculations();
             showToast("Credit card design destroyed", "fa-trash-can", "text-slate-400");
@@ -1966,7 +2016,9 @@ async function handleRequest(request) {
             const category = document.getElementById('txCategory').value;
             const internalCategory = document.getElementById('txInternalCategory').value;
             const amount = parseFloat(document.getElementById('txAmount').value);
-            const description = document.getElementById('txDescription').value;
+            const rawDescription = document.getElementById('txDescription').value.trim();
+            // Handle fallback description if none provided by the user
+            const description = rawDescription || "General Purchase";
 
             const selectedCard = cards.find(c => c.id === cardId);
             if (!selectedCard) {
@@ -2010,6 +2062,10 @@ async function handleRequest(request) {
             repopulateInternalCategoryLogDropdown();
             renderCardsVault();
             repopulateFormDropdowns();
+            
+            // Re-render dashboard selector card deck
+            renderDashboardFilterDeck();
+
             renderTransactionLedgerTable();
             recalculateKPICounters();
             
@@ -2051,6 +2107,7 @@ async function handleRequest(request) {
         function handleTxCardChange() {
             const cardId = document.getElementById('txCard').value;
             const categorySelect = document.getElementById('txCategory');
+            if (!categorySelect) return;
             categorySelect.innerHTML = '';
 
             const card = cards.find(c => c.id === cardId);
@@ -2073,6 +2130,71 @@ async function handleRequest(request) {
             document.getElementById('selectedCardRuleLabel').innerText = card.useTiers 
                 ? `${card.tiers.length} Brackets` 
                 : `${card.boosters.length} Custom Multipliers`;
+        }
+
+        /* Render dynamic dashboard filter card deck */
+        function renderDashboardFilterDeck() {
+            const deck = document.getElementById('dashboardFilterDeck');
+            if (!deck) return;
+            deck.innerHTML = '';
+
+            // Master "All Cards" filtering block
+            const allBtn = document.createElement('button');
+            allBtn.type = 'button';
+            allBtn.onclick = () => selectDashboardFilterCard('all');
+            allBtn.className = `glass-card text-left p-3.5 rounded-xl transition duration-150 relative overflow-hidden flex flex-col justify-between border min-h-[85px] ${activeDashboardCardId === 'all' ? 'active-filter-card bg-indigo-950/20' : 'border-slate-800'}`;
+            allBtn.innerHTML = `
+                <div class="flex justify-between items-start w-full">
+                    <span class="text-[9px] uppercase tracking-widest text-slate-400 font-bold">Workspace View</span>
+                    <i class="fa-solid fa-globe text-indigo-400 text-xs"></i>
+                </div>
+                <h5 class="text-xs font-black text-white mt-2">All Cards Combined</h5>
+            `;
+            deck.appendChild(allBtn);
+
+            // Print individual configurable cards
+            cards.forEach(card => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.onclick = () => selectDashboardFilterCard(card.id);
+                btn.className = `glass-card text-left p-3.5 rounded-xl transition duration-150 relative overflow-hidden flex flex-col justify-between border min-h-[85px] ${activeDashboardCardId === card.id ? 'active-filter-card bg-indigo-950/20' : 'border-slate-800'}`;
+                
+                let themeIcon = 'fa-credit-card text-indigo-400';
+                if (card.theme === 'grad-emerald') themeIcon = 'fa-credit-card text-emerald-400';
+                else if (card.theme === 'grad-purple-glow') themeIcon = 'fa-credit-card text-purple-400';
+
+                btn.innerHTML = `
+                    <div class="flex justify-between items-start w-full">
+                        <span class="text-[9px] uppercase tracking-widest text-slate-400 font-bold truncate max-w-[85px]">${card.name}</span>
+                        <i class="fa-solid ${themeIcon} text-xs"></i>
+                    </div>
+                    <div class="mt-2 flex justify-between items-end w-full">
+                        <span class="text-[9px] text-slate-500 font-medium">Reset: ${card.cycleType}</span>
+                        <span class="text-[10px] font-bold text-indigo-400">${card.baseRate}% Base</span>
+                    </div>
+                `;
+                deck.appendChild(btn);
+            });
+        }
+
+        function selectDashboardFilterCard(cardId) {
+            activeDashboardCardId = cardId;
+            
+            const badge = document.getElementById('activeFilterBadge');
+            if (cardId === 'all') {
+                badge.innerText = "All Cards Active";
+                badge.className = "text-[9px] bg-indigo-950 text-indigo-300 border border-indigo-850 px-2 py-0.5 rounded-md font-bold uppercase";
+            } else {
+                const matched = cards.find(c => c.id === cardId);
+                badge.innerText = matched ? `${matched.name} Filtered` : "Filtered";
+                badge.className = "text-[9px] bg-emerald-950 text-emerald-300 border border-emerald-850 px-2 py-0.5 rounded-md font-bold uppercase";
+            }
+
+            // Instantly sync visual highlighted state, KPIs, ledger, and charts
+            renderDashboardFilterDeck();
+            renderTransactionLedgerTable();
+            recalculateKPICounters();
+            setTimeout(refreshCharts, 50);
         }
 
         function renderCardsVault() {
@@ -2211,18 +2333,23 @@ async function handleRequest(request) {
             const tableBody = document.getElementById('transactionLedgerBody');
             tableBody.innerHTML = '';
 
-            if (transactions.length === 0) {
+            // Filter ledger rows by selected card
+            const filteredLedgerList = activeDashboardCardId === 'all' 
+                ? [...transactions] 
+                : transactions.filter(t => t.cardId === activeDashboardCardId);
+
+            if (filteredLedgerList.length === 0) {
                 tableBody.innerHTML = `
                     <tr>
                         <td colspan="8" class="text-center py-10 text-slate-500 italic">
-                            No ledger recordings registered.
+                            No ledger recordings registered for this card view.
                         </td>
                     </tr>
                 `;
                 return;
             }
 
-            const sorted = [...transactions].sort((a,b) => new Date(b.date) - new Date(a.date));
+            const sorted = filteredLedgerList.sort((a,b) => new Date(b.date) - new Date(a.date));
 
             sorted.forEach(t => {
                 const tr = document.createElement('tr');
@@ -2251,7 +2378,7 @@ async function handleRequest(request) {
                     <td class="py-4 px-4 text-right font-semibold text-slate-100">RM ${t.amount.toFixed(2)}</td>
                     <td class="py-4 px-4 text-right font-bold text-emerald-400">${cashbackDisplay}</td>
                     <td class="py-4 px-4 text-center">
-                        <button onclick="deleteTransaction('${t.id}')" class="text-slate-500 hover:text-rose-400 p-1 rounded transition">
+                        <button onclick="deleteTransaction('${t.id}')" class="text-slate-500 hover:text-rose-400 p-1 rounded transition" title="Delete Ledger Record">
                             <i class="fa-solid fa-trash-can"></i>
                         </button>
                     </td>
@@ -2268,8 +2395,13 @@ async function handleRequest(request) {
         }
 
         function recalculateKPICounters() {
-            const totalCashback = transactions.reduce((sum, t) => sum + parseFloat(t.cashback), 0);
-            const totalSpend = transactions.reduce((sum, t) => sum + parseFloat(t.amount), 0);
+            // Apply dashboard card filter metrics
+            const targetTxs = activeDashboardCardId === 'all' 
+                ? [...transactions] 
+                : transactions.filter(t => t.cardId === activeDashboardCardId);
+
+            const totalCashback = targetTxs.reduce((sum, t) => sum + parseFloat(t.cashback), 0);
+            const totalSpend = targetTxs.reduce((sum, t) => sum + parseFloat(t.amount), 0);
             const averageRate = totalSpend > 0 ? (totalCashback / totalSpend) * 100 : 0;
 
             document.getElementById('kpiTotalCashback').innerText = `RM ${totalCashback.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
@@ -2281,11 +2413,18 @@ async function handleRequest(request) {
         function refreshCharts() {
             const trendCtx = document.getElementById('cashbackTrendChart');
             const pieCtx = document.getElementById('categoryPieChart');
+            const cardPieCtx = document.getElementById('cardCashbackPieChart');
             
-            if (!trendCtx || !pieCtx) return;
+            if (!trendCtx || !pieCtx || !cardPieCtx) return;
 
+            // Apply global filtering
+            const targetTxs = activeDashboardCardId === 'all'
+                ? [...transactions]
+                : transactions.filter(t => t.cardId === activeDashboardCardId);
+
+            // Process Trend Data grouped by month
             const monthlyBuckets = {};
-            transactions.forEach(t => {
+            targetTxs.forEach(t => {
                 const date = new Date(t.date);
                 if (isNaN(date.getTime())) return;
                 const label = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
@@ -2342,8 +2481,9 @@ async function handleRequest(request) {
                 }
             });
 
+            // Process Category Pie Data
             const categoryBuckets = {};
-            transactions.forEach(t => {
+            targetTxs.forEach(t => {
                 const cat = t.category || "General Spend";
                 if (!categoryBuckets[cat]) categoryBuckets[cat] = 0;
                 categoryBuckets[cat] += parseFloat(t.cashback);
@@ -2375,7 +2515,47 @@ async function handleRequest(request) {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 9 } } }
+                        legend: { position: 'right', labels: { color: '#94a3b8', font: { size: 8 } } }
+                    }
+                }
+            });
+
+            // Process Card Cashback Contribution Pie Data
+            const cardBuckets = {};
+            targetTxs.forEach(t => {
+                const cardRef = cards.find(c => c.id === t.cardId);
+                const cardLabel = cardRef ? cardRef.name : "Deleted Card";
+                if (!cardBuckets[cardLabel]) cardBuckets[cardLabel] = 0;
+                cardBuckets[cardLabel] += parseFloat(t.cashback);
+            });
+
+            const cardLabels = Object.keys(cardBuckets);
+            const cardData = cardLabels.map(l => cardBuckets[l]);
+
+            if (cardPieChartInstance) cardPieChartInstance.destroy();
+
+            cardPieChartInstance = new Chart(cardPieCtx.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: cardLabels,
+                    datasets: [{
+                        data: cardData,
+                        backgroundColor: [
+                            'rgba(124, 58, 237, 0.8)', // Purple
+                            'rgba(99, 102, 241, 0.8)',  // Indigo
+                            'rgba(16, 185, 129, 0.8)',  // Emerald
+                            'rgba(244, 63, 94, 0.8)',   // Rose
+                            'rgba(234, 179, 8, 0.8)'    // Amber
+                        ],
+                        borderColor: '#080b11',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { color: '#94a3b8', font: { size: 8 } } }
                     }
                 }
             });
@@ -2383,12 +2563,17 @@ async function handleRequest(request) {
 
         function exportToExcel() {
             try {
-                if (transactions.length === 0) {
+                // Apply dashboard card filter metrics to export data list
+                const exportTxs = activeDashboardCardId === 'all' 
+                    ? [...transactions] 
+                    : transactions.filter(t => t.cardId === activeDashboardCardId);
+
+                if (exportTxs.length === 0) {
                     showToast("No data to export", "fa-triangle-exclamation", "text-amber-500");
                     return;
                 }
 
-                const sheetRows = transactions.map(t => {
+                const sheetRows = exportTxs.map(t => {
                     const card = cards.find(c => c.id === t.cardId) || { name: 'Deleted Card' };
                     return {
                         'Date': t.date,
@@ -2406,7 +2591,7 @@ async function handleRequest(request) {
 
                 const ws = XLSX.utils.json_to_sheet(sheetRows);
                 const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, "Cashback Ledger");
+                XLSX.utils.book_append_sheet(wb, ws, "Filtered Cashback Ledger");
 
                 XLSX.writeFile(wb, "cashback_wealth_audit_export.xlsx");
                 showToast("Excel spreadsheet generated successfully!", "fa-file-excel", "text-emerald-400");
@@ -2423,7 +2608,7 @@ async function handleRequest(request) {
                 return;
             }
 
-            // Auto-correct missing protocol (extremely common root cause for "Failed to fetch")
+            // Auto-correct missing protocol
             if (!/^https?:\/\//i.test(baseUrl)) {
                 baseUrl = 'https://' + baseUrl;
             }
