@@ -77,10 +77,13 @@
             <div class="flex flex-wrap items-center justify-center gap-3">
                 <nav class="flex flex-wrap items-center justify-center gap-1.5 bg-[#0f1422] p-1.5 rounded-xl border border-slate-800/90">
                     <button onclick="switchTab('dashboard')" id="tabBtn-dashboard" class="px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 bg-indigo-600 text-white shadow-md">
-                        <i class="fa-solid fa-chart-pie mr-1.5"></i>Dashboard
+                        <i class="fa-solid fa-chart-pie mr-1.5"></i>CC Dashboard
                     </button>
                     <button onclick="switchTab('quickLog')" id="tabBtn-quickLog" class="px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-slate-100">
                         <i class="fa-solid fa-bolt mr-1.5"></i>Quick Log
+                    </button>
+                    <button onclick="switchTab('sspnDashboard')" id="tabBtn-sspnDashboard" class="px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-slate-100">
+                        <i class="fa-solid fa-chart-line mr-1.5"></i>SSPN Dashboard
                     </button>
                     <button onclick="switchTab('sspn')" id="tabBtn-sspn" class="px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-slate-100">
                         <i class="fa-solid fa-graduation-cap mr-1.5"></i>SSPN Wallet
@@ -97,7 +100,7 @@
                     <button onclick="handleCloudSync('push')" title="Sync workspace to Koofr cloud" class="px-3.5 py-2 rounded-lg text-xs font-bold bg-[#6366f1] hover:bg-[#5053df] text-white shadow-md flex items-center gap-1 transition-all duration-155">
                         <i class="fa-solid fa-cloud-arrow-up"></i>Sync
                     </button>
-                    <button onclick="handleCloudSync('pull')" title="Load database from Koofr cloud" class="px-3.5 py-2 rounded-lg text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center gap-1 transition-all duration-155">
+                    <button onclick="handleCloudSync('pull')" title="Load database from Koofr cloud" class="px-3.5 py-2 rounded-lg text-xs font-bold bg-slate-800 hover:bg-slate-705 text-slate-200 border border-slate-700 flex items-center gap-1 transition-all duration-155">
                         <i class="fa-solid fa-cloud-arrow-down"></i>Load
                     </button>
                 </div>
@@ -108,16 +111,38 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 mt-8">
         <div id="toastContainer" class="fixed top-24 right-6 z-50 flex flex-col gap-2"></div>
 
-        <!-- Dashboard Section -->
-        <section id="tabContent-dashboard" class="space-y-8">
-            <div class="space-y-3 bg-[#0d1222]/40 p-4 rounded-2xl border border-slate-800/60">
-                <div class="flex justify-between items-center">
-                    <h4 class="text-xs font-bold text-indigo-400 uppercase tracking-widest"><i class="fa-solid fa-clock mr-1.5"></i>Historical Cycle Timeline</h4>
-                    <span id="activePeriodBadge" class="text-[9px] bg-indigo-950 text-indigo-300 border border-indigo-850 px-2 py-0.5 rounded-md font-bold uppercase">All Time view</span>
+        <!-- Universal Calendar Filter Panel -->
+        <div class="mb-8 space-y-3 bg-[#0d1222]/40 p-5 rounded-2xl border border-slate-800/60">
+            <div class="flex flex-col md:flex-row justify-between md:items-center gap-4">
+                <div>
+                    <h4 class="text-xs font-bold text-indigo-400 uppercase tracking-widest"><i class="fa-solid fa-calendar mr-1.5"></i>Global Calendar Range Filters</h4>
+                    <p class="text-[10px] text-slate-400 mt-1">Isolate credit card cashback yields and SSPN investments by specific posting years and months</p>
                 </div>
-                <div id="timelinePeriodContainer" class="flex flex-wrap gap-2 pt-1.5"></div>
+                <div class="flex gap-2.5">
+                    <select id="filterYear" onchange="refreshLedgerAndCalculations()" class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 cursor-pointer font-semibold min-w-[120px]">
+                        <option value="ALL">All Years</option>
+                    </select>
+                    <select id="filterMonth" onchange="refreshLedgerAndCalculations()" class="bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 cursor-pointer font-semibold min-w-[140px]">
+                        <option value="ALL">All Months</option>
+                        <option value="01">January</option>
+                        <option value="02">February</option>
+                        <option value="03">March</option>
+                        <option value="04">April</option>
+                        <option value="05">May</option>
+                        <option value="06">June</option>
+                        <option value="07">July</option>
+                        <option value="08">August</option>
+                        <option value="09">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                </div>
             </div>
+        </div>
 
+        <!-- CC Dashboard Section -->
+        <section id="tabContent-dashboard" class="space-y-8">
             <div class="space-y-3">
                 <div class="flex justify-between items-center">
                     <h4 class="text-xs font-bold text-indigo-400 uppercase tracking-widest"><i class="fa-solid fa-filter mr-1.5"></i>Filter Workspace View by Card</h4>
@@ -126,11 +151,12 @@
                 <div id="dashboardFilterDeck" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3"></div>
             </div>
 
+            <!-- KPI Cards Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
                     <div class="flex justify-between items-start">
                         <div>
-                            <span class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Total Cashback Accumulated</span>
+                            <span class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Accumulated Cashback</span>
                             <h3 class="text-3xl font-black text-indigo-400 mt-1" id="kpiTotalCashback">RM 0.00</h3>
                         </div>
                         <div class="p-3 bg-indigo-500/10 text-indigo-400 rounded-xl"><i class="fa-solid fa-piggy-bank text-xl"></i></div>
@@ -148,7 +174,7 @@
                 <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
                     <div class="flex justify-between items-start">
                         <div>
-                            <span class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Average Effective Rate</span>
+                            <span class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Effective Reward Yield</span>
                             <h3 class="text-3xl font-black text-emerald-400 mt-1" id="kpiAverageRate">0.00%</h3>
                         </div>
                         <div class="p-3 bg-emerald-500/10 text-emerald-400 rounded-xl"><i class="fa-solid fa-percent text-xl"></i></div>
@@ -165,13 +191,15 @@
                 </div>
             </div>
 
+            <!-- Cycle Spend Progress Area -->
             <div class="space-y-3">
                 <h4 class="text-xs font-bold text-indigo-400 uppercase tracking-widest">
-                    <i class="fa-solid fa-clock-rotate-left mr-1.5"></i>Active Billing Cycles & Rewards Progress
+                    <i class="fa-solid fa-clock-rotate-left mr-1.5"></i>Active Cycle Spend Progress & Cashback Caps (with breakdown)
                 </h4>
                 <div id="billingCycleProgressContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
             </div>
 
+            <!-- Charts & Visual Layout -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div class="glass-card rounded-2xl p-6 lg:col-span-2">
                     <div class="flex justify-between items-center mb-6">
@@ -204,11 +232,12 @@
                 </div>
             </div>
 
+            <!-- CC Transactions Table -->
             <div class="glass-card rounded-2xl p-6">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div>
                         <h4 class="text-sm font-bold uppercase tracking-wider text-slate-200">Processed Ledger Audit</h4>
-                        <p class="text-[10px] text-slate-500 mt-0.5">Filter cards and periods above to isolate records</p>
+                        <p class="text-[10px] text-slate-500 mt-0.5">Calculated based on real-time minimum spends and tiered constraints.</p>
                     </div>
                     <div class="flex gap-2 w-full sm:w-auto">
                         <button onclick="exportToExcel()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-xs font-semibold tracking-wider transition flex items-center justify-center gap-1.5 w-full sm:w-auto shadow-md shadow-indigo-500/10">
@@ -218,7 +247,7 @@
                 </div>
 
                 <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-slate-300">
+                    <table class="w-full text-left text-xs text-slate-300 border-collapse">
                         <thead class="bg-slate-900/60 uppercase text-[10px] tracking-widest text-slate-500 font-bold border-b border-slate-800">
                             <tr>
                                 <th class="py-3.5 px-4">Date</th>
@@ -228,6 +257,7 @@
                                 <th class="py-3.5 px-4">Description</th>
                                 <th class="py-3.5 px-4 text-right">Amount</th>
                                 <th class="py-3.5 px-4 text-right">Calculated Cashback</th>
+                                <th class="py-3.5 px-4 text-center">Eligibility / Status</th>
                                 <th class="py-3.5 px-4 text-center">Actions</th>
                             </tr>
                         </thead>
@@ -242,7 +272,7 @@
             <div class="glass-card rounded-2xl p-6">
                 <div class="flex justify-between items-center mb-2">
                     <h3 class="text-base font-bold text-slate-200 uppercase tracking-wider"><i class="fa-solid fa-bolt text-indigo-400 mr-2"></i>Quick Ledger Log</h3>
-                    <button type="button" onclick="openSettingsModal()" class="h-8 w-8 bg-slate-900 border border-slate-800 hover:border-[#6366f1] text-[#6366f1] rounded-lg flex items-center justify-center transition duration-200">
+                    <button type="button" onclick="switchTab('cardManager')" class="h-8 w-8 bg-slate-900 border border-slate-800 hover:border-[#6366f1] text-[#6366f1] rounded-lg flex items-center justify-center transition duration-200">
                         <i class="fa-solid fa-sliders text-xs"></i>
                     </button>
                 </div>
@@ -275,7 +305,6 @@
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5" for="txInternalCategory">Internal Personal Category</label>
                         <select id="txInternalCategory" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 cursor-pointer"></select>
-                        <span class="text-[10px] text-slate-500 block mt-1">Configure these categories inside the Settings Panel anytime!</span>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -294,7 +323,7 @@
 
                     <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-4 flex justify-between items-center">
                         <div class="space-y-1">
-                            <span class="text-[9px] uppercase tracking-widest text-indigo-400 font-bold block">Estimated Yield</span>
+                            <span class="text-[9px] uppercase tracking-widest text-indigo-400 font-bold block">Estimated Cycle Yield preview</span>
                             <span class="text-xs text-slate-400" id="cashbackPreviewRate">0.00% Applied</span>
                             <div class="text-[9px] text-slate-500 max-w-[200px]" id="cashbackPreviewCycleMsg">...</div>
                         </div>
@@ -310,98 +339,243 @@
             </div>
         </section>
 
-        <!-- SSPN Section (Completed missing implementation template) -->
-        <section id="tabContent-sspn" class="hidden space-y-8 max-w-lg mx-auto">
-            <div class="flex justify-between items-center bg-[#0d1222] p-4 rounded-2xl border border-slate-800/80">
-                <div>
-                    <h3 class="text-base font-bold text-slate-200 uppercase tracking-wider">SSPN Savings Hub</h3>
-                    <p class="text-[10px] text-slate-500 mt-0.5">Custom configurations for dynamic devices & channels</p>
-                </div>
-                <button onclick="openSettingsModal()" class="h-9 w-9 bg-slate-900 border border-slate-800 hover:border-[#6366f1] text-[#6366f1] rounded-xl flex items-center justify-center transition duration-200">
-                    <i class="fa-solid fa-sliders text-sm"></i>
-                </button>
-            </div>
-
-            <div class="grid grid-cols-1 gap-3">
-                <div class="glass-card rounded-2xl p-4 flex justify-between items-center relative overflow-hidden">
+        <!-- SSPN Dashboard Tab Section -->
+        <section id="tabContent-sspnDashboard" class="hidden space-y-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="glass-card rounded-2xl p-5 flex justify-between items-center relative overflow-hidden">
                     <div>
-                        <span class="text-[9px] uppercase tracking-widest text-slate-400 font-bold">Total SSPN Net Savings</span>
-                        <h3 class="text-2xl font-black text-emerald-400 mt-0.5" id="sspnKpiNet">RM 0.00</h3>
+                        <span class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Total SSPN Net Savings</span>
+                        <h3 class="text-3xl font-black text-emerald-400 mt-1" id="sspnDashboardKpiNet">RM 0.00</h3>
                     </div>
-                    <div class="p-2.5 bg-emerald-500/10 text-emerald-400 rounded-lg"><i class="fa-solid fa-vault"></i></div>
+                    <div class="p-3.5 bg-emerald-500/10 text-emerald-400 rounded-xl"><i class="fa-solid fa-vault text-2xl"></i></div>
                 </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="glass-card rounded-2xl p-4 flex justify-between items-center relative overflow-hidden">
-                        <div>
-                            <span class="text-[9px] uppercase tracking-widest text-slate-400 font-bold">Total Additions</span>
-                            <h3 class="text-lg font-black text-indigo-400 mt-0.5" id="sspnKpiDeposits">RM 0.00</h3>
-                        </div>
-                        <div class="p-2 bg-indigo-500/10 text-indigo-400 rounded-lg"><i class="fa-solid fa-arrow-down-long text-xs"></i></div>
+                <div class="glass-card rounded-2xl p-5 flex justify-between items-center relative overflow-hidden">
+                    <div>
+                        <span class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Total Deposits / Additions</span>
+                        <h3 class="text-3xl font-black text-indigo-400 mt-1" id="sspnDashboardKpiDeposits">RM 0.00</h3>
                     </div>
-                    <div class="glass-card rounded-2xl p-4 flex justify-between items-center relative overflow-hidden">
-                        <div>
-                            <span class="text-[9px] uppercase tracking-widest text-slate-400 font-bold">Withdrawals</span>
-                            <h3 class="text-lg font-black text-rose-400 mt-0.5" id="sspnKpiWithdrawals">RM 0.00</h3>
-                        </div>
-                        <div class="p-2 bg-rose-500/10 text-rose-400 rounded-lg"><i class="fa-solid fa-arrow-up-long text-xs"></i></div>
+                    <div class="p-3 bg-indigo-500/10 text-indigo-400 rounded-xl"><i class="fa-solid fa-arrow-down-long text-xl"></i></div>
+                </div>
+                <div class="glass-card rounded-2xl p-5 flex justify-between items-center relative overflow-hidden">
+                    <div>
+                        <span class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Withdrawals / Outflow</span>
+                        <h3 class="text-3xl font-black text-rose-400 mt-1" id="sspnDashboardKpiWithdrawals">RM 0.00</h3>
                     </div>
+                    <div class="p-3 bg-rose-500/10 text-rose-400 rounded-xl"><i class="fa-solid fa-arrow-up-long text-xl"></i></div>
                 </div>
             </div>
 
-            <div class="glass-card rounded-2xl p-6">
-                <h4 class="text-xs font-bold text-slate-300 uppercase tracking-widest mb-4">
-                    <i class="fa-solid fa-coins text-indigo-400 mr-1.5"></i>Log Wallet Record
-                </h4>
-                <form id="sspnForm" onsubmit="handleSspnSubmit(event)" class="space-y-4">
-                    <div>
-                        <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1" for="sspnDate">Transaction Date</label>
-                        <input type="date" id="sspnDate" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-slate-100 focus:outline-none focus:border-indigo-500 text-xs block [color-scheme:dark]">
+            <!-- SSPN Graphic Analytics -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="glass-card rounded-2xl p-6 lg:col-span-2">
+                    <h4 class="text-sm font-bold uppercase tracking-wider text-slate-200 mb-4">SSPN Net Savings Timeline</h4>
+                    <div class="h-[280px] w-full relative">
+                        <canvas id="sspnSavingsTrendChart"></canvas>
                     </div>
-                    <div>
-                        <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1" for="sspnChannel">Channel Selection</label>
-                        <select id="sspnChannel" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500"></select>
+                </div>
+                <div class="glass-card rounded-2xl p-6">
+                    <h4 class="text-sm font-bold uppercase tracking-wider text-slate-200 mb-4">Channel Contribution</h4>
+                    <div class="h-[240px] w-full relative">
+                        <canvas id="sspnChannelPieChart"></canvas>
                     </div>
-                    <div>
-                        <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1" for="sspnDevice">Target Device</label>
-                        <select id="sspnDevice" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500"></select>
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1" for="sspnMethod">Payment Method</label>
-                        <select id="sspnMethod" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500"></select>
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1" for="sspnAmount">Amount</label>
-                        <div class="flex gap-2">
-                            <button type="button" id="sspnSignBtn" onclick="toggleSspnSign()" class="w-14 bg-emerald-500/25 border border-emerald-500/40 text-emerald-400 font-bold rounded-xl text-center text-sm flex items-center justify-center transition duration-150">+</button>
-                            <div class="relative flex-1">
-                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-semibold">RM</span>
-                                <input type="number" step="0.01" min="0.01" id="sspnAmount" required placeholder="0.00" class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-slate-100 text-sm focus:outline-none focus:border-indigo-500">
-                            </div>
-                        </div>
-                    </div>
-                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-widest transition">
-                        Save SSPN Record
-                    </button>
-                </form>
+                </div>
             </div>
         </section>
 
-        <!-- Dynamic Maintenance Panel -->
+        <!-- SSPN Wallet Transaction Entry Section -->
+        <section id="tabContent-sspn" class="hidden space-y-8 max-w-4xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
+                <!-- Entry Form -->
+                <div class="md:col-span-2 space-y-4">
+                    <div class="glass-card rounded-2xl p-6">
+                        <h4 class="text-xs font-bold text-slate-300 uppercase tracking-widest mb-4">
+                            <i class="fa-solid fa-coins text-indigo-400 mr-1.5"></i>Log Wallet Record
+                        </h4>
+                        <form id="sspnForm" onsubmit="handleSspnSubmit(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1" for="sspnDate">Transaction Date</label>
+                                <input type="date" id="sspnDate" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-slate-100 focus:outline-none focus:border-indigo-500 text-xs block [color-scheme:dark]">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1" for="sspnChannel">Channel Selection</label>
+                                <select id="sspnChannel" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500"></select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1" for="sspnDevice">Target Device</label>
+                                <select id="sspnDevice" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500"></select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1" for="sspnMethod">Payment Method</label>
+                                <select id="sspnMethod" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500"></select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1" for="sspnAmount">Amount</label>
+                                <div class="flex gap-2">
+                                    <button type="button" id="sspnSignBtn" onclick="toggleSspnSign()" class="w-14 bg-emerald-500/25 border border-emerald-500/40 text-emerald-400 font-bold rounded-xl text-center text-sm flex items-center justify-center transition duration-150">+</button>
+                                    <div class="relative flex-1">
+                                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-semibold">RM</span>
+                                        <input type="number" step="0.01" min="0.01" id="sspnAmount" required placeholder="0.00" class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-slate-100 text-sm focus:outline-none focus:border-indigo-500">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-2 bg-slate-950 border border-slate-800/80 rounded-xl p-3">
+                                <input type="checkbox" id="sspnReflected" class="w-4 h-4 rounded border-slate-800 text-emerald-500 bg-slate-950 focus:ring-emerald-500 cursor-pointer">
+                                <label for="sspnReflected" class="text-xs font-semibold text-slate-300 cursor-pointer flex items-center gap-1.5">
+                                    <i class="fa-solid fa-circle-check text-emerald-400"></i> Mark as Reflected in PTPTN Portal
+                                </label>
+                            </div>
+
+                            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-widest transition">
+                                Save SSPN Record
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Ledger History Table -->
+                <div class="md:col-span-3 space-y-4">
+                    <div class="glass-card rounded-2xl p-6">
+                        <div class="border-b border-slate-800 pb-3 mb-4">
+                            <h4 class="text-sm font-bold uppercase tracking-wider text-slate-200">Historical SSPN Logs</h4>
+                            <p class="text-[10px] text-slate-500 mt-0.5">Adjust saved records or toggle portal reflection status.</p>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs text-slate-300 border-collapse">
+                                <head class="bg-slate-900/60 uppercase text-[10px] tracking-widest text-slate-500 font-bold border-b border-slate-800">
+                                    <tr>
+                                        <th class="py-3 px-4">Date</th>
+                                        <th class="py-3 px-4">Channel</th>
+                                        <th class="py-3 px-4 text-right">Amount</th>
+                                        <th class="py-3 px-4 text-center">Reflected</th>
+                                        <th class="py-3 px-4 text-center">Actions</th>
+                                    </tr>
+                                </head>
+                                <tbody id="sspnHistoryLedgerBody" class="divide-y divide-slate-900"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Maintenance Hub Panel -->
         <section id="tabContent-cardManager" class="hidden space-y-6">
-            <div class="glass-card rounded-2xl p-6">
-                <h3 class="text-base font-bold text-slate-200 uppercase tracking-wider mb-4">Credit Card Configurations</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-slate-300">
-                        <thead class="bg-slate-900/60 uppercase text-[10px] tracking-widest text-slate-500 font-bold border-b border-slate-800">
-                            <tr>
-                                <th class="py-3 px-4">Card Identifier</th>
-                                <th class="py-3 px-4">Theme Variant</th>
-                                <th class="py-3 px-4">Billing Day</th>
-                                <th class="py-3 px-4">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="cardManagerTableBody"></tbody>
-                    </table>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="glass-card rounded-2xl p-6 lg:col-span-2 space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                        <div>
+                            <h3 class="text-base font-bold text-slate-200 uppercase tracking-wider">Credit Card Vault</h3>
+                            <p class="text-[10px] text-slate-500 mt-0.5">Manage credit card configurations, minimum spends, tiers and rewards caps</p>
+                        </div>
+                        <button onclick="showAddCardForm()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-xl text-xs font-semibold tracking-wider transition flex items-center gap-1.5 shadow-md shadow-indigo-500/10">
+                            <i class="fa-solid fa-plus"></i>Add Card
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-slate-300 border-collapse">
+                            <thead class="bg-slate-900/60 uppercase text-[10px] tracking-widest text-slate-500 font-bold border-b border-slate-800">
+                                <tr>
+                                    <th class="py-3 px-4">Card Identifier</th>
+                                    <th class="py-3 px-4">Theme Variant</th>
+                                    <th class="py-3 px-4">Billing Day</th>
+                                    <th class="py-3 px-4">Min Spend / Cap</th>
+                                    <th class="py-3 px-4 text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cardManagerTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div id="cardEditorPanel" class="glass-card rounded-2xl p-6 space-y-4 hidden">
+                        <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                            <h3 id="cardEditorTitle" class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Add Config Instrument</h3>
+                            <button onclick="hideCardEditor()" class="text-slate-400 hover:text-slate-100"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <form id="cardEditForm" onsubmit="handleCardFormSubmit(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Card ID (Unique Code)</label>
+                                <input type="text" id="editCardId" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500" placeholder="e.g. HSBC_MPower">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Display Name</label>
+                                <input type="text" id="editCardName" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500" placeholder="e.g. HSBC Amanah MPower">
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Theme Color</label>
+                                    <select id="editCardTheme" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500">
+                                        <option value="purple">Purple Glow</option>
+                                        <option value="emerald">Emerald</option>
+                                        <option value="indigo">Indigo</option>
+                                        <option value="obsidian">Obsidian / Gray</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Billing Day (1-31)</label>
+                                    <input type="number" id="editCardBillingDay" required min="1" max="31" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500" placeholder="e.g. 25">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3 border-t border-slate-800 pt-3">
+                                <div>
+                                    <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Cycle Min Spend (RM)</label>
+                                    <input type="number" step="1" id="editCardMinSpend" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500" placeholder="500">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Overall Cycle Cap (RM)</label>
+                                    <input type="number" step="1" id="editCardCashbackCap" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500" placeholder="100">
+                                </div>
+                            </div>
+
+                            <!-- Dynamic Cashback Rules Area -->
+                            <div class="space-y-2 border-t border-slate-800 pt-3">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Cashback Rules</span>
+                                    <button type="button" onclick="addRuleRow()" class="text-[9px] bg-slate-900 border border-slate-800 hover:border-indigo-500 text-indigo-400 px-2 py-1 rounded font-bold transition">
+                                        + Add Rate
+                                    </button>
+                                </div>
+                                <div id="rulesListContainer" class="space-y-3 max-h-[250px] overflow-y-auto pr-1"></div>
+                            </div>
+
+                            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 rounded-xl text-xs uppercase tracking-wider transition">
+                                Save Instrument Config
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Global Config Option Dropdowns -->
+                    <div class="glass-card rounded-2xl p-6 space-y-4">
+                        <div class="border-b border-slate-800 pb-3">
+                            <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider">System Dropdowns Customizer</h3>
+                        </div>
+                        <form id="systemSettingsForm" onsubmit="handleSystemSettingsSubmit(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Ledger Expense Tags (Comma separated)</label>
+                                <textarea id="settingsPersonalTags" class="w-full h-16 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 font-mono" placeholder="Dining, Groceries, Utilities..."></textarea>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">SSPN Saving Channels (Comma separated)</label>
+                                <textarea id="settingsSspnChannels" class="w-full h-12 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 font-mono" placeholder="PTPTN Portal, Bank Transfer..."></textarea>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">SSPN Devices</label>
+                                    <input type="text" id="settingsSspnDevices" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 font-mono" placeholder="Comma separated">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">SSPN Methods</label>
+                                    <input type="text" id="settingsSspnMethods" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 font-mono" placeholder="Comma separated">
+                                </div>
+                            </div>
+                            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded-xl text-xs uppercase tracking-wider transition">
+                                Apply Settings
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </section>
@@ -409,39 +583,188 @@
         <!-- Koofr Sync Settings Screen -->
         <section id="tabContent-koofrSync" class="hidden space-y-6 max-w-lg mx-auto">
             <div class="glass-card rounded-2xl p-6 space-y-4">
-                <h3 class="text-base font-bold text-slate-200 uppercase tracking-wider"><i class="fa-solid fa-cloud mr-2 text-indigo-400"></i>WebDAV Koofr Credentials</h3>
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">WebDAV Endpoint URL</label>
-                    <input type="text" id="syncEndpoint" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none" placeholder="https://app.koofr.net/dav/Koofr">
+                <div class="flex items-center gap-2 mb-2 border-b border-slate-800 pb-3">
+                    <div class="h-8 w-8 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-400">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-200 uppercase tracking-wider">Cloudflare Worker Proxy</h3>
+                        <p class="text-[10px] text-indigo-400 font-bold uppercase tracking-wider">Secure WebDAV Gateway Configuration</p>
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-xs text-slate-400 mb-1">Account Username (Email)</label>
-                    <input type="email" id="syncUser" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none">
+
+                <div class="bg-indigo-950/30 border border-indigo-500/10 p-4 rounded-xl space-y-2 text-xs leading-relaxed">
+                    <p class="text-indigo-200 font-semibold"><i class="fa-solid fa-circle-info mr-1"></i> Zero Password Exposure Client-Side</p>
+                    <p class="text-slate-400">To maintain security, keep WebDAV authorization credentials inside upstream Cloudflare Worker secrets. The client only needs the gateway URL.</p>
                 </div>
+
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1">App-Specific Password</label>
-                    <input type="password" id="syncPass" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none">
+                    <label class="block text-xs text-slate-400 mb-1.5 font-semibold">Proxy Endpoint URL</label>
+                    <input type="text" id="syncEndpoint" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 font-mono" placeholder="https://gateway.yourdomain.workers.dev/data">
                 </div>
-                <button onclick="saveSyncSettings()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
-                    Save Config to Browser Storage
+
+                <button onclick="saveSyncSettings()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-floppy-disk"></i>Save Endpoint
                 </button>
             </div>
         </section>
     </main>
 
-    <!-- Global App Engine JavaScript Controller -->
+    <!-- Edit Transaction Modal -->
+    <div id="editTxModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="glass-card w-full max-w-md rounded-2xl p-6 space-y-4 m-4">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="text-sm font-bold text-indigo-400 uppercase tracking-widest"><i class="fa-solid fa-pen mr-1.5"></i>Modify Ledger Record</h3>
+                <button onclick="closeEditTxModal()" class="text-slate-400 hover:text-slate-100"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="editTxForm" onsubmit="handleEditTxSubmit(event)" class="space-y-4">
+                <input type="hidden" id="editFormTxId">
+                <div>
+                    <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Transaction Date</label>
+                    <input type="date" id="editFormTxDate" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 block [color-scheme:dark]">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Credit Card Source</label>
+                    <select id="editFormTxCard" required onchange="handleModalTxCardChange()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none"></select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Bank Category</label>
+                    <select id="editFormTxCategory" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none"></select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Internal Tag</label>
+                    <select id="editFormTxInternal" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none"></select>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Amount (RM)</label>
+                        <input type="number" step="0.01" id="editFormTxAmount" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Description</label>
+                        <input type="text" id="editFormTxDesc" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none">
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
+                    Commit Updates
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit SSPN Modal -->
+    <div id="editSspnModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="glass-card w-full max-w-md rounded-2xl p-6 space-y-4 m-4">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="text-sm font-bold text-emerald-400 uppercase tracking-widest"><i class="fa-solid fa-pen mr-1.5"></i>Modify SSPN Log</h3>
+                <button onclick="closeEditSspnModal()" class="text-slate-400 hover:text-slate-100"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="editSspnForm" onsubmit="handleEditSspnSubmit(event)" class="space-y-4">
+                <input type="hidden" id="editFormSspnId">
+                <div>
+                    <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Transaction Date</label>
+                    <input type="date" id="editFormSspnDate" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none block [color-scheme:dark]">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Channel Selection</label>
+                    <select id="editFormSspnChannel" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none"></select>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Target Device</label>
+                        <select id="editFormSspnDevice" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none"></select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Payment Method</label>
+                        <select id="editFormSspnMethod" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none"></select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Amount</label>
+                    <input type="number" step="0.01" id="editFormSspnAmount" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none">
+                </div>
+                <div class="flex items-center gap-2 bg-slate-950 border border-slate-800/80 rounded-xl p-3">
+                    <input type="checkbox" id="editFormSspnReflected" class="w-4 h-4 rounded border-slate-800 text-emerald-500 bg-slate-950 cursor-pointer">
+                    <label for="editFormSspnReflected" class="text-xs font-semibold text-slate-300 cursor-pointer">Reflected / Cleared in Portal</label>
+                </div>
+                <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
+                    Commit Updates
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom Confirm Modal -->
+    <div id="customConfirmModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="glass-card w-full max-w-sm rounded-2xl p-6 space-y-4 m-4">
+            <div class="flex items-center gap-3 text-rose-400 border-b border-slate-800 pb-2">
+                <i class="fa-solid fa-triangle-exclamation text-lg"></i>
+                <h4 class="text-sm font-bold uppercase tracking-wider">Confirm Action</h4>
+            </div>
+            <p id="confirmModalText" class="text-xs text-slate-300 leading-relaxed"></p>
+            <div class="flex gap-2.5 justify-end">
+                <button id="confirmCancelBtn" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 bg-slate-900 border border-slate-800">Cancel</button>
+                <button id="confirmProceedBtn" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-white bg-rose-600 hover:bg-rose-500">Confirm</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Memory DB Architecture Defaults
         let database = {
             transactions: [],
             sspnRecords: [],
             cards: [
-                { id: "Maybank2Gold", name: "Maybank 2 Gold", theme: "purple", billingDay: 25, rules: { "Weekend Dining": 0.05, "Utilities": 0.01, "Other": 0.002 } },
-                { id: "PublicBankQuantum", name: "Public Bank Quantum", theme: "emerald", billingDay: 10, rules: { "Online/Contactless": 0.02, "Other": 0.003 } },
-                { id: "CIMBCashback", name: "CIMB Cashback", theme: "indigo", billingDay: 15, rules: { "Groceries": 0.04, "Other": 0.002 } }
+                { 
+                    id: "Maybank2Gold", 
+                    name: "Maybank 2 Gold", 
+                    theme: "purple", 
+                    billingDay: 25, 
+                    cycleMinSpend: 0,
+                    cycleCashbackCap: 50,
+                    rules: [
+                        { category: "Weekend Dining", rate: 0.05, minTxSpend: 0, categoryCap: 50, tiered: false, tiers: [] },
+                        { category: "Utilities", rate: 0.01, minTxSpend: 0, categoryCap: 0, tiered: false, tiers: [] },
+                        { category: "Other", rate: 0.002, minTxSpend: 0, categoryCap: 0, tiered: false, tiers: [] }
+                    ]
+                },
+                { 
+                    id: "PublicBankQuantum", 
+                    name: "Public Bank Quantum", 
+                    theme: "emerald", 
+                    billingDay: 10, 
+                    cycleMinSpend: 0,
+                    cycleCashbackCap: 30,
+                    rules: [
+                        { category: "Online/Contactless", rate: 0.02, minTxSpend: 30, categoryCap: 30, tiered: false, tiers: [] },
+                        { category: "Other", rate: 0.003, minTxSpend: 0, categoryCap: 0, tiered: false, tiers: [] }
+                    ]
+                },
+                { 
+                    id: "CIMBCashback", 
+                    name: "CIMB Cash Back", 
+                    theme: "indigo", 
+                    billingDay: 15, 
+                    cycleMinSpend: 500,
+                    cycleCashbackCap: 60,
+                    rules: [
+                        { 
+                            category: "Groceries", 
+                            rate: 0.04, 
+                            minTxSpend: 100, 
+                            categoryCap: 30, 
+                            tiered: true, 
+                            tiers: [
+                                { minSpend: 500, rate: 0.02 },
+                                { minSpend: 1000, rate: 0.04 }
+                            ] 
+                        },
+                        { category: "Other", rate: 0.002, minTxSpend: 0, categoryCap: 0, tiered: false, tiers: [] }
+                    ]
+                }
             ],
             settings: {
-                internalCategories: ["Dining", "Utilities", "Groceries", "Shopping", "Transport", "Investment"],
+                internalCategories: ["Dining", "Groceries", "Utilities", "Shopping", "Transport", "Investment"],
                 sspnChannels: ["PTPTN Portal", "Bank Transfer", "Salary Deduction"],
                 sspnDevices: ["Mobile Phone", "Web Browser", "Counter Kiosk"],
                 sspnMethods: ["FPX Online", "Credit Card Route", "Direct Debit"]
@@ -449,9 +772,9 @@
         };
 
         let currentFilterCard = "ALL";
-        let currentFilterPeriod = "ALL";
         let sspnSignIsPositive = true;
         let trendChartObj = null, cardPieChartObj = null, catPieChartObj = null;
+        let sspnTrendChartObj = null, sspnChannelPieChartObj = null;
 
         window.onload = function() {
             loadFromLocalStorage();
@@ -460,7 +783,6 @@
             refreshLedgerAndCalculations();
         };
 
-        // FIXED: Restored missing core formatting and design utility function
         function getThemeStyles(theme) {
             switch(theme) {
                 case 'purple': return { bg: 'grad-purple-glow', badge: 'bg-purple-500/10 text-purple-400 border-purple-500/20' };
@@ -468,6 +790,21 @@
                 case 'indigo': return { bg: 'grad-indigo', badge: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' };
                 default: return { bg: 'grad-obsidian', badge: 'bg-slate-500/10 text-slate-400 border-slate-500/20' };
             }
+        }
+
+        function askConfirm(msg, proceedCallback) {
+            const modal = document.getElementById("customConfirmModal");
+            document.getElementById("confirmModalText").innerText = msg;
+            modal.classList.remove("hidden");
+
+            const cleanUp = () => {
+                modal.classList.add("hidden");
+                document.getElementById("confirmProceedBtn").onclick = null;
+                document.getElementById("confirmCancelBtn").onclick = null;
+            };
+
+            document.getElementById("confirmProceedBtn").onclick = () => { proceedCallback(); cleanUp(); };
+            document.getElementById("confirmCancelBtn").onclick = () => { cleanUp(); };
         }
 
         function showToast(msg, type = "info") {
@@ -486,7 +823,7 @@
         }
 
         function switchTab(tabId) {
-            document.querySelectorAll("main >= section, main > section").forEach(s => s.classList.add("hidden"));
+            document.querySelectorAll("main > section").forEach(s => s.classList.add("hidden"));
             const targetSec = document.getElementById(`tabContent-${tabId}`);
             if(targetSec) targetSec.classList.remove("hidden");
 
@@ -495,6 +832,26 @@
             });
             const activeBtn = document.getElementById(`tabBtn-${tabId}`);
             if(activeBtn) activeBtn.className = "px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 bg-indigo-600 text-white shadow-md";
+        }
+
+        function getTransactionCycle(txDateStr, billingDay) {
+            const date = new Date(txDateStr);
+            const y = date.getFullYear();
+            const m = date.getMonth(); 
+            const d = date.getDate();
+
+            let cycleYear = y;
+            let cycleMonth = m; 
+
+            if (d > billingDay) {
+                cycleMonth += 1;
+                if (cycleMonth > 11) {
+                    cycleMonth = 0;
+                    cycleYear += 1;
+                }
+            }
+            const mm = String(cycleMonth + 1).padStart(2, '0');
+            return `${cycleYear}-${mm}`;
         }
 
         function initDatePickers() {
@@ -520,14 +877,37 @@
             if(metSel) metSel.innerHTML = database.settings.sspnMethods.map(i => `<option value="${i}">${i}</option>`).join('');
         }
 
+        function populateFilterYears() {
+            const years = new Set([new Date().getFullYear().toString()]); 
+            database.transactions.forEach(t => {
+                if (t.date && t.date.length >= 4) years.add(t.date.substring(0, 4));
+            });
+            database.sspnRecords.forEach(r => {
+                if (r.date && r.date.length >= 4) years.add(r.date.substring(0, 4));
+            });
+            
+            const sortedYears = Array.from(years).sort().reverse();
+            const yearSel = document.getElementById("filterYear");
+            if (yearSel) {
+                const prevVal = yearSel.value || "ALL";
+                yearSel.innerHTML = '<option value="ALL">All Years</option>' + 
+                    sortedYears.map(y => `<option value="${y}">${y}</option>`).join('');
+                yearSel.value = Array.from(yearSel.options).some(o => o.value === prevVal) ? prevVal : "ALL";
+            }
+        }
+
         function handleTxCardChange() {
             const cardId = document.getElementById("txCard").value;
             const card = database.cards.find(c => c.id === cardId);
             const catSel = document.getElementById("txCategory");
             const label = document.getElementById("selectedCardRuleLabel");
             if(card && catSel) {
-                label.innerText = `${Object.keys(card.rules).length} Processing Rules Defined`;
-                catSel.innerHTML = Object.keys(card.rules).map(k => `<option value="${k}">${k} (${(card.rules[k]*100).toFixed(1)}%)</option>`).join('');
+                const rulesCount = card.rules ? card.rules.length : 0;
+                label.innerText = `${rulesCount} Processing Rules Defined`;
+                catSel.innerHTML = (card.rules || []).map(r => {
+                    const desc = r.tiered ? 'Tiered Scheme' : `${(r.rate*100).toFixed(1)}%`;
+                    return `<option value="${r.category}">${r.category} (${desc})</option>`;
+                }).join('');
             }
         }
 
@@ -537,12 +917,20 @@
             const amount = parseFloat(document.getElementById("txAmount").value) || 0;
             const card = database.cards.find(c => c.id === cardId);
             
-            if(card && catKey && card.rules[catKey] !== undefined) {
-                const rate = card.rules[catKey];
-                const yieldAmt = amount * rate;
-                document.getElementById("cashbackPreviewRate").innerText = `${(rate*100).toFixed(2)}% Scheme Rule`;
-                document.getElementById("cashbackPreviewVal").innerText = `RM ${yieldAmt.toFixed(2)}`;
-                document.getElementById("cashbackPreviewCycleMsg").innerText = `Billing Cycle Day: ${card.billingDay}`;
+            if(card) {
+                const rule = card.rules ? card.rules.find(r => r.category === catKey) : null;
+                if(rule) {
+                    let rate = rule.rate || 0;
+                    let prefix = "";
+                    if (rule.tiered && rule.tiers && rule.tiers.length > 0) {
+                        rate = rule.tiers[0].rate; 
+                        prefix = "Est. Tier Min ";
+                    }
+                    const yieldAmt = amount * rate;
+                    document.getElementById("cashbackPreviewRate").innerText = `${prefix}${(rate*100).toFixed(2)}% Rule`;
+                    document.getElementById("cashbackPreviewVal").innerText = `RM ${yieldAmt.toFixed(2)}`;
+                    document.getElementById("cashbackPreviewCycleMsg").innerText = `Billing Cycle Day: ${card.billingDay} | Min Tx: RM ${rule.minTxSpend || 0}`;
+                }
             }
         }
 
@@ -551,8 +939,6 @@
             const cardId = document.getElementById("txCard").value;
             const catKey = document.getElementById("txCategory").value;
             const amount = parseFloat(document.getElementById("txAmount").value);
-            const card = database.cards.find(c => c.id === cardId);
-            const rate = card.rules[catKey];
 
             const record = {
                 id: 'tx-' + Date.now(),
@@ -561,8 +947,7 @@
                 category: catKey,
                 internalTag: document.getElementById("txInternalCategory").value,
                 description: document.getElementById("txDescription").value || "General Expense",
-                amount: amount,
-                cashback: amount * rate
+                amount: amount
             };
 
             database.transactions.push(record);
@@ -590,6 +975,7 @@
             e.preventDefault();
             let baseAmount = parseFloat(document.getElementById("sspnAmount").value);
             if(!sspnSignIsPositive) baseAmount = -baseAmount;
+            const reflected = document.getElementById("sspnReflected").checked;
 
             const rec = {
                 id: 'sspn-' + Date.now(),
@@ -597,7 +983,8 @@
                 channel: document.getElementById("sspnChannel").value,
                 device: document.getElementById("sspnDevice").value,
                 method: document.getElementById("sspnMethod").value,
-                amount: baseAmount
+                amount: baseAmount,
+                reflected: reflected
             };
 
             database.sspnRecords.push(rec);
@@ -609,47 +996,205 @@
         }
 
         function deleteTx(id) {
-            database.transactions = database.transactions.filter(t => t.id !== id);
-            saveToLocalStorage();
-            refreshLedgerAndCalculations();
-            showToast("Ledger record purged.", "info");
+            askConfirm("Are you sure you want to permanently delete this credit card transaction from the ledger?", () => {
+                database.transactions = database.transactions.filter(t => t.id !== id);
+                saveToLocalStorage();
+                refreshLedgerAndCalculations();
+                showToast("Ledger record purged.", "info");
+            });
+        }
+
+        function deleteSspn(id) {
+            askConfirm("Are you sure you want to delete this SSPN savings entry?", () => {
+                database.sspnRecords = database.sspnRecords.filter(r => r.id !== id);
+                saveToLocalStorage();
+                refreshLedgerAndCalculations();
+                showToast("SSPN record purged.", "info");
+            });
+        }
+
+        function toggleSspnReflected(id) {
+            const rec = database.sspnRecords.find(r => r.id === id);
+            if (rec) {
+                rec.reflected = !rec.reflected;
+                saveToLocalStorage();
+                refreshLedgerAndCalculations();
+                showToast(`SSPN Status toggled to ${rec.reflected ? "Reflected" : "Pending"}.`, "info");
+            }
+        }
+
+        function evaluateCashbackSimulation() {
+            const cardCycleSpendTotals = {};
+
+            database.transactions.forEach(t => {
+                const card = database.cards.find(c => c.id === t.cardId);
+                const bDay = card ? card.billingDay : 15;
+                const cycleKey = getTransactionCycle(t.date, bDay);
+
+                if (!cardCycleSpendTotals[cycleKey]) cardCycleSpendTotals[cycleKey] = {};
+                if (!cardCycleSpendTotals[cycleKey][t.cardId]) cardCycleSpendTotals[cycleKey][t.cardId] = 0;
+                cardCycleSpendTotals[cycleKey][t.cardId] += t.amount;
+            });
+
+            const sortedTxs = database.transactions.map(t => ({ ...t }))
+                .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            const cardCycleCashbackAccumulated = {};
+            const categoryCycleCashbackAccumulated = {};
+            const evaluatedMap = {};
+
+            sortedTxs.forEach(t => {
+                const card = database.cards.find(c => c.id === t.cardId);
+                const bDay = card ? card.billingDay : 15;
+                const cycleKey = getTransactionCycle(t.date, bDay);
+                
+                const totalCycleSpend = (cardCycleSpendTotals[cycleKey] && cardCycleSpendTotals[cycleKey][t.cardId]) || 0;
+                const cycleMinRequired = card ? (card.cycleMinSpend || 0) : 0;
+                const cycleCapMax = card ? (card.cycleCashbackCap || Infinity) : Infinity;
+
+                let calculatedCashback = 0;
+                let statusMsg = "";
+                let actualRate = 0;
+                let eligible = true;
+
+                if (!card) {
+                    statusMsg = "Unknown Card Config";
+                    eligible = false;
+                } else {
+                    const rule = card.rules ? card.rules.find(r => r.category === t.category) : null;
+                    if (!rule) {
+                        statusMsg = "No Rule Matched";
+                        eligible = false;
+                    } else {
+                        const ruleMinTx = rule.minTxSpend || 0;
+                        if (t.amount < ruleMinTx) {
+                            eligible = false;
+                            statusMsg = `Blocked: Tx < RM ${ruleMinTx}`;
+                        }
+                        
+                        if (eligible && totalCycleSpend < cycleMinRequired) {
+                            eligible = false;
+                            statusMsg = `Blocked: Cycle < RM ${cycleMinRequired}`;
+                        }
+
+                        if (eligible) {
+                            if (rule.tiered && rule.tiers && rule.tiers.length > 0) {
+                                const sortedTiers = [...rule.tiers].sort((a,b) => b.minSpend - a.minSpend);
+                                const matchedTier = sortedTiers.find(tier => totalCycleSpend >= tier.minSpend);
+                                if (matchedTier) {
+                                    actualRate = matchedTier.rate;
+                                    statusMsg = `Bracket Met (${(actualRate*100).toFixed(1)}%)`;
+                                } else {
+                                    actualRate = rule.rate || 0; 
+                                    statusMsg = `Base Bracket (${(actualRate*100).toFixed(1)}%)`;
+                                }
+                            } else {
+                                actualRate = rule.rate || 0;
+                                statusMsg = `Unlocked (${(actualRate*100).toFixed(1)}%)`;
+                            }
+
+                            const potentialCashback = t.amount * actualRate;
+
+                            if (!cardCycleCashbackAccumulated[cycleKey]) cardCycleCashbackAccumulated[cycleKey] = {};
+                            if (cardCycleCashbackAccumulated[cycleKey][t.cardId] === undefined) cardCycleCashbackAccumulated[cycleKey][t.cardId] = 0;
+
+                            if (!categoryCycleCashbackAccumulated[cycleKey]) categoryCycleCashbackAccumulated[cycleKey] = {};
+                            if (!categoryCycleCashbackAccumulated[cycleKey][t.cardId]) categoryCycleCashbackAccumulated[cycleKey][t.cardId] = {};
+                            if (categoryCycleCashbackAccumulated[cycleKey][t.cardId][t.category] === undefined) {
+                                categoryCycleCashbackAccumulated[cycleKey][t.cardId][t.category] = 0;
+                            }
+
+                            const categoryCapMax = (rule.categoryCap !== undefined && rule.categoryCap > 0) ? rule.categoryCap : Infinity;
+                            const currentCatAccumulated = categoryCycleCashbackAccumulated[cycleKey][t.cardId][t.category];
+                            const currentCardAccumulated = cardCycleCashbackAccumulated[cycleKey][t.cardId];
+
+                            const allowedByCat = Math.max(0, categoryCapMax - currentCatAccumulated);
+                            const allowedByCard = Math.max(0, cycleCapMax - currentCardAccumulated);
+
+                            calculatedCashback = Math.min(potentialCashback, allowedByCat, allowedByCard);
+
+                            if (calculatedCashback <= 0 && potentialCashback > 0) {
+                                eligible = false;
+                                statusMsg = allowedByCat <= 0 ? "Category Cap Reached" : "Overall Cap Reached";
+                            } else if (calculatedCashback < potentialCashback) {
+                                eligible = true;
+                                statusMsg = allowedByCat < allowedByCard 
+                                    ? `Partially Capped (Cat: +RM ${calculatedCashback.toFixed(2)})`
+                                    : `Partially Capped (Card: +RM ${calculatedCashback.toFixed(2)})`;
+                                categoryCycleCashbackAccumulated[cycleKey][t.cardId][t.category] += calculatedCashback;
+                                cardCycleCashbackAccumulated[cycleKey][t.cardId] += calculatedCashback;
+                            } else {
+                                categoryCycleCashbackAccumulated[cycleKey][t.cardId][t.category] += calculatedCashback;
+                                cardCycleCashbackAccumulated[cycleKey][t.cardId] += calculatedCashback;
+                            }
+                        }
+                    }
+                }
+
+                evaluatedMap[t.id] = {
+                    calculatedCashback: calculatedCashback,
+                    statusMessage: statusMsg,
+                    isEligible: eligible,
+                    cycleKey: cycleKey
+                };
+            });
+
+            return database.transactions.map(t => ({
+                ...t,
+                ...(evaluatedMap[t.id] || { calculatedCashback: 0, statusMessage: "Unprocessed", isEligible: false, cycleKey: "ALL" })
+            }));
         }
 
         function refreshLedgerAndCalculations() {
-            renderFilterDecks();
-            renderCardsVault();
-            
-            let filtered = database.transactions.filter(t => {
+            populateFilterYears();
+
+            const selectedYear = document.getElementById("filterYear").value;
+            const selectedMonth = document.getElementById("filterMonth").value;
+            const simulatedTxs = evaluateCashbackSimulation();
+
+            let filteredTxs = simulatedTxs.filter(t => {
                 const cardMatch = (currentFilterCard === "ALL" || t.cardId === currentFilterCard);
-                const periodMatch = (currentFilterPeriod === "ALL" || t.date.substring(0,7) === currentFilterPeriod);
-                return cardMatch && periodMatch;
+                const txYear = t.date.substring(0, 4);
+                const txMonth = t.date.substring(5, 7);
+                const yearMatch = (selectedYear === "ALL" || txYear === selectedYear);
+                const monthMatch = (selectedMonth === "ALL" || txMonth === selectedMonth);
+                return cardMatch && yearMatch && monthMatch;
             });
 
-            filtered.sort((a,b) => new Date(b.date) - new Date(a.date));
+            filteredTxs.sort((a,b) => new Date(b.date) - new Date(a.date));
 
-            // Populate Table
             const body = document.getElementById("transactionLedgerBody");
             if(body) {
-                body.innerHTML = filtered.map(t => {
+                body.innerHTML = filteredTxs.map(t => {
                     const card = database.cards.find(c => c.id === t.cardId) || {name: t.cardId};
+                    const statusClass = t.isEligible 
+                        ? "bg-emerald-950/40 text-emerald-400 border border-emerald-900/50" 
+                        : "bg-rose-950/40 text-rose-400 border border-rose-900/50";
+                    
                     return `<tr class="hover:bg-slate-900/40 transition">
-                        <td class="py-3 px-4 font-mono text-[11px]">${t.date}</td>
-                        <td class="py-3 px-4 font-semibold">${card.name}</td>
-                        <td class="py-3 px-4 text-indigo-400">${t.category}</td>
-                        <td class="py-3 px-4 text-slate-400">${t.internalTag}</td>
-                        <td class="py-3 px-4 text-slate-400">${t.description}</td>
-                        <td class="py-3 px-4 text-right font-semibold">RM ${t.amount.toFixed(2)}</td>
-                        <td class="py-3 px-4 text-right font-bold text-indigo-400">RM ${t.cashback.toFixed(2)}</td>
-                        <td class="py-3 px-4 text-center">
-                            <button onclick="deleteTx('${t.id}')" class="text-rose-500 hover:text-rose-400 p-1"><i class="fa-solid fa-trash"></i></button>
+                        <td class="py-3.5 px-4 font-mono text-[11px]">${t.date}</td>
+                        <td class="py-3.5 px-4 font-semibold">${card.name}</td>
+                        <td class="py-3.5 px-4 text-indigo-400 font-medium">${t.category}</td>
+                        <td class="py-3.5 px-4 text-slate-400">${t.internalTag}</td>
+                        <td class="py-3.5 px-4 text-slate-400">${t.description}</td>
+                        <td class="py-3.5 px-4 text-right font-semibold">RM ${t.amount.toFixed(2)}</td>
+                        <td class="py-3.5 px-4 text-right font-bold text-indigo-400">RM ${t.calculatedCashback.toFixed(2)}</td>
+                        <td class="py-3.5 px-4 text-center"><span class="text-[9px] font-bold px-2 py-0.5 rounded-md ${statusClass}">${t.statusMessage}</span></td>
+                        <td class="py-3.5 px-4 text-center">
+                            <div class="flex gap-1 justify-center">
+                                <button onclick="openEditTxModal('${t.id}')" class="text-indigo-400 hover:text-indigo-300 p-1"><i class="fa-solid fa-pen-to-square"></i></button>
+                                <button onclick="deleteTx('${t.id}')" class="text-rose-500 hover:text-rose-400 p-1"><i class="fa-solid fa-trash"></i></button>
+                            </div>
                         </td>
                     </tr>`;
                 }).join('');
             }
 
-            // Calculations for KPIs
             let totalSpend = 0, totalCashback = 0;
-            filtered.forEach(t => { totalSpend += t.amount; totalCashback += t.cashback; });
+            filteredTxs.forEach(t => { 
+                totalSpend += t.amount; 
+                totalCashback += t.calculatedCashback; 
+            });
             const avgRate = totalSpend > 0 ? (totalCashback / totalSpend) * 100 : 0;
 
             document.getElementById("kpiTotalCashback").innerText = `RM ${totalCashback.toFixed(2)}`;
@@ -657,43 +1202,90 @@
             document.getElementById("kpiAverageRate").innerText = `${avgRate.toFixed(2)}%`;
             document.getElementById("kpiActiveCards").innerText = database.cards.length;
 
-            // SSPN Calculations
+            renderFilterDecks(simulatedTxs);
+            renderCardsVault();
+            renderActiveBillingProgress(simulatedTxs);
+
+            let filteredSspn = database.sspnRecords.filter(r => {
+                const txYear = r.date.substring(0, 4);
+                const txMonth = r.date.substring(5, 7);
+                const yearMatch = (selectedYear === "ALL" || txYear === selectedYear);
+                const monthMatch = (selectedMonth === "ALL" || txMonth === selectedMonth);
+                return yearMatch && monthMatch;
+            });
+
+            renderSspnHistoryLedger(filteredSspn);
+
             let sspnDep = 0, sspnWith = 0;
-            database.sspnRecords.forEach(r => {
+            filteredSspn.forEach(r => {
                 if(r.amount > 0) sspnDep += r.amount;
                 else sspnWith += Math.abs(r.amount);
             });
-            document.getElementById("sspnKpiNet").innerText = `RM ${(sspnDep - sspnWith).toFixed(2)}`;
-            document.getElementById("sspnKpiDeposits").innerText = `RM ${sspnDep.toFixed(2)}`;
-            document.getElementById("sspnKpiWithdrawals").innerText = `RM ${sspnWith.toFixed(2)}`;
 
-            renderCharts(filtered);
+            const netSavings = sspnDep - sspnWith;
+            document.getElementById("sspnDashboardKpiNet").innerText = `RM ${netSavings.toFixed(2)}`;
+            document.getElementById("sspnDashboardKpiDeposits").innerText = `RM ${sspnDep.toFixed(2)}`;
+            document.getElementById("sspnDashboardKpiWithdrawals").innerText = `RM ${sspnWith.toFixed(2)}`;
+
+            renderCharts(filteredTxs);
+            renderSspnCharts(filteredSspn);
         }
 
-        function renderFilterDecks() {
-            // Timeline Period Generation
-            const periods = new Set();
-            database.transactions.forEach(t => periods.add(t.date.substring(0,7)));
-            const sortedPeriods = Array.from(periods).sort().reverse();
+        function renderSspnHistoryLedger(recordsList) {
+            const body = document.getElementById("sspnHistoryLedgerBody");
+            if (!body) return;
 
-            const pContainer = document.getElementById("timelinePeriodContainer");
-            if(pContainer) {
-                let html = `<button onclick="setPeriodFilter('ALL')" class="px-2.5 py-1 text-[10px] font-bold rounded-md border transition uppercase ${currentFilterPeriod === 'ALL' ? 'bg-indigo-600 border-indigo-500 text-white' : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'}">All View</button>`;
-                html += sortedPeriods.map(p => `<button onclick="setPeriodFilter('${p}')" class="px-2.5 py-1 text-[10px] font-bold rounded-md border transition uppercase font-mono ${currentFilterPeriod === p ? 'bg-indigo-600 border-indigo-500 text-white' : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'}">${p}</button>`).join('');
-                pContainer.innerHTML = html;
-            }
+            recordsList.sort((a,b) => new Date(b.date) - new Date(a.date));
 
-            // Dashboard Filter Deck Cards
+            body.innerHTML = recordsList.map(r => {
+                const sign = r.amount > 0 ? "+" : "";
+                const amtClass = r.amount > 0 ? "text-emerald-400" : "text-rose-400";
+                
+                const reflectedBadge = r.reflected 
+                    ? `<button onclick="toggleSspnReflected('${r.id}')" class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[9px] font-bold flex items-center gap-1 mx-auto">Reflected <i class="fa-solid fa-check"></i></button>`
+                    : `<button onclick="toggleSspnReflected('${r.id}')" class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[9px] font-bold flex items-center gap-1 mx-auto">Pending <i class="fa-solid fa-clock"></i></button>`;
+
+                return `
+                    <tr class="hover:bg-slate-900/40 transition">
+                        <td class="py-2.5 px-4 font-mono text-[11px]">${r.date}</td>
+                        <td class="py-2.5 px-4 font-semibold text-slate-300">
+                            <div>${r.channel}</div>
+                            <div class="text-[9px] text-slate-500 font-normal">${r.method}</div>
+                        </td>
+                        <td class="py-2.5 px-4 text-right font-bold ${amtClass}">RM ${sign}${r.amount.toFixed(2)}</td>
+                        <td class="py-2.5 px-4 text-center">${reflectedBadge}</td>
+                        <td class="py-2.5 px-4 text-center">
+                            <div class="flex gap-1 justify-center">
+                                <button onclick="openEditSspnModal('${r.id}')" class="text-indigo-400 hover:text-indigo-300 p-1"><i class="fa-solid fa-pen-to-square"></i></button>
+                                <button onclick="deleteSspn('${r.id}')" class="text-rose-500 hover:text-rose-400 p-1"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderFilterDecks(simulatedTxs) {
             const deck = document.getElementById("dashboardFilterDeck");
             if(deck) {
+                const selectedYear = document.getElementById("filterYear").value;
+                const selectedMonth = document.getElementById("filterMonth").value;
+
                 let html = `<div onclick="setCardFilter('ALL')" class="glass-card rounded-xl p-3 cursor-pointer border transition text-center ${currentFilterCard === 'ALL' ? 'active-filter-card' : ''}">
                     <span class="text-[10px] font-black uppercase text-slate-300">All Instruments</span>
                     <h4 class="text-xs font-mono text-slate-500 mt-1">Global Database</h4>
                 </div>`;
                 html += database.cards.map(c => {
                     const styles = getThemeStyles(c.theme);
-                    const txs = database.transactions.filter(t => t.cardId === c.id);
-                    const totalCB = txs.reduce((sum, t) => sum + t.cashback, 0);
+                    const txs = simulatedTxs.filter(t => {
+                        const cardMatch = t.cardId === c.id;
+                        const txYear = t.date.substring(0, 4);
+                        const txMonth = t.date.substring(5, 7);
+                        const yearMatch = (selectedYear === "ALL" || txYear === selectedYear);
+                        const monthMatch = (selectedMonth === "ALL" || txMonth === selectedMonth);
+                        return cardMatch && yearMatch && monthMatch;
+                    });
+                    const totalCB = txs.reduce((sum, t) => sum + t.calculatedCashback, 0);
                     return `<div onclick="setCardFilter('${c.id}')" class="glass-card rounded-xl p-3 cursor-pointer border transition ${styles.bg} ${currentFilterCard === c.id ? 'active-filter-card' : ''}">
                         <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded ${styles.badge} mb-1 inline-block">${c.id}</span>
                         <h4 class="text-xs font-bold text-slate-200 truncate">${c.name}</h4>
@@ -704,29 +1296,514 @@
             }
         }
 
+        function renderActiveBillingProgress(simulatedTxs) {
+            const container = document.getElementById("billingCycleProgressContainer");
+            if (!container) return;
+
+            const selectedYear = document.getElementById("filterYear").value;
+            const selectedMonth = document.getElementById("filterMonth").value;
+
+            container.innerHTML = database.cards.map(c => {
+                const txs = simulatedTxs.filter(t => {
+                    const cardMatch = t.cardId === c.id;
+                    const txYear = t.date.substring(0, 4);
+                    const txMonth = t.date.substring(5, 7);
+                    const yearMatch = (selectedYear === "ALL" || txYear === selectedYear);
+                    const monthMatch = (selectedMonth === "ALL" || txMonth === selectedMonth);
+                    return cardMatch && yearMatch && monthMatch;
+                });
+
+                const totalSpend = txs.reduce((sum, t) => sum + t.amount, 0);
+                const totalCB = txs.reduce((sum, t) => sum + t.calculatedCashback, 0);
+                const minReq = c.cycleMinSpend || 0;
+                const limitCap = c.cycleCashbackCap || Infinity;
+
+                const spendPercent = minReq > 0 ? Math.min((totalSpend / minReq) * 100, 100) : 100;
+                const capPercent = limitCap !== Infinity ? Math.min((totalCB / limitCap) * 100, 100) : 0;
+                const hasUnlocked = totalSpend >= minReq;
+
+                let categoryProgressBars = "";
+                c.rules.forEach(r => {
+                    if (r.categoryCap > 0) {
+                        const catTxs = txs.filter(t => t.category === r.category);
+                        const catCB = catTxs.reduce((sum, t) => sum + t.calculatedCashback, 0);
+                        const catPercent = Math.min((catCB / r.categoryCap) * 100, 100);
+                        categoryProgressBars += `
+                            <div class="space-y-1 pl-3 border-l border-slate-800">
+                                <div class="flex justify-between text-[9px] text-slate-400 font-semibold">
+                                    <span>Category Cap: ${r.category}</span>
+                                    <span>RM ${catCB.toFixed(2)} / RM ${r.categoryCap.toFixed(0)}</span>
+                                </div>
+                                <div class="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-slate-800/60">
+                                    <div class="bg-violet-500 h-full rounded-full transition-all duration-300" style="width: ${catPercent}%"></div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+
+                return `
+                    <div class="glass-card rounded-2xl p-4 space-y-3">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h5 class="text-xs font-bold text-slate-200">${c.name}</h5>
+                                <span class="text-[9px] text-slate-400 uppercase font-mono">Statement Engine</span>
+                            </div>
+                            <span class="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded ${hasUnlocked ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'}">
+                                ${hasUnlocked ? 'Unlocked' : 'Min Spend Locked'}
+                            </span>
+                        </div>
+
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-[10px] text-slate-400 font-semibold">
+                                <span>Cycle Spending Meter</span>
+                                <span>RM ${totalSpend.toFixed(2)} / RM ${minReq.toFixed(0)}</span>
+                            </div>
+                            <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800">
+                                <div class="bg-indigo-500 h-full rounded-full transition-all duration-300" style="width: ${spendPercent}%"></div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-[10px] text-slate-400 font-semibold">
+                                <span>Overall Cashback Cap</span>
+                                <span>RM ${totalCB.toFixed(2)} / ${limitCap !== Infinity ? 'RM ' + limitCap.toFixed(0) : 'Unlimited'}</span>
+                            </div>
+                            <div class="w-full bg-slate-900 h-2 rounded-full overflow-hidden border border-slate-800">
+                                <div class="bg-emerald-500 h-full rounded-full transition-all duration-300" style="width: ${limitCap !== Infinity ? capPercent : 0}%"></div>
+                            </div>
+                        </div>
+
+                        ${categoryProgressBars ? `
+                            <div class="space-y-2 mt-2 pt-2 border-t border-slate-800/60">
+                                <span class="text-[9px] uppercase tracking-widest text-slate-500 font-bold block">Category-Level Cap Breakdowns</span>
+                                ${categoryProgressBars}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
         function setCardFilter(cardId) {
             currentFilterCard = cardId;
             document.getElementById("activeFilterBadge").innerText = cardId === "ALL" ? "All Cards Active" : `${cardId} Selected`;
             refreshLedgerAndCalculations();
         }
 
-        function setPeriodFilter(p) {
-            currentFilterPeriod = p;
-            document.getElementById("activePeriodBadge").innerText = p === "ALL" ? "All Time View" : `Cycle: ${p}`;
-            refreshLedgerAndCalculations();
-        }
-
         function renderCardsVault() {
             const body = document.getElementById("cardManagerTableBody");
             if(body) {
-                body.innerHTML = database.cards.map(c => `
-                    <tr class="border-b border-slate-900">
-                        <td class="py-3 px-4 font-bold text-slate-200">${c.name} (${c.id})</td>
-                        <td class="py-3 px-4 uppercase text-xs text-indigo-400 font-mono">${c.theme}</td>
-                        <td class="py-3 px-4 text-slate-400">Day ${c.billingDay}</td>
-                        <td class="py-3 px-4"><span class="text-slate-500">System Managed</span></td>
-                    </tr>
-                `).join('');
+                body.innerHTML = database.cards.map(c => {
+                    const styles = getThemeStyles(c.theme);
+                    const minSpendText = c.cycleMinSpend > 0 ? `RM ${c.cycleMinSpend}` : 'None';
+                    const capText = c.cycleCashbackCap > 0 ? `RM ${c.cycleCashbackCap}` : 'Unlimited';
+                    return `
+                        <tr class="border-b border-slate-900/60 hover:bg-slate-900/30 transition">
+                            <td class="py-3 px-4 font-bold text-slate-200">
+                                <span class="text-xs">${c.name}</span>
+                                <span class="text-[9px] block font-mono text-slate-500">${c.id}</span>
+                            </td>
+                            <td class="py-3 px-4 uppercase text-xs">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-bold ${styles.badge}">${c.theme}</span>
+                            </td>
+                            <td class="py-3 px-4 text-slate-400 font-semibold">Day ${c.billingDay}</td>
+                            <td class="py-3 px-4 text-slate-400">
+                                <span class="text-xs block font-bold text-slate-300">Min: ${minSpendText}</span>
+                                <span class="text-[9px] block font-semibold text-indigo-400">Cap: ${capText}</span>
+                            </td>
+                            <td class="py-3 px-4 text-center">
+                                <div class="flex gap-1.5 justify-center">
+                                    <button onclick="editCard('${c.id}')" class="text-indigo-400 hover:text-indigo-300 p-1 bg-indigo-500/10 hover:bg-indigo-500/25 rounded transition"><i class="fa-solid fa-pen-to-square"></i></button>
+                                    <button onclick="deleteCard('${c.id}')" class="text-rose-500 hover:text-rose-400 p-1 bg-rose-500/10 hover:bg-rose-500/25 rounded transition"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+        }
+
+        function showAddCardForm() {
+            document.getElementById("cardEditorPanel").classList.remove("hidden");
+            document.getElementById("cardEditorTitle").innerText = "Add Config Instrument";
+            document.getElementById("editCardId").value = "";
+            document.getElementById("editCardId").disabled = false;
+            document.getElementById("editCardName").value = "";
+            document.getElementById("editCardTheme").value = "purple";
+            document.getElementById("editCardBillingDay").value = "1";
+            document.getElementById("editCardMinSpend").value = "0";
+            document.getElementById("editCardCashbackCap").value = "100";
+            document.getElementById("rulesListContainer").innerHTML = "";
+            addRuleRow("Other", 0.002, 0, false, [], 0);
+        }
+
+        function hideCardEditor() {
+            document.getElementById("cardEditorPanel").classList.add("hidden");
+        }
+
+        function addRuleRow(category = "", rate = 0, minTx = 0, tiered = false, tiers = [], categoryCap = 0) {
+            const container = document.getElementById("rulesListContainer");
+            const ruleId = "rule-" + Date.now() + Math.random().toString(36).substr(2, 4);
+            const row = document.createElement("div");
+            row.className = "p-3 bg-slate-900/60 border border-slate-800/80 rounded-xl space-y-3 rule-item-row";
+            row.dataset.ruleId = ruleId;
+
+            const ratePct = (rate * 100).toFixed(1);
+
+            row.innerHTML = `
+                <div class="flex flex-wrap gap-2 items-center justify-between">
+                    <input type="text" placeholder="Category e.g. Dining" value="${category}" required class="rule-category flex-1 min-w-[120px] bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-[11px] text-slate-100 focus:outline-none focus:border-indigo-500 font-semibold">
+                    
+                    <div class="flex gap-1.5 items-center">
+                        <label class="text-[9px] uppercase font-bold text-slate-400">Min Tx (RM)</label>
+                        <input type="number" value="${minTx}" placeholder="0" class="rule-min-spend-tx w-14 bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-[11px] text-slate-100 text-right">
+                    </div>
+
+                    <div class="flex gap-1.5 items-center">
+                        <label class="text-[9px] uppercase font-bold text-indigo-400">Cat Cap (RM)</label>
+                        <input type="number" value="${categoryCap}" placeholder="0" class="rule-category-cap w-14 bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-[11px] text-slate-100 text-right font-mono">
+                    </div>
+
+                    <div class="flex gap-1 items-center">
+                        <label class="text-[9px] uppercase font-bold text-indigo-400">Is Tiered?</label>
+                        <input type="checkbox" ${tiered ? 'checked' : ''} onchange="toggleTieredRow(this, '${ruleId}')" class="rule-tiered-checkbox rounded border-slate-800 text-indigo-500 focus:ring-indigo-500 cursor-pointer">
+                    </div>
+                    
+                    <button type="button" onclick="this.parentElement.parentElement.remove()" class="text-rose-500 hover:text-rose-400 p-1 text-[11px]"><i class="fa-solid fa-trash"></i></button>
+                </div>
+
+                <div class="rate-config-panel" id="ratePanel-${ruleId}">
+                    ${tiered ? renderTiersInputs(tiers) : `
+                        <div class="flex gap-2 items-center">
+                            <span class="text-[9px] uppercase font-bold text-slate-500">Flat Cashback Rate:</span>
+                            <div class="relative w-24">
+                                <input type="number" step="0.1" value="${ratePct}" placeholder="5" class="rule-flat-rate w-full bg-slate-950 border border-slate-800 rounded-lg pl-2 pr-5 py-1 text-[11px] text-slate-100 focus:outline-none text-right font-mono">
+                                <span class="absolute right-1.5 top-1/2 -translate-y-1/2 text-[9px] text-slate-400 font-bold">%</span>
+                            </div>
+                        </div>
+                    `}
+                </div>
+            `;
+            container.appendChild(row);
+        }
+
+        function toggleTieredRow(checkbox, ruleId) {
+            const panel = document.getElementById(`ratePanel-${ruleId}`);
+            if (checkbox.checked) {
+                panel.innerHTML = renderTiersInputs([]);
+            } else {
+                panel.innerHTML = `
+                    <div class="flex gap-2 items-center">
+                        <span class="text-[9px] uppercase font-bold text-slate-500">Flat Cashback Rate:</span>
+                        <div class="relative w-24">
+                            <input type="number" step="0.1" value="1.0" placeholder="5" class="rule-flat-rate w-full bg-slate-950 border border-slate-800 rounded-lg pl-2 pr-5 py-1 text-[11px] text-slate-100 focus:outline-none text-right font-mono">
+                            <span class="absolute right-1.5 top-1/2 -translate-y-1/2 text-[9px] text-slate-400 font-bold">%</span>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function renderTiersInputs(tiers) {
+            let html = `
+                <div class="space-y-1.5 bg-slate-950/60 p-2 rounded-lg border border-slate-800/40">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-[9px] uppercase font-black text-indigo-400 tracking-wider">Statement Spending Tiers</span>
+                        <button type="button" onclick="addTierInputRow(this)" class="text-[8px] bg-slate-900 hover:bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded font-bold border border-slate-800">
+                            + Add Tier
+                        </button>
+                    </div>
+                    <div class="tier-rows-container space-y-1">
+            `;
+
+            if (tiers && tiers.length > 0) {
+                tiers.forEach(t => {
+                    html += `
+                        <div class="flex gap-2 items-center tier-row">
+                            <span class="text-[9px] text-slate-400">If cycle spend &ge; RM</span>
+                            <input type="number" value="${t.minSpend}" class="rule-tier-min-spend w-16 bg-slate-950 border border-slate-800 rounded px-1.5 py-0.5 text-[10px] text-slate-100 font-mono">
+                            <span class="text-[9px] text-slate-400">rate is</span>
+                            <input type="number" step="0.1" value="${(t.rate*100).toFixed(1)}" class="rule-tier-rate w-12 bg-slate-950 border border-slate-800 rounded px-1.5 py-0.5 text-[10px] text-slate-100 text-right font-mono">%
+                            <button type="button" onclick="this.parentElement.remove()" class="text-rose-500 hover:text-rose-400 text-[10px] ml-auto"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    `;
+                });
+            } else {
+                html += `
+                    <div class="flex gap-2 items-center tier-row">
+                        <span class="text-[9px] text-slate-400">If cycle spend &ge; RM</span>
+                        <input type="number" value="1000" class="rule-tier-min-spend w-16 bg-slate-950 border border-slate-800 rounded px-1.5 py-0.5 text-[10px] text-slate-100 font-mono">
+                        <span class="text-[9px] text-slate-400">rate is</span>
+                        <input type="number" step="0.1" value="5.0" class="rule-tier-rate w-12 bg-slate-950 border border-slate-800 rounded px-1.5 py-0.5 text-[10px] text-slate-100 text-right font-mono">%
+                        <button type="button" onclick="this.parentElement.remove()" class="text-rose-500 hover:text-rose-400 text-[10px] ml-auto"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+            }
+
+            html += `</div></div>`;
+            return html;
+        }
+
+        function addTierInputRow(btn) {
+            const container = btn.parentElement.parentElement.querySelector(".tier-rows-container");
+            const div = document.createElement("div");
+            div.className = "flex gap-2 items-center tier-row";
+            div.innerHTML = `
+                <span class="text-[9px] text-slate-400">If cycle spend &ge; RM</span>
+                <input type="number" value="1000" class="rule-tier-min-spend w-16 bg-slate-950 border border-slate-800 rounded px-1.5 py-0.5 text-[10px] text-slate-100 font-mono">
+                <span class="text-[9px] text-slate-400">rate is</span>
+                <input type="number" step="0.1" value="5.0" class="rule-tier-rate w-12 bg-slate-950 border border-slate-800 rounded px-1.5 py-0.5 text-[10px] text-slate-100 text-right font-mono">%
+                <button type="button" onclick="this.parentElement.remove()" class="text-rose-500 hover:text-rose-400 text-[10px] ml-auto"><i class="fa-solid fa-trash"></i></button>
+            `;
+            container.appendChild(div);
+        }
+
+        function editCard(cardId) {
+            const card = database.cards.find(c => c.id === cardId);
+            if (!card) return;
+
+            document.getElementById("cardEditorPanel").classList.remove("hidden");
+            document.getElementById("cardEditorTitle").innerText = `Configure ${card.name}`;
+            
+            const idInput = document.getElementById("editCardId");
+            idInput.value = card.id;
+            idInput.disabled = true;
+
+            document.getElementById("editCardName").value = card.name;
+            document.getElementById("editCardTheme").value = card.theme || "purple";
+            document.getElementById("editCardBillingDay").value = card.billingDay || 1;
+            document.getElementById("editCardMinSpend").value = card.cycleMinSpend || 0;
+            document.getElementById("editCardCashbackCap").value = card.cycleCashbackCap || 100;
+
+            const rulesContainer = document.getElementById("rulesListContainer");
+            rulesContainer.innerHTML = "";
+            
+            if (card.rules) {
+                card.rules.forEach(r => {
+                    addRuleRow(r.category, r.rate, r.minTxSpend, r.tiered, r.tiers, r.categoryCap || 0);
+                });
+            }
+        }
+
+        function deleteCard(cardId) {
+            const index = database.cards.findIndex(c => c.id === cardId);
+            if (index === -1) return;
+
+            const txCount = database.transactions.filter(t => t.cardId === cardId).length;
+            const confirmMsg = txCount > 0 
+                ? `Warning: Removing this card configuration will impact calculations for ${txCount} historical transactions. Continue?` 
+                : "Are you sure you want to remove this credit card from your config database?";
+
+            askConfirm(confirmMsg, () => {
+                database.cards.splice(index, 1);
+                saveToLocalStorage();
+                refreshLedgerAndCalculations();
+                populateDropdownOptions();
+                showToast("Card configuration wiped.");
+            });
+        }
+
+        function handleCardFormSubmit(e) {
+            e.preventDefault();
+            const rawId = document.getElementById("editCardId").value.trim().replace(/\s+/g, '');
+            const cardName = document.getElementById("editCardName").value.trim();
+            const cardTheme = document.getElementById("editCardTheme").value;
+            const billingDay = parseInt(document.getElementById("editCardBillingDay").value) || 1;
+            const minSpend = parseFloat(document.getElementById("editCardMinSpend").value) || 0;
+            const cbCap = parseFloat(document.getElementById("editCardCashbackCap").value) || 0;
+
+            const rules = [];
+            document.querySelectorAll(".rule-item-row").forEach(row => {
+                const categoryInput = row.querySelector(".rule-category");
+                const minTxInput = row.querySelector(".rule-min-spend-tx");
+                const categoryCapInput = row.querySelector(".rule-category-cap");
+                const tieredCheckbox = row.querySelector(".rule-tiered-checkbox");
+
+                if (categoryInput && categoryInput.value.trim()) {
+                    const ruleData = {
+                        category: categoryInput.value.trim(),
+                        minTxSpend: parseFloat(minTxInput.value) || 0,
+                        categoryCap: parseFloat(categoryCapInput.value) || 0,
+                        tiered: tieredCheckbox.checked,
+                        rate: 0,
+                        tiers: []
+                    };
+
+                    if (tieredCheckbox.checked) {
+                        const tierRows = row.querySelectorAll(".tier-row");
+                        tierRows.forEach(tr => {
+                            const minSpendInput = tr.querySelector(".rule-tier-min-spend");
+                            const rateInput = tr.querySelector(".rule-tier-rate");
+                            if (minSpendInput && rateInput) {
+                                ruleData.tiers.push({
+                                    minSpend: parseFloat(minSpendInput.value) || 0,
+                                    rate: (parseFloat(rateInput.value) || 0) / 100
+                                });
+                            }
+                        });
+                        if (ruleData.tiers.length > 0) {
+                            ruleData.rate = Math.min(...ruleData.tiers.map(t => t.rate));
+                        }
+                    } else {
+                        const rateInput = row.querySelector(".rule-flat-rate");
+                        ruleData.rate = rateInput ? (parseFloat(rateInput.value) || 0) / 100 : 0;
+                    }
+                    rules.push(ruleData);
+                }
+            });
+
+            const existingCard = database.cards.find(c => c.id === rawId);
+            if (existingCard) {
+                existingCard.name = cardName;
+                existingCard.theme = cardTheme;
+                existingCard.billingDay = billingDay;
+                existingCard.cycleMinSpend = minSpend;
+                existingCard.cycleCashbackCap = cbCap;
+                existingCard.rules = rules;
+                showToast("Card settings updated.");
+            } else {
+                database.cards.push({
+                    id: rawId,
+                    name: cardName,
+                    theme: cardTheme,
+                    billingDay: billingDay,
+                    cycleMinSpend: minSpend,
+                    cycleCashbackCap: cbCap,
+                    rules: rules
+                });
+                showToast("New credit card configuration stored.");
+            }
+
+            saveToLocalStorage();
+            refreshLedgerAndCalculations();
+            populateDropdownOptions();
+            hideCardEditor();
+        }
+
+        function handleSystemSettingsSubmit(e) {
+            e.preventDefault();
+            const parseCsv = (id) => document.getElementById(id).value.split(',')
+                .map(item => item.trim())
+                .filter(item => item.length > 0);
+
+            database.settings.internalCategories = parseCsv("settingsPersonalTags");
+            database.settings.sspnChannels = parseCsv("settingsSspnChannels");
+            database.settings.sspnDevices = parseCsv("settingsSspnDevices");
+            database.settings.sspnMethods = parseCsv("settingsSspnMethods");
+
+            saveToLocalStorage();
+            populateDropdownOptions();
+            refreshLedgerAndCalculations();
+            showToast("System dropdown configurations saved.");
+        }
+
+        function openEditTxModal(txId) {
+            const tx = database.transactions.find(t => t.id === txId);
+            if (!tx) return;
+
+            document.getElementById("editFormTxId").value = tx.id;
+            document.getElementById("editFormTxDate").value = tx.date;
+            
+            const cardSelect = document.getElementById("editFormTxCard");
+            cardSelect.innerHTML = database.cards.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+            cardSelect.value = tx.cardId;
+
+            handleModalTxCardChange(tx.category);
+
+            const internalSelect = document.getElementById("editFormTxInternal");
+            internalSelect.innerHTML = database.settings.internalCategories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
+            internalSelect.value = tx.internalTag;
+
+            document.getElementById("editFormTxAmount").value = tx.amount;
+            document.getElementById("editFormTxDesc").value = tx.description;
+
+            document.getElementById("editTxModal").classList.remove("hidden");
+        }
+
+        function handleModalTxCardChange(selectedCategory = null) {
+            const cardId = document.getElementById("editFormTxCard").value;
+            const card = database.cards.find(c => c.id === cardId);
+            const catSelect = document.getElementById("editFormTxCategory");
+            
+            if (card && catSelect) {
+                catSelect.innerHTML = (card.rules || []).map(r => `<option value="${r.category}">${r.category}</option>`).join('');
+                if (selectedCategory) {
+                    catSelect.value = selectedCategory;
+                }
+            }
+        }
+
+        function closeEditTxModal() {
+            document.getElementById("editTxModal").classList.add("hidden");
+        }
+
+        function handleEditTxSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById("editFormTxId").value;
+            const tx = database.transactions.find(t => t.id === id);
+
+            if (tx) {
+                tx.date = document.getElementById("editFormTxDate").value;
+                tx.cardId = document.getElementById("editFormTxCard").value;
+                tx.category = document.getElementById("editFormTxCategory").value;
+                tx.internalTag = document.getElementById("editFormTxInternal").value;
+                tx.amount = parseFloat(document.getElementById("editFormTxAmount").value);
+                tx.description = document.getElementById("editFormTxDesc").value;
+
+                saveToLocalStorage();
+                refreshLedgerAndCalculations();
+                closeEditTxModal();
+                showToast("Ledger record updated.");
+            }
+        }
+
+        function openEditSspnModal(recId) {
+            const rec = database.sspnRecords.find(r => r.id === recId);
+            if (!rec) return;
+
+            document.getElementById("editFormSspnId").value = rec.id;
+            document.getElementById("editFormSspnDate").value = rec.date;
+
+            const chSelect = document.getElementById("editFormSspnChannel");
+            chSelect.innerHTML = database.settings.sspnChannels.map(c => `<option value="${c}">${c}</option>`).join('');
+            chSelect.value = rec.channel;
+
+            const devSelect = document.getElementById("editFormSspnDevice");
+            devSelect.innerHTML = database.settings.sspnDevices.map(d => `<option value="${d}">${d}</option>`).join('');
+            devSelect.value = rec.device;
+
+            const metSelect = document.getElementById("editFormSspnMethod");
+            metSelect.innerHTML = database.settings.sspnMethods.map(m => `<option value="${m}">${m}</option>`).join('');
+            metSelect.value = rec.method;
+
+            document.getElementById("editFormSspnAmount").value = rec.amount;
+            document.getElementById("editFormSspnReflected").checked = !!rec.reflected;
+
+            document.getElementById("editSspnModal").classList.remove("hidden");
+        }
+
+        function closeEditSspnModal() {
+            document.getElementById("editSspnModal").classList.add("hidden");
+        }
+
+        function handleEditSspnSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById("editFormSspnId").value;
+            const rec = database.sspnRecords.find(r => r.id === id);
+
+            if (rec) {
+                rec.date = document.getElementById("editFormSspnDate").value;
+                rec.channel = document.getElementById("editFormSspnChannel").value;
+                rec.device = document.getElementById("editFormSspnDevice").value;
+                rec.method = document.getElementById("editFormSspnMethod").value;
+                rec.amount = parseFloat(document.getElementById("editFormSspnAmount").value);
+                rec.reflected = document.getElementById("editFormSspnReflected").checked;
+
+                saveToLocalStorage();
+                refreshLedgerAndCalculations();
+                closeEditSspnModal();
+                showToast("SSPN record modified.");
             }
         }
 
@@ -736,9 +1813,9 @@
             const catData = {};
 
             records.forEach(t => {
-                chartData[t.date] = (chartData[t.date] || 0) + t.cashback;
-                cardData[t.cardId] = (cardData[t.cardId] || 0) + t.cashback;
-                catData[t.internalTag] = (catData[t.internalTag] || 0) + t.cashback;
+                chartData[t.date] = (chartData[t.date] || 0) + t.calculatedCashback;
+                cardData[t.cardId] = (cardData[t.cardId] || 0) + t.calculatedCashback;
+                catData[t.internalTag] = (catData[t.internalTag] || 0) + t.calculatedCashback;
             });
 
             const sortedDates = Object.keys(chartData).sort();
@@ -791,6 +1868,59 @@
             }
         }
 
+        function renderSspnCharts(records) {
+            const channelTracker = {};
+            const sorted = [...records].sort((a,b) => new Date(a.date) - new Date(b.date));
+
+            let rollingBalance = 0;
+            const points = [];
+            const labels = [];
+
+            sorted.forEach(r => {
+                rollingBalance += r.amount;
+                labels.push(r.date);
+                points.push(rollingBalance);
+
+                if (r.amount > 0) {
+                    channelTracker[r.channel] = (channelTracker[r.channel] || 0) + r.amount;
+                }
+            });
+
+            if(sspnTrendChartObj) sspnTrendChartObj.destroy();
+            if(sspnChannelPieChartObj) sspnChannelPieChartObj.destroy();
+
+            const sCtx1 = document.getElementById('sspnSavingsTrendChart');
+            if(sCtx1) {
+                sspnTrendChartObj = new Chart(sCtx1, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Consolidated Balance (RM)',
+                            data: points,
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.05)',
+                            fill: true,
+                            tension: 0.1
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                });
+            }
+
+            const sCtx2 = document.getElementById('sspnChannelPieChart');
+            if(sCtx2) {
+                sspnChannelPieChartObj = new Chart(sCtx2, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(channelTracker),
+                        datasets: [{ data: Object.values(channelTracker), backgroundColor: ['#10b981', '#3b82f6', '#f59e0b', '#ec4899'] }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                });
+            }
+        }
+
         function exportToExcel() {
             if(database.transactions.length === 0) {
                 showToast("Ledger dashboard empty!", "error");
@@ -812,68 +1942,74 @@
                 try {
                     const parsed = JSON.parse(data);
                     if(parsed.transactions) database = parsed;
-                } catch(e) { console.error("Database structure corrupted, falling back to defaults.", e); }
+                } catch(e) { console.error("Data parameters corrupted.", e); }
             }
             
-            // Load cloud credentials into parameters form input views
-            document.getElementById("syncEndpoint").value = localStorage.getItem("koofr_endpoint") || "";
-            document.getElementById("syncUser").value = localStorage.getItem("koofr_user") || "";
-            document.getElementById("syncPass").value = localStorage.getItem("koofr_pass") || "";
+            if (database.settings) {
+                document.getElementById("settingsPersonalTags").value = (database.settings.internalCategories || []).join(', ');
+                document.getElementById("settingsSspnChannels").value = (database.settings.sspnChannels || []).join(', ');
+                document.getElementById("settingsSspnDevices").value = (database.settings.sspnDevices || []).join(', ');
+                document.getElementById("settingsSspnMethods").value = (database.settings.sspnMethods || []).join(', ');
+            }
+
+            if(document.getElementById("syncEndpoint")) {
+                document.getElementById("syncEndpoint").value = localStorage.getItem("koofr_endpoint") || "";
+            }
         }
 
         function saveSyncSettings() {
             localStorage.setItem("koofr_endpoint", document.getElementById("syncEndpoint").value.trim());
-            localStorage.setItem("koofr_user", document.getElementById("syncUser").value.trim());
-            localStorage.setItem("koofr_pass", document.getElementById("syncPass").value.trim());
-            showToast("Sync profile parameters saved locally.");
+            showToast("Gateway proxy endpoints updated.");
         }
 
         async function handleCloudSync(action) {
             const url = localStorage.getItem("koofr_endpoint");
-            const user = localStorage.getItem("koofr_user");
-            const pass = localStorage.getItem("koofr_pass");
 
-            if(!url || !user || !pass) {
-                showToast("Missing cloud synchronization configuration profiling parameters.", "error");
+            if(!url) {
+                showToast("Missing Cloudflare Proxy Endpoint configuration.", "error");
                 switchTab('koofrSync');
                 return;
             }
 
-            const targetUrl = url.endsWith('/') ? url + 'cc_sspn_backup.json' : url + '/cc_sspn_backup.json';
-            const headers = new Headers();
-            headers.set('Authorization', 'Basic ' + btoa(user + ":" + pass));
-
+            const targetUrl = url.endsWith('.json') ? url : (url.endsWith('/') ? url + 'cc_sspn_backup.json' : url + '/cc_sspn_backup.json');
+            
             if(action === 'push') {
                 try {
-                    headers.set('Content-Type', 'application/json');
-                    const response = await fetch(targetUrl, { method: 'PUT', headers: headers, body: JSON.stringify(database) });
+                    const response = await fetch(targetUrl, { 
+                        method: 'PUT', 
+                        headers: { 'Content-Type': 'application/json' }, 
+                        body: JSON.stringify(database) 
+                    });
+                    
                     if(response.ok || response.status === 201 || response.status === 204) {
-                        showToast("Workspace database securely snapshot backup pushed!");
-                    } else { throw new Error(`HTTP Status ${response.status}`); }
+                        showToast("Workspace database synced to Cloud!");
+                    } else { 
+                        throw new Error(`HTTP Status ${response.status}`); 
+                    }
                 } catch(e) {
                     showToast("Sync Push Error: " + e.message, "error");
                 }
             } else if(action === 'pull') {
                 try {
-                    const response = await fetch(targetUrl, { method: 'GET', headers: headers });
+                    const response = await fetch(targetUrl, { method: 'GET' });
                     if(response.ok) {
                         const cloudDb = await response.json();
-                        if(cloudDb && cloudDb.transactions) {
+                        if(cloudDb && (cloudDb.transactions || cloudDb.sspnRecords)) {
                             database = cloudDb;
                             saveToLocalStorage();
                             refreshLedgerAndCalculations();
                             populateDropdownOptions();
                             showToast("Database pulled from Koofr.");
+                        } else {
+                            throw new Error("Invalid database schema returned from cloud.");
                         }
-                    } else { throw new Error(`HTTP Status ${response.status}`); }
+                    } else { 
+                        throw new Error(`HTTP Status ${response.status}`); 
+                    }
                 } catch(e) {
                     showToast("Sync Pull Error: " + e.message, "error");
                 }
             }
-        }
-
-        function openSettingsModal() {
-            showToast("Settings profiles can be updated via the Maintenance and Koofr Sync tabs directly.", "info");
         }
     </script>
 </body>
