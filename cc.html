@@ -117,6 +117,18 @@
 
         <!-- Dashboard Content -->
         <section id="tabContent-dashboard" class="space-y-8">
+            <!-- Dynamic Period Timeline Selector (As requested for historical transaction review) -->
+            <div class="space-y-3 bg-[#0d1222]/40 p-4 rounded-2xl border border-slate-800/60">
+                <div class="flex justify-between items-center">
+                    <h4 class="text-xs font-bold text-indigo-400 uppercase tracking-widest"><i class="fa-solid fa-clock mr-1.5"></i>Historical Cycle Timeline</h4>
+                    <span id="activePeriodBadge" class="text-[9px] bg-indigo-950 text-indigo-300 border border-indigo-850 px-2 py-0.5 rounded-md font-bold uppercase">All Time view</span>
+                </div>
+                <!-- Pill Container for dynamically calculated months -->
+                <div id="timelinePeriodContainer" class="flex flex-wrap gap-2 pt-1.5">
+                    <!-- Dynamic Month Pills added here -->
+                </div>
+            </div>
+
             <!-- Universal Dashboard Filtering Deck -->
             <div class="space-y-3">
                 <div class="flex justify-between items-center">
@@ -169,6 +181,16 @@
                 </div>
             </div>
 
+            <!-- New World Class Solution: Dynamic Statement / Billing Cycle Limit & Milestone Monitors -->
+            <div class="space-y-3">
+                <h4 class="text-xs font-bold text-indigo-400 uppercase tracking-widest">
+                    <i class="fa-solid fa-clock-rotate-left mr-1.5"></i>Active Billing Cycles & Rewards Progress
+                </h4>
+                <div id="billingCycleProgressContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Generated dynamically based on statement/calendar close criteria -->
+                </div>
+            </div>
+
             <!-- Dashboard Analytics Layout -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- Interactive Chart Column -->
@@ -208,8 +230,8 @@
             <div class="glass-card rounded-2xl p-6">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div>
-                        <h4 class="text-sm font-bold uppercase tracking-wider text-slate-200">Processed Wealth Ledger</h4>
-                        <p class="text-[10px] text-slate-500 mt-0.5">Real-time ledger audit containing individual rewards yields</p>
+                        <h4 class="text-sm font-bold uppercase tracking-wider text-slate-200">Processed Ledger Audit</h4>
+                        <p class="text-[10px] text-slate-500 mt-0.5">Filter cards and periods above to isolate records</p>
                     </div>
                     <div class="flex gap-2 w-full sm:w-auto">
                         <button onclick="exportToExcel()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-xl text-xs font-semibold tracking-wider transition flex items-center justify-center gap-1.5 w-full sm:w-auto shadow-md shadow-indigo-500/10">
@@ -486,14 +508,17 @@
             </div>
         </section>
 
-        <!-- Maintenance Hub (Cards + Custom Categories) -->
+        <!-- Maintenance Hub -->
         <section id="tabContent-cardManager" class="hidden space-y-8">
-            <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+            <div class="grid cols-1 lg:grid-cols-5 gap-6">
                 <!-- Left Hand Configurator Forms -->
                 <div class="lg:col-span-2 space-y-6">
                     <!-- Configurator panel for Cards -->
-                    <div class="glass-card rounded-2xl p-6">
-                        <h3 class="text-base font-bold text-slate-200 mb-2 uppercase tracking-wider"><i class="fa-solid fa-plus text-indigo-400 mr-2"></i>Configure Credit Card</h3>
+                    <div class="glass-card rounded-2xl p-6" id="cardFormContainer">
+                        <h3 class="text-base font-bold text-slate-200 mb-2 uppercase tracking-wider">
+                            <i class="fa-solid fa-plus text-indigo-400 mr-2" id="cardFormIcon"></i>
+                            <span id="cardFormHeader">Configure Credit Card</span>
+                        </h3>
                         <p class="text-xs text-slate-500 mb-6">Create new reward rules. Formulate custom category multipliers or intricate spend-tiered bracket rates here.</p>
 
                         <form id="cardConfigForm" onsubmit="handleCardSubmit(event)" class="space-y-4">
@@ -618,9 +643,15 @@
                                 <p class="text-[9px] text-slate-500 mt-1">If "Min Tx" is set, transactions with amount less than this setting earn no cashback. If Milestone Spend is reached, Milestone rate takes precedence.</p>
                             </div>
 
-                            <button type="submit" class="w-full bg-[#6366f1] hover:bg-[#5053df] text-white font-bold py-3 rounded-xl shadow-lg transition duration-200 text-xs uppercase tracking-widest mt-6">
-                                Create Credit Card Template
-                            </button>
+                            <!-- Submit action buttons -->
+                            <div class="flex gap-2">
+                                <button type="button" id="cardCancelEditBtn" onclick="cancelCardEdit()" class="hidden flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
+                                    Cancel
+                                </button>
+                                <button type="submit" id="cardSubmitBtn" class="flex-[2] bg-[#6366f1] hover:bg-[#5053df] text-white font-bold py-3 rounded-xl shadow-lg transition duration-200 text-xs uppercase tracking-widest">
+                                    Create Credit Card Template
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -804,7 +835,7 @@ async function handleRequest(request) {
 
                 <!-- Config Section: Methods -->
                 <div class="space-y-3 border-t border-slate-900 pt-4">
-                    <h4 class="text-xs font-bold text-indigo-400 uppercase tracking-wide">SSPN Payment Methods</h4>
+                    <h4 class="text-xs font-bold text-[#6366f1] uppercase tracking-wide">SSPN Payment Methods</h4>
                     <div class="flex gap-2">
                         <input type="text" id="addMethodInput" placeholder="e.g. Debit Card, E-Wallet"
                             class="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
@@ -815,7 +846,7 @@ async function handleRequest(request) {
 
                 <!-- Config Section: Personal Budget Tags -->
                 <div class="space-y-3 border-t border-slate-900 pt-4">
-                    <h4 class="text-xs font-bold text-indigo-400 uppercase tracking-wide">Card Personal Categories</h4>
+                    <h4 class="text-xs font-bold text-[#6366f1] uppercase tracking-wide">Card Personal Categories</h4>
                     <div class="flex gap-2">
                         <input type="text" id="newCategoryInput" placeholder="e.g. ☕ Cafe & Treats"
                             class="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
@@ -842,13 +873,17 @@ async function handleRequest(request) {
         let internalCategories = [];
         let sspnRecords = [];
 
-        // Global selected dashboard card filter state
-        let activeDashboardCardId = "all";
-
-        // Track editing SSPN entry
+        // Track editing template references
+        let editingCardId = null;
         let editingSspnId = null;
 
-        // Dynamic Settings Configurations (Configurable via new portal)
+        // Global selected dashboard card filter state
+        let activeDashboardCardId = "all";
+        
+        // Global selected historical period timeline state
+        let activeDashboardPeriod = "all";
+
+        // Dynamic Settings Configurations (Configurable via settings portal modal)
         let sspnChannels = [];
         let sspnDevices = [];
         let sspnMethods = [];
@@ -938,6 +973,26 @@ async function handleRequest(request) {
                 internalCategory: "🛒 Essential Utility",
                 description: "Organic Supermarket",
                 cashback: 4.83
+            },
+            {
+                id: "tx-3",
+                date: "2026-04-18",
+                amount: 450.00,
+                cardId: "card-1",
+                category: "Travel",
+                internalCategory: "🏠 Personal Life",
+                description: "Historical Flight Ticket",
+                cashback: 18.00
+            },
+            {
+                id: "tx-4",
+                date: "2026-04-20",
+                amount: 120.00,
+                cardId: "card-2",
+                category: "Groceries",
+                internalCategory: "🛒 Essential Utility",
+                description: "April Grocery Stock",
+                cashback: 7.20
             }
         ];
 
@@ -1415,6 +1470,7 @@ async function handleRequest(request) {
 
         function renderSspnLedger() {
             const container = document.getElementById('sspnMobileCardContainer');
+            if (!container) return;
             container.innerHTML = '';
 
             const countEl = document.getElementById('sspnRecordCount');
@@ -1596,7 +1652,7 @@ async function handleRequest(request) {
             const cycleKey = getBillingCycleKey(card, dateStr);
             return transactions
                 .filter(t => t.cardId === card.id && getBillingCycleKey(card, t.date) === cycleKey)
-                .reduce((sum, t) => sum + parseFloat(t.cashback), 0);
+                .reduce((sum, t) => sum + parseFloat(t.cashback || 0), 0);
         }
 
         function calculateTieredBaseCashback(amount, currentSpend, tiers, baseRate) {
@@ -1956,28 +2012,56 @@ async function handleRequest(request) {
             const minTxAmountVal = document.getElementById('cardMinTxAmount').value;
             const minTxAmount = minTxAmountVal !== '' && parseFloat(minTxAmountVal) > 0 ? parseFloat(minTxAmountVal) : null;
 
-            const newCard = {
-                id: 'card-' + Date.now(),
-                name,
-                baseRate,
-                theme,
-                illustration: tempIllustrationData,
-                cycleType,
-                statementCloseDay,
-                boosters,
-                useTiers,
-                tiers,
-                monthlyCap,
-                tierSpendThreshold,
-                tierSpendRate,
-                minTxAmount
-            };
+            if (editingCardId) {
+                // Update card structure in place
+                const index = cards.findIndex(c => c.id === editingCardId);
+                if (index !== -1) {
+                    cards[index] = {
+                        id: editingCardId,
+                        name,
+                        baseRate,
+                        theme,
+                        illustration: tempIllustrationData,
+                        cycleType,
+                        statementCloseDay,
+                        boosters,
+                        useTiers,
+                        tiers,
+                        monthlyCap,
+                        tierSpendThreshold,
+                        tierSpendRate,
+                        minTxAmount
+                    };
+                    showToast("Credit card template amended successfully!", "fa-check", "text-emerald-400");
+                }
+                cancelCardEdit();
+            } else {
+                // Create new card design
+                const newCard = {
+                    id: 'card-' + Date.now(),
+                    name,
+                    baseRate,
+                    theme,
+                    illustration: tempIllustrationData,
+                    cycleType,
+                    statementCloseDay,
+                    boosters,
+                    useTiers,
+                    tiers,
+                    monthlyCap,
+                    tierSpendThreshold,
+                    tierSpendRate,
+                    minTxAmount
+                };
 
-            cards.push(newCard);
+                cards.push(newCard);
+                showToast(`Card template registered: ${name}`, "fa-wallet", "text-indigo-400");
+            }
+
             saveStateToLocalStorage();
             refreshLedgerAndCalculations();
 
-            // Clear configuration form
+            // Clear card input form
             document.getElementById('cardConfigForm').reset();
             document.getElementById('boosterRowsContainer').innerHTML = '';
             document.getElementById('tierRowsContainer').innerHTML = '';
@@ -1987,8 +2071,6 @@ async function handleRequest(request) {
             document.getElementById('customIllustrationContainer').classList.add('hidden');
             addBoosterInputRow();
             addBoosterInputRow();
-
-            showToast(`Card template registered: ${name}`, "fa-wallet", "text-indigo-400");
         }
 
         function deleteCard(cardId) {
@@ -2066,6 +2148,12 @@ async function handleRequest(request) {
             // Re-render dashboard selector card deck
             renderDashboardFilterDeck();
 
+            // Re-render timeline period selector pills
+            renderTimelinePeriodContainer();
+
+            // Re-render world-class dashboard billing progress monitor (Statement Cycle Progress bars)
+            renderBillingCycleProgressPanel();
+
             renderTransactionLedgerTable();
             recalculateKPICounters();
             
@@ -2079,6 +2167,7 @@ async function handleRequest(request) {
 
         function repopulateFormDropdowns() {
             const cardSelect = document.getElementById('txCard');
+            if (!cardSelect) return;
             const prevSelectedValue = cardSelect.value;
             
             cardSelect.innerHTML = '';
@@ -2130,6 +2219,71 @@ async function handleRequest(request) {
             document.getElementById('selectedCardRuleLabel').innerText = card.useTiers 
                 ? `${card.tiers.length} Brackets` 
                 : `${card.boosters.length} Custom Multipliers`;
+        }
+
+        /* Render dynamic timeline period selector pills */
+        function renderTimelinePeriodContainer() {
+            const container = document.getElementById('timelinePeriodContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            // Compute unique period values from transactions
+            const periodsSet = new Set();
+            transactions.forEach(t => {
+                const date = new Date(t.date);
+                if (isNaN(date.getTime())) return;
+                
+                // Formulate month name matching user's May.2026 format from the screenshot
+                const monthsList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                const key = `${monthsList[date.getMonth()]} ${date.getFullYear()}`;
+                periodsSet.add(key);
+            });
+
+            // Master "All Time" timeline filter block
+            const allBtn = document.createElement('button');
+            allBtn.type = 'button';
+            allBtn.onclick = () => selectDashboardPeriod('all');
+            allBtn.className = `px-4 py-2 rounded-xl text-xs font-bold transition duration-150 ${activeDashboardPeriod === 'all' ? 'bg-[#6366f1] text-white shadow-md shadow-indigo-500/10' : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-100'}`;
+            allBtn.innerText = "All Time";
+            container.appendChild(allBtn);
+
+            // Print sorted historical month list
+            const sortedPeriods = Array.from(periodsSet).sort((a,b) => {
+                // Parse "May 2026" to compare chronologically
+                const monthsList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                const [m1, y1] = a.split(' ');
+                const [m2, y2] = b.split(' ');
+                if (y1 !== y2) return parseInt(y2) - parseInt(y1);
+                return monthsList.indexOf(m2) - monthsList.indexOf(m1);
+            });
+
+            sortedPeriods.forEach(p => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.onclick = () => selectDashboardPeriod(p);
+                btn.className = `px-4 py-2 rounded-xl text-xs font-bold transition duration-150 ${activeDashboardPeriod === p ? 'bg-[#6366f1] text-white shadow-md shadow-indigo-500/10' : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-100'}`;
+                btn.innerText = p;
+                container.appendChild(btn);
+            });
+        }
+
+        function selectDashboardPeriod(periodKey) {
+            activeDashboardPeriod = periodKey;
+            
+            const badge = document.getElementById('activePeriodBadge');
+            if (periodKey === 'all') {
+                badge.innerText = "All Time View";
+                badge.className = "text-[9px] bg-indigo-950 text-indigo-300 border border-indigo-850 px-2 py-0.5 rounded-md font-bold uppercase";
+            } else {
+                badge.innerText = `${periodKey} Filtered`;
+                badge.className = "text-[9px] bg-emerald-950 text-emerald-300 border border-emerald-850 px-2 py-0.5 rounded-md font-bold uppercase";
+            }
+
+            // Sync metrics, progress monitors, and transactions list
+            renderBillingCycleProgressPanel();
+            renderTransactionLedgerTable();
+            recalculateKPICounters();
+            setTimeout(refreshCharts, 50);
         }
 
         /* Render dynamic dashboard filter card deck */
@@ -2192,13 +2346,107 @@ async function handleRequest(request) {
 
             // Instantly sync visual highlighted state, KPIs, ledger, and charts
             renderDashboardFilterDeck();
+            renderBillingCycleProgressPanel();
             renderTransactionLedgerTable();
             recalculateKPICounters();
             setTimeout(refreshCharts, 50);
         }
 
+        /* Render real-time statement cycle progress panels on dashboard */
+        function renderBillingCycleProgressPanel() {
+            const container = document.getElementById('billingCycleProgressContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            // Filter shown cycles based on dynamic card selector state
+            const cardsToRender = activeDashboardCardId === 'all'
+                ? cards
+                : cards.filter(c => c.id === activeDashboardCardId);
+
+            if (cardsToRender.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-2 bg-[#090d16] border border-slate-900 rounded-2xl p-6 text-center text-xs text-slate-500">
+                        No credit card templates defined to evaluate billing metrics.
+                    </div>
+                `;
+                return;
+            }
+
+            cardsToRender.forEach(card => {
+                const rangeText = getCurrentCycleDateRange(card);
+                const { cycleSpend, cycleCashback } = getCycleMetrics(card);
+
+                // Compute Cap Usage percentage
+                let capPercent = 0;
+                let capRatioText = "Unlimited limit";
+                if (card.monthlyCap && card.monthlyCap > 0) {
+                    const maxCap = parseFloat(card.monthlyCap);
+                    capPercent = Math.min((cycleCashback / maxCap) * 100, 100);
+                    capRatioText = `RM ${cycleCashback.toFixed(2)} / RM ${maxCap.toFixed(2)}`;
+                } else {
+                    capRatioText = `RM ${cycleCashback.toFixed(2)} accumulated`;
+                }
+
+                // Compute Milestone Rate progress
+                let milestonePercent = 0;
+                let milestoneRatioText = "Milestone inactive";
+                let milestoneClass = "hidden";
+                if (card.tierSpendThreshold && card.tierSpendThreshold > 0) {
+                    milestoneClass = "block";
+                    const thresh = parseFloat(card.tierSpendThreshold);
+                    milestonePercent = Math.min((cycleSpend / thresh) * 100, 100);
+                    if (cycleSpend >= thresh) {
+                        milestoneRatioText = `🎉 Threshold reached! Rate boosted to ${card.tierSpendRate}%`;
+                    } else {
+                        milestoneRatioText = `RM ${cycleSpend.toFixed(2)} / RM ${thresh.toFixed(2)} to unlock ${card.tierSpendRate}% rate`;
+                    }
+                }
+
+                const cycleCard = document.createElement('div');
+                cycleCard.className = "glass-card rounded-2xl p-5 border border-slate-800/80 hover:border-slate-700/60 flex flex-col justify-between space-y-4";
+                cycleCard.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h5 class="text-sm font-extrabold text-slate-200 tracking-tight">${card.name}</h5>
+                            <span class="text-[9px] uppercase font-bold text-slate-500 block mt-0.5"><i class="fa-solid fa-calendar mr-1 text-[#6366f1]"></i>Cycle: ${rangeText}</span>
+                        </div>
+                        <span class="text-[9px] bg-slate-900 border border-slate-800 text-indigo-400 px-2 py-0.5 rounded font-mono font-bold capitalize">${card.cycleType} Reset</span>
+                    </div>
+
+                    <!-- Cap usage progress tracker -->
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between items-center text-[10px]">
+                            <span class="text-slate-400 font-semibold">Cashback Cap Consumed</span>
+                            <span class="font-bold text-indigo-400">${capRatioText}</span>
+                        </div>
+                        <div class="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden">
+                            <div class="bg-gradient-to-r from-indigo-500 to-purple-500 h-1.5 rounded-full" style="width: ${card.monthlyCap ? capPercent : 100}%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Milestone threshold progress tracker -->
+                    <div class="space-y-1.5 border-t border-slate-900/60 pt-3.5 ${milestoneClass}">
+                        <div class="flex justify-between items-center text-[10px]">
+                            <span class="text-slate-400 font-semibold">Spending Milestone Target</span>
+                            <span class="font-bold text-emerald-400">${milestoneRatioText}</span>
+                        </div>
+                        <div class="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden">
+                            <div class="bg-gradient-to-r from-emerald-500 to-teal-400 h-1.5 rounded-full" style="width: ${milestonePercent}%"></div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center text-[10px] text-slate-500 pt-1 border-t border-slate-900/40">
+                        <span>Spend in active cycle: <strong>RM ${cycleSpend.toFixed(2)}</strong></span>
+                        <span>Single-tx min req: <strong>${card.minTxAmount ? `RM ${card.minTxAmount}` : 'None'}</strong></span>
+                    </div>
+                `;
+                container.appendChild(cycleCard);
+            });
+        }
+
         function renderCardsVault() {
             const vaultDeck = document.getElementById('cardVaultDeck');
+            if (!vaultDeck) return;
             vaultDeck.innerHTML = '';
 
             if (cards.length === 0) {
@@ -2279,9 +2527,14 @@ async function handleRequest(request) {
                                 <h4 class="text-base font-bold text-white tracking-wide truncate max-w-[200px]" title="${card.name}">${card.name}</h4>
                                 <p class="text-[10px] text-slate-400 font-mono mt-0.5">${billingMethodText}</p>
                             </div>
-                            <button onclick="deleteCard('${card.id}')" class="text-slate-500 hover:text-rose-400 p-1.5 rounded transition">
-                                <i class="fa-solid fa-trash-can text-sm"></i>
-                            </button>
+                            <div class="flex gap-1">
+                                <button onclick="editCard('${card.id}')" class="text-slate-500 hover:text-indigo-400 p-1.5 rounded transition" title="Edit Template Config">
+                                    <i class="fa-solid fa-pen-to-square text-xs"></i>
+                                </button>
+                                <button onclick="deleteCard('${card.id}')" class="text-slate-500 hover:text-rose-400 p-1.5 rounded transition" title="Delete Template">
+                                    <i class="fa-solid fa-trash-can text-xs"></i>
+                                </button>
+                            </div>
                         </div>
 
                         <div class="flex gap-1.5 items-center mb-6">
@@ -2320,29 +2573,123 @@ async function handleRequest(request) {
             });
         }
 
-        function getThemeStyles(theme) {
-            switch(theme) {
-                case 'grad-indigo': return 'background: linear-gradient(135deg, #090d16 0%, #151c2e 60%, #1a233d 100%); border: 1px solid rgba(99,102,241,0.25);';
-                case 'grad-emerald': return 'background: linear-gradient(135deg, #03211c 0%, #063c32 55%, #03211c 100%); border: 1px solid rgba(16,185,129,0.3);';
-                case 'grad-purple-glow': return 'background: linear-gradient(135deg, #0d0f1a 0%, #141727 60%, #2f1d4f 100%); border: 1px solid rgba(124,58,237,0.3);';
-                case 'grad-obsidian': default: return 'background: linear-gradient(135deg, #070a13 0%, #0f1422 60%, #1b2234 100%); border: 1px solid rgba(148,163,184,0.15);';
+        /* Amend Credit Card Template - Loaded back into configuration form */
+        function editCard(cardId) {
+            const card = cards.find(c => c.id === cardId);
+            if (!card) return;
+            editingCardId = cardId;
+
+            // Load properties back to input fields
+            document.getElementById('cardName').value = card.name;
+            document.getElementById('cardBaseRate').value = card.baseRate;
+            document.getElementById('cardStyleSelect').value = card.theme;
+            handleCardStyleChange();
+
+            // Set dynamic illustration file reference
+            tempIllustrationData = card.illustration;
+
+            document.getElementById('cardCycleType').value = card.cycleType;
+            handleCycleTypeChange();
+            if (card.cycleType === 'statement') {
+                document.getElementById('cardStatementCloseDay').value = card.statementCloseDay || 15;
             }
+
+            // Restore Multi-tier base rate configuration state
+            const toggleTiers = document.getElementById('toggleTiers');
+            toggleTiers.checked = card.useTiers;
+            toggleTiersVisibility();
+
+            const tierContainer = document.getElementById('tierRowsContainer');
+            tierContainer.innerHTML = '';
+            if (card.useTiers && card.tiers) {
+                card.tiers.forEach((tier, idx) => {
+                    addTierInputRow(tier.minSpend, tier.rate, idx === 0);
+                });
+            }
+
+            // Restore Multipliers/Boosters
+            const boosterContainer = document.getElementById('boosterRowsContainer');
+            boosterContainer.innerHTML = '';
+            if (card.boosters && card.boosters.length > 0) {
+                card.boosters.forEach(b => {
+                    addBoosterInputRow(b.category, b.rate);
+                });
+            } else {
+                addBoosterInputRow();
+            }
+
+            // Restore limits
+            document.getElementById('cardMonthlyCap').value = card.monthlyCap || '';
+            document.getElementById('cardMinTxAmount').value = card.minTxAmount || '';
+            document.getElementById('cardTierSpendThreshold').value = card.tierSpendThreshold || '';
+            document.getElementById('cardTierSpendRate').value = card.tierSpendRate || '';
+
+            // Update submit button states
+            document.getElementById('cardSubmitBtn').innerText = "Update Card Template";
+            document.getElementById('cardFormHeader').innerText = "Update Credit Card";
+            document.getElementById('cardFormIcon').className = "fa-solid fa-pen-to-square text-indigo-400 mr-2";
+            document.getElementById('cardCancelEditBtn').classList.remove('hidden');
+
+            // Scroll configurator form smoothly into focus
+            document.getElementById('cardFormContainer').scrollIntoView({ behavior: 'smooth' });
+            showToast(`Loading: ${card.name}. Ready for amendment!`, "fa-sliders", "text-indigo-400");
+        }
+
+        function cancelCardEdit() {
+            editingCardId = null;
+            document.getElementById('cardConfigForm').reset();
+            document.getElementById('cardSubmitBtn').innerText = "Create Credit Card Template";
+            document.getElementById('cardFormHeader').innerText = "Configure Credit Card";
+            document.getElementById('cardFormIcon').className = "fa-solid fa-plus text-indigo-400 mr-2";
+            document.getElementById('cardCancelEditBtn').classList.add('hidden');
+
+            // Reset dynamic structures
+            document.getElementById('boosterRowsContainer').innerHTML = '';
+            document.getElementById('tierRowsContainer').innerHTML = '';
+            document.getElementById('toggleTiers').checked = false;
+            document.getElementById('tiersSectionContainer').classList.add('hidden');
+            tempIllustrationData = null;
+            document.getElementById('customIllustrationContainer').classList.add('hidden');
+            addBoosterInputRow();
+            addBoosterInputRow();
+
+            showToast("Template amendment cancelled.", "fa-xmark", "text-slate-400");
+        }
+
+        /* Filter transactions array dynamically using card & timeline selectors */
+        function getFilteredTransactions() {
+            let list = [...transactions];
+            
+            // 1. Card Filter
+            if (activeDashboardCardId !== 'all') {
+                list = list.filter(t => t.cardId === activeDashboardCardId);
+            }
+
+            // 2. Timeline period filter
+            if (activeDashboardPeriod !== 'all') {
+                list = list.filter(t => {
+                    const date = new Date(t.date);
+                    if (isNaN(date.getTime())) return false;
+                    const monthsList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                    const key = `${monthsList[date.getMonth()]} ${date.getFullYear()}`;
+                    return key === activeDashboardPeriod;
+                });
+            }
+            return list;
         }
 
         function renderTransactionLedgerTable() {
             const tableBody = document.getElementById('transactionLedgerBody');
+            if (!tableBody) return;
             tableBody.innerHTML = '';
 
-            // Filter ledger rows by selected card
-            const filteredLedgerList = activeDashboardCardId === 'all' 
-                ? [...transactions] 
-                : transactions.filter(t => t.cardId === activeDashboardCardId);
+            const filteredLedgerList = getFilteredTransactions();
 
             if (filteredLedgerList.length === 0) {
                 tableBody.innerHTML = `
                     <tr>
                         <td colspan="8" class="text-center py-10 text-slate-500 italic">
-                            No ledger recordings registered for this card view.
+                            No ledger recordings registered for this dashboard filter context.
                         </td>
                     </tr>
                 `;
@@ -2362,7 +2709,7 @@ async function handleRequest(request) {
                 if (t.internalCategory.includes('Personal')) tagBg = 'bg-sky-500/10 text-sky-400 border border-sky-500/15';
                 else if (t.internalCategory.includes('Essential')) tagBg = 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/15';
                 else if (t.internalCategory.includes('Business')) tagBg = 'bg-purple-500/10 text-purple-400 border border-purple-500/15';
-                else if (t.internalCategory.includes('Leisures') || t.internalCategory.includes('Fun')) tagBg = 'bg-amber-500/10 text-amber-400 border border-amber-500/15';
+                else if (t.internalCategory.includes('Leisures') || t.internalCategory.includes('Fun')) tagBg = 'bg-amber-55/10 text-amber-400 border border-amber-55/15';
                 else tagBg = 'bg-indigo-500/10 text-indigo-300 border border-indigo-500/15';
 
                 const cashbackDisplay = parseFloat(t.cashback) > 0 
@@ -2395,10 +2742,8 @@ async function handleRequest(request) {
         }
 
         function recalculateKPICounters() {
-            // Apply dashboard card filter metrics
-            const targetTxs = activeDashboardCardId === 'all' 
-                ? [...transactions] 
-                : transactions.filter(t => t.cardId === activeDashboardCardId);
+            // Respect active dashboard timeline + card filters
+            const targetTxs = getFilteredTransactions();
 
             const totalCashback = targetTxs.reduce((sum, t) => sum + parseFloat(t.cashback), 0);
             const totalSpend = targetTxs.reduce((sum, t) => sum + parseFloat(t.amount), 0);
@@ -2417,10 +2762,8 @@ async function handleRequest(request) {
             
             if (!trendCtx || !pieCtx || !cardPieCtx) return;
 
-            // Apply global filtering
-            const targetTxs = activeDashboardCardId === 'all'
-                ? [...transactions]
-                : transactions.filter(t => t.cardId === activeDashboardCardId);
+            // Apply global filters
+            const targetTxs = getFilteredTransactions();
 
             // Process Trend Data grouped by month
             const monthlyBuckets = {};
@@ -2561,45 +2904,6 @@ async function handleRequest(request) {
             });
         }
 
-        function exportToExcel() {
-            try {
-                // Apply dashboard card filter metrics to export data list
-                const exportTxs = activeDashboardCardId === 'all' 
-                    ? [...transactions] 
-                    : transactions.filter(t => t.cardId === activeDashboardCardId);
-
-                if (exportTxs.length === 0) {
-                    showToast("No data to export", "fa-triangle-exclamation", "text-amber-500");
-                    return;
-                }
-
-                const sheetRows = exportTxs.map(t => {
-                    const card = cards.find(c => c.id === t.cardId) || { name: 'Deleted Card' };
-                    return {
-                        'Date': t.date,
-                        'Card Name': card.name,
-                        'Billing Cycle Type': card.cycleType,
-                        'Statement Close Day': card.statementCloseDay || 'N/A',
-                        'Category (Bank)': t.category,
-                        'Category (Internal)': t.internalCategory,
-                        'Description': t.description,
-                        'Spend Amount (RM)': t.amount,
-                        'Cashback Yield (RM)': t.cashback,
-                        'Effective Yield Rate (%)': t.amount > 0 ? ((t.cashback / t.amount) * 100).toFixed(2) + '%' : '0%'
-                    };
-                });
-
-                const ws = XLSX.utils.json_to_sheet(sheetRows);
-                const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, "Filtered Cashback Ledger");
-
-                XLSX.writeFile(wb, "cashback_wealth_audit_export.xlsx");
-                showToast("Excel spreadsheet generated successfully!", "fa-file-excel", "text-emerald-400");
-            } catch (err) {
-                showToast(`Excel export failed: ${err.message}`, "fa-triangle-exclamation", "text-rose-400");
-            }
-        }
-
         async function handleCloudSync(direction) {
             let baseUrl = syncConfig.workerUrl;
 
@@ -2686,7 +2990,7 @@ async function handleRequest(request) {
                         }
                     } else {
                         const errorDetails = await res.json().catch(() => ({}));
-                        showToast(`Pull Failed: ${errorDetails.error || res.statusText}`, "fa-triangle-exclamation", "text-rose-400");
+                        showToast("Pull Failed", "fa-triangle-exclamation", "text-rose-400");
                     }
                 } catch (err) {
                     console.error("Sync Pull Error:", err);
