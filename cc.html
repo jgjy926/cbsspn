@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Credit Card Cashback Tracker & SSPN Wallet</title>
+    <title>Credit Card Cashback & SSPN Wallet</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -68,29 +68,41 @@
                     <i class="fa-solid fa-crown text-white text-lg font-bold"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-slate-100 via-indigo-200 to-purple-400 tracking-tight">Aura Premium</h1>
+                    <h1 class="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-slate-100 via-indigo-200 to-purple-400 tracking-tight">Credit Card Cashback & SSPN Wallet</h1>
                     <p class="text-[10px] uppercase font-bold tracking-widest text-indigo-400">Wealth Cashback Engine & Savings Portal</p>
                 </div>
             </div>
 
-            <!-- Tab Navigation Menu matched to screenshot buttons -->
-            <nav class="flex flex-wrap items-center justify-center gap-1.5 bg-[#0f1422] p-1.5 rounded-xl border border-slate-800/90">
-                <button onclick="switchTab('dashboard')" id="tabBtn-dashboard" class="px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 bg-indigo-600 text-white shadow-md">
-                    <i class="fa-solid fa-chart-pie mr-1.5"></i>Dashboard
-                </button>
-                <button onclick="switchTab('quickLog')" id="tabBtn-quickLog" class="px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-slate-100">
-                    <i class="fa-solid fa-bolt mr-1.5"></i>Quick Log
-                </button>
-                <button onclick="switchTab('sspn')" id="tabBtn-sspn" class="px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-slate-100">
-                    <i class="fa-solid fa-graduation-cap mr-1.5"></i>SSPN Wallet
-                </button>
-                <button onclick="switchTab('cardManager')" id="tabBtn-cardManager" class="px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-slate-100">
-                    <i class="fa-solid fa-wallet mr-1.5"></i>Maintenance Hub
-                </button>
-                <button onclick="switchTab('koofrSync')" id="tabBtn-koofrSync" class="px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-slate-100">
-                    <i class="fa-solid fa-cloud-arrow-up mr-1.5"></i>Koofr Sync
-                </button>
-            </nav>
+            <!-- Tab Navigation & Universal Sync Toolbar (Requested buttons configured here) -->
+            <div class="flex flex-wrap items-center justify-center gap-3">
+                <nav class="flex flex-wrap items-center justify-center gap-1.5 bg-[#0f1422] p-1.5 rounded-xl border border-slate-800/90">
+                    <button onclick="switchTab('dashboard')" id="tabBtn-dashboard" class="px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 bg-indigo-600 text-white shadow-md">
+                        <i class="fa-solid fa-chart-pie mr-1.5"></i>Dashboard
+                    </button>
+                    <button onclick="switchTab('quickLog')" id="tabBtn-quickLog" class="px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-slate-100">
+                        <i class="fa-solid fa-bolt mr-1.5"></i>Quick Log
+                    </button>
+                    <button onclick="switchTab('sspn')" id="tabBtn-sspn" class="px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-slate-100">
+                        <i class="fa-solid fa-graduation-cap mr-1.5"></i>SSPN Wallet
+                    </button>
+                    <button onclick="switchTab('cardManager')" id="tabBtn-cardManager" class="px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-slate-100">
+                        <i class="fa-solid fa-wallet mr-1.5"></i>Maintenance Hub
+                    </button>
+                    <button onclick="switchTab('koofrSync')" id="tabBtn-koofrSync" class="px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-slate-100">
+                        <i class="fa-solid fa-cloud-arrow-up mr-1.5"></i>Koofr Sync
+                    </button>
+                </nav>
+
+                <!-- Persistent Universal cloud sync/load action desk -->
+                <div class="flex items-center gap-1.5 bg-[#0f1422] p-1.5 rounded-xl border border-slate-800/90">
+                    <button onclick="handleCloudSync('push')" title="Sync workspace to Koofr cloud" class="px-3.5 py-2 rounded-lg text-xs font-bold bg-[#6366f1] hover:bg-[#5053df] text-white shadow-md flex items-center gap-1 transition-all duration-155">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>Sync
+                    </button>
+                    <button onclick="handleCloudSync('pull')" title="Load database from Koofr cloud" class="px-3.5 py-2 rounded-lg text-xs font-bold bg-slate-800 hover:bg-slate-705 text-slate-200 border border-slate-700 flex items-center gap-1 transition-all duration-155">
+                        <i class="fa-solid fa-cloud-arrow-down"></i>Load
+                    </button>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -100,13 +112,13 @@
 
         <!-- Dashboard Content -->
         <section id="tabContent-dashboard" class="space-y-8">
-            <!-- KPIs Header Cards Grid -->
+            <!-- KPIs Header Cards Grid (Styled exactly like the screenshot indicator cards with RM currency) -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
                     <div class="flex justify-between items-start">
                         <div>
                             <span class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Total Cashback Accumulated</span>
-                            <h3 class="text-3xl font-black text-indigo-400 mt-1" id="kpiTotalCashback">$0.00</h3>
+                            <h3 class="text-3xl font-black text-indigo-400 mt-1" id="kpiTotalCashback">RM 0.00</h3>
                         </div>
                         <div class="p-3 bg-indigo-500/10 text-indigo-400 rounded-xl"><i class="fa-solid fa-piggy-bank text-xl"></i></div>
                     </div>
@@ -115,7 +127,7 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <span class="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Total Processed Spend</span>
-                            <h3 class="text-3xl font-black text-slate-100 mt-1" id="kpiTotalSpend">$0.00</h3>
+                            <h3 class="text-3xl font-black text-slate-100 mt-1" id="kpiTotalSpend">RM 0.00</h3>
                         </div>
                         <div class="p-3 bg-slate-500/10 text-slate-300 rounded-xl"><i class="fa-solid fa-money-bill-trend-up text-xl"></i></div>
                     </div>
@@ -254,9 +266,9 @@
                         <div>
                             <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5" for="txAmount">Transaction Amount</label>
                             <div class="relative">
-                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm font-semibold">$</span>
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm font-semibold">RM</span>
                                 <input type="number" step="0.01" min="0.01" id="txAmount" required placeholder="0.00" oninput="calculateRealtimeCashback()"
-                                    class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-8 pr-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-sm">
+                                    class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-sm">
                             </div>
                         </div>
                         <div>
@@ -274,11 +286,11 @@
                             <div class="text-[9px] text-slate-500 max-w-[200px]" id="cashbackPreviewCycleMsg">...</div>
                         </div>
                         <div class="text-right">
-                            <h2 class="text-2xl font-black text-indigo-400" id="cashbackPreviewVal">$0.00</h2>
+                            <h2 class="text-2xl font-black text-indigo-400" id="cashbackPreviewVal">RM 0.00</h2>
                         </div>
                     </div>
 
-                    <!-- Submit action button (Styled with Screenshot accent violet/indigo) -->
+                    <!-- Submit action button -->
                     <button type="submit" class="w-full bg-[#6366f1] hover:bg-[#5053df] text-white font-bold py-3 rounded-xl shadow-lg transition duration-200 text-xs uppercase tracking-widest">
                         Save Transaction To Ledger
                     </button>
@@ -286,7 +298,7 @@
             </div>
         </section>
 
-        <!-- SSPN Tracking Dashboard (Fully Mobile-First Redesign with Settings trigger) -->
+        <!-- SSPN Tracking Dashboard -->
         <section id="tabContent-sspn" class="hidden space-y-8 max-w-lg mx-auto">
             <!-- SSPN Header & Config Toggle -->
             <div class="flex justify-between items-center bg-[#0d1222] p-4 rounded-2xl border border-slate-800/80">
@@ -301,12 +313,12 @@
                 </button>
             </div>
 
-            <!-- SSPN KPIs Grid -->
+            <!-- SSPN KPIs Grid (Reflected in RM) -->
             <div class="grid grid-cols-1 gap-3">
                 <div class="glass-card rounded-2xl p-4 flex justify-between items-center relative overflow-hidden">
                     <div>
                         <span class="text-[9px] uppercase tracking-widest text-slate-400 font-bold">Total SSPN Net Savings</span>
-                        <h3 class="text-2xl font-black text-emerald-400 mt-0.5" id="sspnKpiNet">$0.00</h3>
+                        <h3 class="text-2xl font-black text-emerald-400 mt-0.5" id="sspnKpiNet">RM 0.00</h3>
                     </div>
                     <div class="p-2.5 bg-emerald-500/10 text-emerald-400 rounded-lg"><i class="fa-solid fa-vault"></i></div>
                 </div>
@@ -314,14 +326,14 @@
                     <div class="glass-card rounded-2xl p-4 flex justify-between items-center relative overflow-hidden">
                         <div>
                             <span class="text-[9px] uppercase tracking-widest text-slate-400 font-bold">Total Additions</span>
-                            <h3 class="text-lg font-black text-indigo-400 mt-0.5" id="sspnKpiDeposits">$0.00</h3>
+                            <h3 class="text-lg font-black text-indigo-400 mt-0.5" id="sspnKpiDeposits">RM 0.00</h3>
                         </div>
                         <div class="p-2 bg-indigo-500/10 text-indigo-400 rounded-lg"><i class="fa-solid fa-arrow-down-long text-xs"></i></div>
                     </div>
                     <div class="glass-card rounded-2xl p-4 flex justify-between items-center relative overflow-hidden">
                         <div>
                             <span class="text-[9px] uppercase tracking-widest text-slate-400 font-bold">Withdrawals</span>
-                            <h3 class="text-lg font-black text-rose-400 mt-0.5" id="sspnKpiWithdrawals">$0.00</h3>
+                            <h3 class="text-lg font-black text-rose-400 mt-0.5" id="sspnKpiWithdrawals">RM 0.00</h3>
                         </div>
                         <div class="p-2 bg-rose-500/10 text-rose-400 rounded-lg"><i class="fa-solid fa-arrow-up-long text-xs"></i></div>
                     </div>
@@ -380,9 +392,9 @@
                                 +
                             </button>
                             <div class="relative flex-1">
-                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-semibold">$</span>
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-semibold">RM</span>
                                 <input type="number" step="0.01" min="0.01" id="sspnAmount" required placeholder="0.00"
-                                    class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-8 pr-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-xs">
+                                    class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-xs">
                             </div>
                         </div>
                         <span class="text-[9px] text-slate-500 mt-1 block leading-normal">
@@ -390,7 +402,7 @@
                         </span>
                     </div>
 
-                    <!-- New Column: Reflection audit switcher -->
+                    <!-- Reflection audit switcher -->
                     <div class="flex items-center justify-between bg-slate-950 border border-slate-850 p-3 rounded-xl">
                         <div class="space-y-0.5">
                             <span class="block text-[10px] uppercase font-bold text-slate-400">Ledger Status</span>
@@ -482,7 +494,7 @@
                                         <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-300 after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-500"></div>
                                     </label>
                                 </div>
-                                <p class="text-[10px] text-slate-500 mb-3">Enable bracketed tiers (e.g. $0-$500 @ 0.1%, $500+ @ 1%). If disabled, the card uses a flat default base rate.</p>
+                                <p class="text-[10px] text-slate-500 mb-3">Enable bracketed tiers (e.g. RM 0-RM 500 @ 0.1%, RM 500+ @ 1%). If disabled, the card uses a flat default base rate.</p>
 
                                 <div id="tiersSectionContainer" class="hidden space-y-3 bg-slate-950 p-3 rounded-xl border border-slate-800/80">
                                     <div class="flex justify-between items-center">
@@ -540,19 +552,19 @@
                                 <h5 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Advanced Rewards Limits</h5>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block text-xs font-semibold text-slate-500 mb-1.5" for="cardMonthlyCap">Monthly Cashback Cap ($)</label>
+                                        <label class="block text-xs font-semibold text-slate-500 mb-1.5" for="cardMonthlyCap">Monthly Cashback Cap (RM)</label>
                                         <input type="number" step="1" id="cardMonthlyCap" placeholder="No limit"
                                             class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-sm">
                                     </div>
                                     <div>
-                                        <label class="block text-xs font-semibold text-slate-500 mb-1.5" for="cardTierSpendThreshold">Bonus Milestone Spend ($)</label>
+                                        <label class="block text-xs font-semibold text-slate-500 mb-1.5" for="cardTierSpendThreshold">Bonus Milestone Spend (RM)</label>
                                         <input type="number" step="10" id="cardTierSpendThreshold" placeholder="e.g. 1000"
                                             class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-sm">
                                     </div>
                                 </div>
                                 <div class="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block text-xs font-semibold text-slate-500 mb-1.5" for="cardMinTxAmount">Min Tx for Cashback ($)</label>
+                                        <label class="block text-xs font-semibold text-slate-500 mb-1.5" for="cardMinTxAmount">Min Tx for Cashback (RM)</label>
                                         <input type="number" step="1" id="cardMinTxAmount" placeholder="e.g. 100 (0 is off)"
                                             class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-sm">
                                     </div>
@@ -838,7 +850,7 @@ async function handleRequest(request) {
                 tiers: [],
                 tierSpendThreshold: 1000,
                 tierSpendRate: 2.5,
-                minTxAmount: 100 // Cashback requires $100 min single purchase
+                minTxAmount: 100 // Cashback requires RM 100 min single purchase
             },
             {
                 id: "card-2",
@@ -1392,8 +1404,8 @@ async function handleRequest(request) {
                     : `<span class="text-xs font-bold text-rose-400"><i class="fa-solid fa-circle-minus mr-1"></i>Withdrawal</span>`;
 
                 const formattedAmt = isAddition 
-                    ? `+$${parseFloat(r.amount).toFixed(2)}` 
-                    : `-$${Math.abs(parseFloat(r.amount)).toFixed(2)}`;
+                    ? `+RM ${parseFloat(r.amount).toFixed(2)}` 
+                    : `-RM ${Math.abs(parseFloat(r.amount)).toFixed(2)}`;
 
                 const formattedDate = formatDateString(r.date);
 
@@ -1454,9 +1466,9 @@ async function handleRequest(request) {
 
             const net = additions - withdrawals;
 
-            document.getElementById('sspnKpiNet').innerText = `$${net.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            document.getElementById('sspnKpiDeposits').innerText = `$${additions.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            document.getElementById('sspnKpiWithdrawals').innerText = `$${withdrawals.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById('sspnKpiNet').innerText = `RM ${net.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById('sspnKpiDeposits').innerText = `RM ${additions.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById('sspnKpiWithdrawals').innerText = `RM ${withdrawals.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
         }
 
         function deleteSspnRecord(id) {
@@ -1653,7 +1665,7 @@ async function handleRequest(request) {
 
             const selectedCard = cards.find(c => c.id === cardId);
             if (!selectedCard) {
-                document.getElementById('cashbackPreviewVal').innerText = "$0.00";
+                document.getElementById('cashbackPreviewVal').innerText = "RM 0.00";
                 document.getElementById('cashbackPreviewRate').innerText = "Select card to view details";
                 return;
             }
@@ -1665,7 +1677,7 @@ async function handleRequest(request) {
 
             if (isBelowMinThreshold) {
                 activeRateLabel = "Not Eligible";
-                breakdownMessage = `Purchase amount is below card limit of $${parseFloat(selectedCard.minTxAmount).toFixed(2)}.`;
+                breakdownMessage = `Purchase amount is below card limit of RM ${parseFloat(selectedCard.minTxAmount).toFixed(2)}.`;
             } else {
                 const isGeneralSpend = category === "General Spend";
 
@@ -1675,9 +1687,9 @@ async function handleRequest(request) {
                     
                     activeRateLabel = "Tiered Rates Apply";
                     let stepStrings = tierCalc.computationSteps.map(step => 
-                        `$${step.chunk.toFixed(2)} @ ${step.rate}% (+$${step.earned.toFixed(2)})`
+                        `RM ${step.chunk.toFixed(2)} @ ${step.rate}% (+RM ${step.earned.toFixed(2)})`
                     );
-                    breakdownMessage = `Bracket: ${stepStrings.join(" + ")}. Spent: $${accumulatedSpend.toFixed(2)}.`;
+                    breakdownMessage = `Bracket: ${stepStrings.join(" + ")}. Spent: RM ${accumulatedSpend.toFixed(2)}.`;
                 } else {
                     let activeRate = selectedCard.baseRate;
                     if (!isGeneralSpend && selectedCard.boosters) {
@@ -1696,7 +1708,7 @@ async function handleRequest(request) {
                 calculatedReward = calculateCashback(selectedCard, amount, category, date);
             }
 
-            document.getElementById('cashbackPreviewVal').innerText = `$${calculatedReward.toFixed(2)}`;
+            document.getElementById('cashbackPreviewVal').innerText = `RM ${calculatedReward.toFixed(2)}`;
             document.getElementById('cashbackPreviewRate').innerText = activeRateLabel;
 
             const cycleLabel = getBillingCycleLabel(selectedCard, date);
@@ -1788,9 +1800,9 @@ async function handleRequest(request) {
             div.className = "grid grid-cols-12 gap-2 items-center text-xs";
             div.innerHTML = `
                 <div class="col-span-5 relative">
-                    <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-[10px]">$</span>
+                    <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-[10px]">RM</span>
                     <input type="number" step="10" placeholder="Minimum Spend" value="${minSpend}" ${isBaseline ? 'disabled' : 'required'}
-                        class="tier-min-spend w-full bg-slate-900 border border-slate-800 rounded-lg pl-6 pr-2 py-1.5 text-slate-100 focus:outline-none focus:border-indigo-500 text-xs">
+                        class="tier-min-spend w-full bg-slate-900 border border-slate-800 rounded-lg pl-8 pr-2 py-1.5 text-slate-100 focus:outline-none focus:border-indigo-500 text-xs">
                     ${isBaseline ? '<span class="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] text-slate-500 font-mono">Baseline</span>' : ''}
                 </div>
                 <div class="col-span-5 relative">
@@ -1985,7 +1997,7 @@ async function handleRequest(request) {
             document.getElementById('txDescription').value = '';
             calculateRealtimeCashback();
 
-            showToast(`Cashback processed! +$${calculatedCashbackValue.toFixed(2)}`, "fa-check-circle", "text-emerald-400");
+            showToast(`Cashback processed! +RM ${calculatedCashbackValue.toFixed(2)}`, "fa-check-circle", "text-emerald-400");
         }
 
         function deleteTransaction(txId) {
@@ -2121,8 +2133,8 @@ async function handleRequest(request) {
                 let baseRateDisplay = '';
                 if (card.useTiers && card.tiers && card.tiers.length > 0) {
                     let ranges = card.tiers.map((t, idx) => {
-                        let limit = card.tiers[idx + 1] ? `$${card.tiers[idx + 1].minSpend}` : '∞';
-                        return `<span class="block text-[9px] tracking-tight leading-normal text-slate-300">$${t.minSpend} to ${limit} → <strong class="text-indigo-400">${t.rate}%</strong></span>`;
+                        let limit = card.tiers[idx + 1] ? `RM ${card.tiers[idx + 1].minSpend}` : '∞';
+                        return `<span class="block text-[9px] tracking-tight leading-normal text-slate-300">RM ${t.minSpend} to ${limit} → <strong class="text-indigo-400">${t.rate}%</strong></span>`;
                     }).join('');
                     baseRateDisplay = `
                         <div class="col-span-3 bg-slate-950/80 border border-slate-800/80 rounded-lg p-2 text-left">
@@ -2174,13 +2186,13 @@ async function handleRequest(request) {
                     <div class="relative z-10 mt-4 pt-4 border-t border-slate-800/60 grid grid-cols-2 gap-4 text-xs text-slate-400">
                         <div class="flex flex-col gap-1">
                             <span class="text-[10px] text-slate-500 block uppercase tracking-widest font-mono">Monthly Cap</span>
-                            <span class="font-semibold text-slate-200">${card.monthlyCap ? `$${card.monthlyCap}` : 'Unlimited'}</span>
+                            <span class="font-semibold text-slate-200">${card.monthlyCap ? `RM ${card.monthlyCap}` : 'Unlimited'}</span>
                             <span class="text-[10px] text-slate-500 block uppercase tracking-widest font-mono mt-1">Min Tx Threshold</span>
-                            <span class="font-semibold text-emerald-400">${card.minTxAmount ? `$${card.minTxAmount}` : 'No threshold'}</span>
+                            <span class="font-semibold text-emerald-400">${card.minTxAmount ? `RM ${card.minTxAmount}` : 'No threshold'}</span>
                         </div>
                         <div>
                             <span class="text-[10px] text-slate-500 block uppercase tracking-widest font-mono">Spend Milestone</span>
-                            <span class="font-semibold text-slate-200">${card.tierSpendThreshold ? `Spend $${card.tierSpendThreshold} for ${card.tierSpendRate}%` : 'Disabled'}</span>
+                            <span class="font-semibold text-slate-200">${card.tierSpendThreshold ? `Spend RM ${card.tierSpendThreshold} for ${card.tierSpendRate}%` : 'Disabled'}</span>
                         </div>
                     </div>
                 `;
@@ -2229,8 +2241,8 @@ async function handleRequest(request) {
                 else tagBg = 'bg-indigo-500/10 text-indigo-300 border border-indigo-500/15';
 
                 const cashbackDisplay = parseFloat(t.cashback) > 0 
-                    ? `+$${parseFloat(t.cashback).toFixed(2)}`
-                    : `<span class="text-slate-500 font-normal">$0.00 (Ineligible)</span>`;
+                    ? `+RM ${parseFloat(t.cashback).toFixed(2)}`
+                    : `<span class="text-slate-500 font-normal">RM 0.00 (Ineligible)</span>`;
 
                 tr.innerHTML = `
                     <td class="py-4 px-4 font-mono text-slate-400">${formattedDate}</td>
@@ -2238,7 +2250,7 @@ async function handleRequest(request) {
                     <td class="py-4 px-4"><span class="bg-slate-950 border border-slate-850 px-2.5 py-1 rounded-md text-[10px] text-slate-300 font-medium">${t.category}</span></td>
                     <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-md text-[10px] font-medium ${tagBg}">${t.internalCategory}</span></td>
                     <td class="py-4 px-4 text-slate-400 truncate max-w-[150px]" title="${t.description}">${t.description}</td>
-                    <td class="py-4 px-4 text-right font-semibold text-slate-100">$${t.amount.toFixed(2)}</td>
+                    <td class="py-4 px-4 text-right font-semibold text-slate-100">RM ${t.amount.toFixed(2)}</td>
                     <td class="py-4 px-4 text-right font-bold text-emerald-400">${cashbackDisplay}</td>
                     <td class="py-4 px-4 text-center">
                         <button onclick="deleteTransaction('${t.id}')" class="text-slate-500 hover:text-rose-400 p-1 rounded transition">
@@ -2262,8 +2274,8 @@ async function handleRequest(request) {
             const totalSpend = transactions.reduce((sum, t) => sum + parseFloat(t.amount), 0);
             const averageRate = totalSpend > 0 ? (totalCashback / totalSpend) * 100 : 0;
 
-            document.getElementById('kpiTotalCashback').innerText = `$${totalCashback.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            document.getElementById('kpiTotalSpend').innerText = `$${totalSpend.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById('kpiTotalCashback').innerText = `RM ${totalCashback.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById('kpiTotalSpend').innerText = `RM ${totalSpend.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
             document.getElementById('kpiAverageRate').innerText = `${averageRate.toFixed(2)}%`;
             document.getElementById('kpiActiveCards').innerText = cards.length;
         }
@@ -2299,7 +2311,7 @@ async function handleRequest(request) {
                     labels: sortedMonths,
                     datasets: [
                         {
-                            label: 'Cashback Earned ($)',
+                            label: 'Cashback Earned (RM)',
                             data: cashbackData,
                             borderColor: '#10b981', 
                             backgroundColor: 'rgba(16, 185, 129, 0.1)',
@@ -2308,7 +2320,7 @@ async function handleRequest(request) {
                             yAxisID: 'y'
                         },
                         {
-                            label: 'Total Spend ($)',
+                            label: 'Total Spend (RM)',
                             data: spendData,
                             borderColor: '#6366f1', 
                             backgroundColor: 'transparent',
@@ -2388,8 +2400,8 @@ async function handleRequest(request) {
                         'Category (Bank)': t.category,
                         'Category (Internal)': t.internalCategory,
                         'Description': t.description,
-                        'Spend Amount ($)': t.amount,
-                        'Cashback Yield ($)': t.cashback,
+                        'Spend Amount (RM)': t.amount,
+                        'Cashback Yield (RM)': t.cashback,
                         'Effective Yield Rate (%)': t.amount > 0 ? ((t.cashback / t.amount) * 100).toFixed(2) + '%' : '0%'
                     };
                 });
