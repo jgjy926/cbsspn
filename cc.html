@@ -73,7 +73,7 @@
                 </div>
             </div>
 
-            <!-- Tab Navigation & Universal Sync Toolbar (Requested buttons configured here) -->
+            <!-- Tab Navigation & Universal Sync Toolbar -->
             <div class="flex flex-wrap items-center justify-center gap-3">
                 <nav class="flex flex-wrap items-center justify-center gap-1.5 bg-[#0f1422] p-1.5 rounded-xl border border-slate-800/90">
                     <button onclick="switchTab('dashboard')" id="tabBtn-dashboard" class="px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 bg-indigo-600 text-white shadow-md">
@@ -112,7 +112,7 @@
 
         <!-- Dashboard Content -->
         <section id="tabContent-dashboard" class="space-y-8">
-            <!-- KPIs Header Cards Grid (Styled exactly like the screenshot indicator cards with RM currency) -->
+            <!-- KPIs Header Cards Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
                     <div class="flex justify-between items-start">
@@ -313,7 +313,7 @@
                 </button>
             </div>
 
-            <!-- SSPN KPIs Grid (Reflected in RM) -->
+            <!-- SSPN KPIs Grid -->
             <div class="grid grid-cols-1 gap-3">
                 <div class="glass-card rounded-2xl p-4 flex justify-between items-center relative overflow-hidden">
                     <div>
@@ -610,11 +610,6 @@
                             <input type="url" id="syncWorkerUrl" placeholder="https://your-worker.workers.dev" onchange="saveSyncConfig()"
                                 class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-sm">
                         </div>
-                        <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5" for="syncToken">Worker Access Token</label>
-                            <input type="password" id="syncToken" placeholder="••••••••••••••••••••••••••••" onchange="saveSyncConfig()"
-                                class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-sm">
-                        </div>
                     </div>
 
                     <div class="border-t border-slate-800/80 pt-4 flex gap-3">
@@ -631,7 +626,7 @@
                 <div class="glass-card rounded-2xl p-6 lg:col-span-2 space-y-6">
                     <div>
                         <h3 class="text-base font-bold text-slate-200 mb-2 uppercase tracking-wider">Deploy Your Secure Infrastructure</h3>
-                        <p class="text-xs text-slate-500">Hosting on GitHub is fully static. To prevent leaking your raw Koofr credentials, run a free Cloudflare Worker to authenticate safely.</p>
+                        <p class="text-xs text-slate-500">Hosting on GitHub is fully static. Configure a free Cloudflare Worker to proxy your requests safely to Koofr.</p>
                     </div>
 
                     <div class="space-y-4">
@@ -644,7 +639,6 @@
                                 <ul class="list-disc list-inside ml-6 mt-1 space-y-1 text-slate-500">
                                     <li><code class="text-slate-300 font-mono">KOOFR_USER</code>: Your Koofr register email.</li>
                                     <li><code class="text-slate-300 font-mono">KOOFR_PASS</code>: The generated App Password.</li>
-                                    <li><code class="text-slate-300 font-mono">ACCESS_TOKEN</code>: A custom password token to secure your Cloudflare endpoint.</li>
                                 </ul>
                             </li>
                         </ol>
@@ -652,14 +646,26 @@
 
                     <div class="space-y-2">
                         <div class="flex justify-between items-center">
-                            <h4 class="text-xs font-bold text-slate-300 uppercase">Cloudflare Worker Logic Code</h4>
+                            <h4 class="text-xs font-bold text-slate-300 uppercase">Cloudflare Worker Logic Code (Token-Free)</h4>
                             <button onclick="copyWorkerToClipboard()" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-indigo-400 font-mono font-bold px-2 py-1 rounded">
                                 <i class="fa-solid fa-copy mr-1"></i>Copy Code
                             </button>
                         </div>
                         <pre class="bg-slate-950 p-4 rounded-xl text-[10px] text-slate-400 overflow-x-auto border border-slate-900 leading-normal font-mono" id="workerSourceCode">
 addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request))
+  event.respondWith(
+    handleRequest(event.request).catch(err => {
+      return new Response(JSON.stringify({ error: err.message, stack: err.stack }), {
+        status: 500,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+          'Access-Control-Allow-Methods': 'GET, PUT, OPTIONS',
+          'Content-Type': 'application/json'
+        }
+      })
+    })
+  )
 })
 
 async function handleRequest(request) {
@@ -672,11 +678,6 @@ async function handleRequest(request) {
 
   if (request.method === 'OPTIONS') {
     return new Response(null, { headers: allowedHeaders })
-  }
-
-  const authHeader = request.headers.get('Authorization')
-  if (!authHeader || authHeader !== `Bearer ${ACCESS_TOKEN}`) {
-    return new Response(JSON.stringify({ error: 'Unauthorized credentials' }), { status: 401, headers: allowedHeaders })
   }
 
   const remoteUrl = "https://app.koofr.net/dav/Koofr/cashback_ledger_sync.json"
@@ -809,8 +810,7 @@ async function handleRequest(request) {
         let sspnMethods = [];
 
         let syncConfig = {
-            workerUrl: '',
-            workerToken: ''
+            workerUrl: ''
         };
 
         // SSPN sign flag (true = positive, false = negative)
@@ -972,7 +972,6 @@ async function handleRequest(request) {
                 if (storedConfig) {
                     syncConfig = JSON.parse(storedConfig);
                     document.getElementById('syncWorkerUrl').value = syncConfig.workerUrl || '';
-                    document.getElementById('syncToken').value = syncConfig.workerToken || '';
                 }
 
                 if (storedCategories) internalCategories = JSON.parse(storedCategories);
@@ -1013,7 +1012,6 @@ async function handleRequest(request) {
 
         function saveSyncConfig() {
             syncConfig.workerUrl = document.getElementById('syncWorkerUrl').value.trim();
-            syncConfig.workerToken = document.getElementById('syncToken').value.trim();
             localStorage.setItem('premium_sync_config', JSON.stringify(syncConfig));
         }
 
@@ -2418,11 +2416,24 @@ async function handleRequest(request) {
         }
 
         async function handleCloudSync(direction) {
-            const url = syncConfig.workerUrl;
-            const token = syncConfig.workerToken;
+            let baseUrl = syncConfig.workerUrl;
 
-            if (!url) {
+            if (!baseUrl) {
                 showToast("Worker Proxy URL is required to sync", "fa-triangle-exclamation", "text-amber-500");
+                return;
+            }
+
+            // Auto-correct missing protocol (extremely common root cause for "Failed to fetch")
+            if (!/^https?:\/\//i.test(baseUrl)) {
+                baseUrl = 'https://' + baseUrl;
+            }
+
+            let syncUrl;
+            // Safe URL format test to block relative browser directory mappings
+            try {
+                syncUrl = new URL(baseUrl);
+            } catch (e) {
+                showToast("Invalid Worker URL format.", "fa-triangle-exclamation", "text-rose-400");
                 return;
             }
 
@@ -2441,11 +2452,10 @@ async function handleRequest(request) {
                 };
 
                 try {
-                    const res = await fetch(url, {
+                    const res = await fetch(syncUrl.toString(), {
                         method: 'PUT',
                         headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`
+                            'Content-Type': 'application/json'
                         },
                         body: JSON.stringify(payload)
                     });
@@ -2457,13 +2467,13 @@ async function handleRequest(request) {
                         showToast(`Server Sync Failed: ${errorDetails.error || res.statusText}`, "fa-triangle-exclamation", "text-rose-400");
                     }
                 } catch (err) {
-                    showToast(`Network Proxy Interrupted: ${err.message}`, "fa-wifi", "text-rose-400");
+                    console.error("Sync Push Error:", err);
+                    showToast(`Network Proxy Interrupted: ${err.message}. Verify Worker deployment.`, "fa-wifi", "text-rose-400");
                 }
             } else if (direction === 'pull') {
                 try {
-                    const res = await fetch(url, {
-                        method: 'GET',
-                        headers: { 'Authorization': `Bearer ${token}` }
+                    const res = await fetch(syncUrl.toString(), {
+                        method: 'GET'
                     });
 
                     if (res.ok) {
@@ -2494,7 +2504,8 @@ async function handleRequest(request) {
                         showToast(`Pull Failed: ${errorDetails.error || res.statusText}`, "fa-triangle-exclamation", "text-rose-400");
                     }
                 } catch (err) {
-                    showToast(`Network Proxy Interrupted: ${err.message}`, "fa-wifi", "text-rose-400");
+                    console.error("Sync Pull Error:", err);
+                    showToast(`Network Proxy Interrupted: ${err.message}. Verify Worker deployment.`, "fa-wifi", "text-rose-400");
                 }
             }
         }
