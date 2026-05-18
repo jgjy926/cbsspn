@@ -318,7 +318,7 @@
 
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5" for="txInternalCategory">Internal Personal Category</label>
-                        <select id="txInternalCategory" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 cursor-pointer"></select>
+                        <select id="txInternalCategory" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 cursor-pointer"></select>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1279,7 +1279,7 @@
                         : "bg-rose-950/40 text-rose-400 border border-rose-900/50";
                     
                     const networkIcon = card.network ? getNetworkIcon(card.network) : '';
-                    const bankPrefix = card.bank ? `${card.bank} - ` : '';
+                    const bankPrefix = card.bank && !card.name.toLowerCase().startsWith(card.bank.toLowerCase()) ? `${card.bank} - ` : '';
                     const last4Suffix = card.last4 ? ` (•••• ${card.last4})` : '';
 
                     return `<tr class="hover:bg-slate-900/40 transition">
@@ -1393,10 +1393,13 @@
                     <h4 class="text-xs font-mono text-slate-500 mt-1">Global Database</h4>
                 </div>`;
                 
-                // Filter the deck options based on Bank Filter if one is active
-                const filteredCards = database.cards.filter(c => selectedBank === "ALL" || c.bank === selectedBank);
+                // Bank filtering is processed first
+                const filteredByBank = database.cards.filter(c => selectedBank === "ALL" || c.bank === selectedBank);
 
-                html += filteredCards.map(c => {
+                // Now filter down so that if a card is selected, ALL OTHER cards are hidden from this deck
+                const finalCards = filteredByBank.filter(c => currentFilterCard === "ALL" || c.id.trim().toLowerCase() === currentFilterCard.trim().toLowerCase());
+
+                html += finalCards.map(c => {
                     const styles = getThemeStyles(c.theme);
                     const txs = simulatedTxs.filter(t => {
                         const cardMatch = t.cardId === c.id;
@@ -1435,8 +1438,12 @@
             const selectedYear = document.getElementById("filterYear").value;
             const selectedMonth = document.getElementById("filterMonth").value;
 
-            // Only show progress for cards matches bank selection
-            const filteredCards = database.cards.filter(c => selectedBank === "ALL" || c.bank === selectedBank);
+            // Show progress only for cards matching BOTH active bank and card filter selection
+            const filteredCards = database.cards.filter(c => {
+                const bankMatch = (selectedBank === "ALL" || c.bank === selectedBank);
+                const cardMatch = (currentFilterCard === "ALL" || c.id.trim().toLowerCase() === currentFilterCard.trim().toLowerCase());
+                return bankMatch && cardMatch;
+            });
 
             container.innerHTML = filteredCards.map(c => {
                 const txs = simulatedTxs.filter(t => {
@@ -1479,7 +1486,9 @@
 
                 const last4Suffix = c.last4 ? ` •••• ${c.last4}` : '';
                 const networkIcon = c.network ? getNetworkIcon(c.network) : '';
-                const bankPrefix = c.bank ? `${c.bank} ` : '';
+                
+                // Smart bank name display prefix check to avoid double names e.g. Maybank Maybank 2 Gold
+                const bankPrefix = c.bank && !c.name.toLowerCase().startsWith(c.bank.toLowerCase()) ? `${c.bank} ` : '';
 
                 return `
                     <div class="glass-card rounded-2xl p-4 space-y-3">
@@ -1533,6 +1542,7 @@
             refreshLedgerAndCalculations();
         }
 
+        // Render Cards Vault
         function renderCardsVault() {
             const body = document.getElementById("cardManagerTableBody");
             if(body) {
@@ -1542,7 +1552,7 @@
                     const capText = c.cycleCashbackCap > 0 ? `RM ${c.cycleCashbackCap}` : 'Unlimited';
                     const networkIcon = c.network ? getNetworkIcon(c.network) : '';
                     const last4Text = c.last4 ? `•••• ${c.last4}` : '';
-                    const bankText = c.bank ? `[${c.bank}] ` : '';
+                    const bankText = c.bank && !c.name.toLowerCase().startsWith(c.bank.toLowerCase()) ? `[${c.bank}] ` : '';
 
                     return `
                         <tr class="border-b border-slate-900/60 hover:bg-slate-900/30 transition">
@@ -1662,6 +1672,7 @@
             }
         }
 
+        // Render Statement Spending Tiers
         function renderTiersInputs(tiers) {
             let html = `
                 <div class="space-y-1.5 bg-slate-950/60 p-2 rounded-lg border border-slate-800/40">
