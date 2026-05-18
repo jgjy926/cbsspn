@@ -761,9 +761,9 @@
                     cycleMinSpend: 0,
                     cycleCashbackCap: 50,
                     rules: [
-                        { category: "Weekend Dining", rate: 0.05, minTxSpend: 0, categoryCap: 50, tiered: false, tiers: [] },
-                        { category: "Utilities", rate: 0.01, minTxSpend: 0, categoryCap: 0, tiered: false, tiers: [] },
-                        { category: "Other", rate: 0.002, minTxSpend: 0, categoryCap: 0, tiered: false, tiers: [] }
+                        { category: "Weekend Dining", rate: 0.05, minTxSpend: 0, categoryCap: 50, tiered: false, weekendOnly: true, tiers: [] },
+                        { category: "Utilities", rate: 0.01, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, tiers: [] },
+                        { category: "Other", rate: 0.002, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, tiers: [] }
                     ]
                 },
                 { 
@@ -777,8 +777,8 @@
                     cycleMinSpend: 0,
                     cycleCashbackCap: 30,
                     rules: [
-                        { category: "Online/Contactless", rate: 0.02, minTxSpend: 30, categoryCap: 30, tiered: false, tiers: [] },
-                        { category: "Other", rate: 0.003, minTxSpend: 0, categoryCap: 0, tiered: false, tiers: [] }
+                        { category: "Online/Contactless", rate: 0.02, minTxSpend: 30, categoryCap: 30, tiered: false, weekendOnly: false, tiers: [] },
+                        { category: "Other", rate: 0.003, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, tiers: [] }
                     ]
                 },
                 { 
@@ -798,12 +798,13 @@
                             minTxSpend: 100, 
                             categoryCap: 30, 
                             tiered: true, 
+                            weekendOnly: false,
                             tiers: [
                                 { minSpend: 500, rate: 0.02 },
                                 { minSpend: 1000, rate: 0.04 }
                             ] 
                         },
-                        { category: "Other", rate: 0.002, minTxSpend: 0, categoryCap: 0, tiered: false, tiers: [] }
+                        { category: "Other", rate: 0.002, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, tiers: [] }
                     ]
                 }
             ],
@@ -1168,6 +1169,16 @@
                         if (eligible && totalCycleSpend < cycleMinRequired) {
                             eligible = false;
                             statusMsg = `Blocked: Cycle < RM ${cycleMinRequired}`;
+                        }
+
+                        // Checking if cashback is restricted strictly to Saturday/Sunday (Weekend)
+                        if (eligible && rule.weekendOnly) {
+                            const dateObj = new Date(t.date.replace(/-/g, "/"));
+                            const day = dateObj.getDay(); // 0 = Sunday, 6 = Saturday
+                            if (day !== 0 && day !== 6) {
+                                eligible = false;
+                                statusMsg = "Blocked: Weekday Tx";
+                            }
                         }
 
                         if (eligible) {
@@ -1576,14 +1587,14 @@
             document.getElementById("editCardMinSpend").value = "0";
             document.getElementById("editCardCashbackCap").value = "100";
             document.getElementById("rulesListContainer").innerHTML = "";
-            addRuleRow("Other", 0.002, 0, false, [], 0);
+            addRuleRow("Other", 0.002, 0, false, [], 0, false);
         }
 
         function hideCardEditor() {
             document.getElementById("cardEditorPanel").classList.add("hidden");
         }
 
-        function addRuleRow(category = "", rate = 0, minTx = 0, tiered = false, tiers = [], categoryCap = 0) {
+        function addRuleRow(category = "", rate = 0, minTx = 0, tiered = false, tiers = [], categoryCap = 0, weekendOnly = false) {
             const container = document.getElementById("rulesListContainer");
             const ruleId = "rule-" + Date.now() + Math.random().toString(36).substr(2, 4);
             const row = document.createElement("div");
@@ -1604,6 +1615,11 @@
                     <div class="flex gap-1.5 items-center">
                         <label class="text-[9px] uppercase font-bold text-indigo-400">Cat Cap (RM)</label>
                         <input type="number" value="${categoryCap}" placeholder="0" class="rule-category-cap w-14 bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-[11px] text-slate-100 text-right font-mono">
+                    </div>
+
+                    <div class="flex gap-1 items-center">
+                        <label class="text-[9px] uppercase font-bold text-amber-400">Weekend Only?</label>
+                        <input type="checkbox" ${weekendOnly ? 'checked' : ''} class="rule-weekend-checkbox rounded border-slate-800 text-amber-500 focus:ring-amber-500 cursor-pointer">
                     </div>
 
                     <div class="flex gap-1 items-center">
@@ -1725,7 +1741,7 @@
             
             if (card.rules) {
                 card.rules.forEach(r => {
-                    addRuleRow(r.category, r.rate, r.minTxSpend, r.tiered, r.tiers, r.categoryCap || 0);
+                    addRuleRow(r.category, r.rate, r.minTxSpend, r.tiered, r.tiers, r.categoryCap || 0, r.weekendOnly || false);
                 });
             }
         }
@@ -1766,6 +1782,7 @@
                 const minTxInput = row.querySelector(".rule-min-spend-tx");
                 const categoryCapInput = row.querySelector(".rule-category-cap");
                 const tieredCheckbox = row.querySelector(".rule-tiered-checkbox");
+                const weekendCheckbox = row.querySelector(".rule-weekend-checkbox");
 
                 if (categoryInput && categoryInput.value.trim()) {
                     const ruleData = {
@@ -1773,6 +1790,7 @@
                         minTxSpend: parseFloat(minTxInput.value) || 0,
                         categoryCap: parseFloat(categoryCapInput.value) || 0,
                         tiered: tieredCheckbox.checked,
+                        weekendOnly: weekendCheckbox ? weekendCheckbox.checked : false,
                         rate: 0,
                         tiers: []
                     };
