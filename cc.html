@@ -13,25 +13,22 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #080b11; /* Very dark deep navy matched to screenshot */
+            background-color: #080b11; 
             color: #f1f5f9;
         }
-        /* Custom Premium Glassmorphism styling from uploaded interface */
         .glass-card {
-            background: rgba(18, 24, 38, 0.7); /* Deep blue-gray slate matched to screenshot */
+            background: rgba(18, 24, 38, 0.7); 
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(148, 163, 184, 0.08);
         }
         .glass-card:hover {
-            border-color: rgba(99, 102, 241, 0.35); /* Indigo glow highlight */
+            border-color: rgba(99, 102, 241, 0.35); 
         }
-        /* Card selector active highlight state */
         .active-filter-card {
             border-color: #6366f1 !important;
             box-shadow: 0 0 12px rgba(99, 102, 241, 0.25);
         }
-        /* Gradient overlays based on screenshot palette */
         .grad-purple-glow {
             background: linear-gradient(135deg, #0e131f 0%, #151c2e 50%, #2e1e4f 100%);
             border: 1px solid rgba(124, 58, 237, 0.3);
@@ -48,7 +45,6 @@
             background: linear-gradient(135deg, #101626 0%, #1a233d 60%, #1d254c 100%);
             border: 1px solid rgba(99, 102, 241, 0.3);
         }
-        /* Custom scrollbar matched to dark theme */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -78,7 +74,6 @@
                 </div>
             </div>
 
-            <!-- Tab Navigation & Universal Sync Toolbar -->
             <div class="flex flex-wrap items-center justify-center gap-3">
                 <nav class="flex flex-wrap items-center justify-center gap-1.5 bg-[#0f1422] p-1.5 rounded-xl border border-slate-800/90">
                     <button onclick="switchTab('dashboard')" id="tabBtn-dashboard" class="px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 bg-indigo-600 text-white shadow-md">
@@ -98,12 +93,11 @@
                     </button>
                 </nav>
 
-                <!-- Persistent Universal cloud sync/load action desk -->
                 <div class="flex items-center gap-1.5 bg-[#0f1422] p-1.5 rounded-xl border border-slate-800/90">
                     <button onclick="handleCloudSync('push')" title="Sync workspace to Koofr cloud" class="px-3.5 py-2 rounded-lg text-xs font-bold bg-[#6366f1] hover:bg-[#5053df] text-white shadow-md flex items-center gap-1 transition-all duration-155">
                         <i class="fa-solid fa-cloud-arrow-up"></i>Sync
                     </button>
-                    <button onclick="handleCloudSync('pull')" title="Load database from Koofr cloud" class="px-3.5 py-2 rounded-lg text-xs font-bold bg-slate-800 hover:bg-slate-705 text-slate-200 border border-slate-700 flex items-center gap-1 transition-all duration-155">
+                    <button onclick="handleCloudSync('pull')" title="Load database from Koofr cloud" class="px-3.5 py-2 rounded-lg text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center gap-1 transition-all duration-155">
                         <i class="fa-solid fa-cloud-arrow-down"></i>Load
                     </button>
                 </div>
@@ -112,36 +106,26 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 mt-8">
-        <!-- Toast Container -->
-        <div id="toastContainer" class="fixed top-24 right-6 z-50 flex flex-col gap-2 animate-pulse"></div>
+        <div id="toastContainer" class="fixed top-24 right-6 z-50 flex flex-col gap-2"></div>
 
-        <!-- Dashboard Content -->
+        <!-- Dashboard Section -->
         <section id="tabContent-dashboard" class="space-y-8">
-            <!-- Dynamic Period Timeline Selector (As requested for historical transaction review) -->
             <div class="space-y-3 bg-[#0d1222]/40 p-4 rounded-2xl border border-slate-800/60">
                 <div class="flex justify-between items-center">
                     <h4 class="text-xs font-bold text-indigo-400 uppercase tracking-widest"><i class="fa-solid fa-clock mr-1.5"></i>Historical Cycle Timeline</h4>
                     <span id="activePeriodBadge" class="text-[9px] bg-indigo-950 text-indigo-300 border border-indigo-850 px-2 py-0.5 rounded-md font-bold uppercase">All Time view</span>
                 </div>
-                <!-- Pill Container for dynamically calculated months -->
-                <div id="timelinePeriodContainer" class="flex flex-wrap gap-2 pt-1.5">
-                    <!-- Dynamic Month Pills added here -->
-                </div>
+                <div id="timelinePeriodContainer" class="flex flex-wrap gap-2 pt-1.5"></div>
             </div>
 
-            <!-- Universal Dashboard Filtering Deck -->
             <div class="space-y-3">
                 <div class="flex justify-between items-center">
                     <h4 class="text-xs font-bold text-indigo-400 uppercase tracking-widest"><i class="fa-solid fa-filter mr-1.5"></i>Filter Workspace View by Card</h4>
                     <span id="activeFilterBadge" class="text-[9px] bg-indigo-950 text-indigo-300 border border-indigo-850 px-2 py-0.5 rounded-md font-bold uppercase">All Cards Active</span>
                 </div>
-                <!-- Grid of selectable filter cards -->
-                <div id="dashboardFilterDeck" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-                    <!-- Populated dynamically -->
-                </div>
+                <div id="dashboardFilterDeck" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3"></div>
             </div>
 
-            <!-- KPIs Header Cards Grid (Styled exactly like the screenshot indicator cards with RM currency) -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
                     <div class="flex justify-between items-start">
@@ -181,19 +165,14 @@
                 </div>
             </div>
 
-            <!-- New World Class Solution: Dynamic Statement / Billing Cycle Limit & Milestone Monitors -->
             <div class="space-y-3">
                 <h4 class="text-xs font-bold text-indigo-400 uppercase tracking-widest">
                     <i class="fa-solid fa-clock-rotate-left mr-1.5"></i>Active Billing Cycles & Rewards Progress
                 </h4>
-                <div id="billingCycleProgressContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Generated dynamically based on statement/calendar close criteria -->
-                </div>
+                <div id="billingCycleProgressContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
             </div>
 
-            <!-- Dashboard Analytics Layout -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Interactive Chart Column -->
                 <div class="glass-card rounded-2xl p-6 lg:col-span-2">
                     <div class="flex justify-between items-center mb-6">
                         <h4 class="text-sm font-bold uppercase tracking-wider text-slate-200">Cashback Performance Trends</h4>
@@ -203,7 +182,6 @@
                         <canvas id="cashbackTrendChart"></canvas>
                     </div>
                 </div>
-                <!-- Dual Category/Card Share Column -->
                 <div class="glass-card rounded-2xl p-6 space-y-6">
                     <div class="flex justify-between items-center border-b border-slate-900 pb-2">
                         <h4 class="text-sm font-bold uppercase tracking-wider text-slate-200">Yield Breakdown</h4>
@@ -226,7 +204,6 @@
                 </div>
             </div>
 
-            <!-- Ledger Table Container -->
             <div class="glass-card rounded-2xl p-6">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                     <div>
@@ -254,89 +231,67 @@
                                 <th class="py-3.5 px-4 text-center">Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="transactionLedgerBody" class="divide-y divide-slate-900">
-                            <!-- Populated dynamically -->
-                        </tbody>
+                        <tbody id="transactionLedgerBody" class="divide-y divide-slate-900"></tbody>
                     </table>
                 </div>
             </div>
         </section>
 
-        <!-- Quick Log Screen (Optimized for Mobile/Touch) -->
+        <!-- Quick Log Section -->
         <section id="tabContent-quickLog" class="hidden space-y-6 max-w-lg mx-auto">
             <div class="glass-card rounded-2xl p-6">
-                <!-- Header with Settings Button -->
                 <div class="flex justify-between items-center mb-2">
                     <h3 class="text-base font-bold text-slate-200 uppercase tracking-wider"><i class="fa-solid fa-bolt text-indigo-400 mr-2"></i>Quick Ledger Log</h3>
-                    <button type="button" onclick="openSspnSettingsModal()" title="Workspace Configurations"
-                        class="h-8 w-8 bg-slate-900 border border-slate-800 hover:border-[#6366f1] text-[#6366f1] rounded-lg flex items-center justify-center transition duration-200">
+                    <button type="button" onclick="openSettingsModal()" class="h-8 w-8 bg-slate-900 border border-slate-800 hover:border-[#6366f1] text-[#6366f1] rounded-lg flex items-center justify-center transition duration-200">
                         <i class="fa-solid fa-sliders text-xs"></i>
                     </button>
                 </div>
                 <p class="text-xs text-slate-500 mb-6">Optimized workflow designed for speedy manual insertions on mobile and touch devices.</p>
 
                 <form id="quickLogForm" onsubmit="handleTransactionSubmit(event)" class="space-y-4">
-                    <!-- Date Picker with secure, click-friendly calendar wrapper (Fixes programmatic showPicker in iframe) -->
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5" for="txDate">Transaction Date</label>
                         <div class="relative cursor-pointer">
-                            <input type="date" id="txDate" required onchange="calculateRealtimeCashback()"
-                                class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-4 pr-10 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-sm cursor-pointer block [color-scheme:dark]">
+                            <input type="date" id="txDate" required onchange="calculateRealtimeCashback()" class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-4 pr-10 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-sm cursor-pointer block [color-scheme:dark]">
                             <div class="absolute right-3.5 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none">
                                 <i class="fa-solid fa-calendar-days text-sm"></i>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Card Picker -->
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5" for="txCard">Source Credit Card</label>
-                        <select id="txCard" required onchange="handleTxCardChange(); calculateRealtimeCashback()"
-                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 cursor-pointer">
-                            <!-- Populated dynamically -->
-                        </select>
+                        <select id="txCard" required onchange="handleTxCardChange(); calculateRealtimeCashback()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 cursor-pointer"></select>
                     </div>
 
-                    <!-- Dynamic Bank Category -->
                     <div>
                         <div class="flex justify-between items-center mb-1.5">
                             <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400" for="txCategory">Bank Cashback Category</label>
                             <span class="text-[9px] text-indigo-400 font-bold" id="selectedCardRuleLabel">No card rules loaded</span>
                         </div>
-                        <select id="txCategory" required onchange="calculateRealtimeCashback()"
-                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 cursor-pointer">
-                            <!-- Populated dynamically based on Card selections -->
-                        </select>
+                        <select id="txCategory" required onchange="calculateRealtimeCashback()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 cursor-pointer"></select>
                     </div>
 
-                    <!-- Configurable Internal Personal Tag Category -->
                     <div>
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5" for="txInternalCategory">Internal Personal Category</label>
-                        <select id="txInternalCategory" required
-                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 cursor-pointer">
-                            <!-- Dynamically populated from Custom Category configuration -->
-                        </select>
+                        <select id="txInternalCategory" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 cursor-pointer"></select>
                         <span class="text-[10px] text-slate-500 block mt-1">Configure these categories inside the Settings Panel anytime!</span>
                     </div>
 
-                    <!-- Amount and Description Grid (Description/Vendor now optional) -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5" for="txAmount">Transaction Amount</label>
                             <div class="relative">
                                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm font-semibold">RM</span>
-                                <input type="number" step="0.01" min="0.01" id="txAmount" required placeholder="0.00" oninput="calculateRealtimeCashback()"
-                                    class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-sm">
+                                <input type="number" step="0.01" min="0.01" id="txAmount" required placeholder="0.00" oninput="calculateRealtimeCashback()" class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-sm">
                             </div>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5" for="txDescription">Description / Vendor <span class="text-[9px] text-slate-500 font-normal lowercase">(optional)</span></label>
-                            <input type="text" id="txDescription" placeholder="e.g. Starbucks, Uber (optional)"
-                                class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-sm">
+                            <input type="text" id="txDescription" placeholder="e.g. Starbucks, Uber" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-sm">
                         </div>
                     </div>
 
-                    <!-- Live Reward Calculation Panel -->
                     <div class="bg-slate-950 border border-slate-800/80 rounded-xl p-4 flex justify-between items-center">
                         <div class="space-y-1">
                             <span class="text-[9px] uppercase tracking-widest text-indigo-400 font-bold block">Estimated Yield</span>
@@ -348,7 +303,6 @@
                         </div>
                     </div>
 
-                    <!-- Submit action button -->
                     <button type="submit" class="w-full bg-[#6366f1] hover:bg-[#5053df] text-white font-bold py-3 rounded-xl shadow-lg transition duration-200 text-xs uppercase tracking-widest">
                         Save Transaction To Ledger
                     </button>
@@ -356,22 +310,18 @@
             </div>
         </section>
 
-        <!-- SSPN Tracking Dashboard -->
+        <!-- SSPN Section (Completed missing implementation template) -->
         <section id="tabContent-sspn" class="hidden space-y-8 max-w-lg mx-auto">
-            <!-- SSPN Header & Config Toggle -->
             <div class="flex justify-between items-center bg-[#0d1222] p-4 rounded-2xl border border-slate-800/80">
                 <div>
                     <h3 class="text-base font-bold text-slate-200 uppercase tracking-wider">SSPN Savings Hub</h3>
                     <p class="text-[10px] text-slate-500 mt-0.5">Custom configurations for dynamic devices & channels</p>
                 </div>
-                <!-- Trigger Setup Modal Icon -->
-                <button onclick="openSspnSettingsModal()" title="Configure SSPN Dropdown Options"
-                    class="h-9 w-9 bg-slate-900 border border-slate-800 hover:border-[#6366f1] text-[#6366f1] rounded-xl flex items-center justify-center transition duration-200">
+                <button onclick="openSettingsModal()" class="h-9 w-9 bg-slate-900 border border-slate-800 hover:border-[#6366f1] text-[#6366f1] rounded-xl flex items-center justify-center transition duration-200">
                     <i class="fa-solid fa-sliders text-sm"></i>
                 </button>
             </div>
 
-            <!-- SSPN KPIs Grid -->
             <div class="grid grid-cols-1 gap-3">
                 <div class="glass-card rounded-2xl p-4 flex justify-between items-center relative overflow-hidden">
                     <div>
@@ -398,2643 +348,532 @@
                 </div>
             </div>
 
-            <!-- SSPN Mobile Quick Entry Card -->
-            <div class="glass-card rounded-2xl p-6" id="sspnFormContainer">
+            <div class="glass-card rounded-2xl p-6">
                 <h4 class="text-xs font-bold text-slate-300 uppercase tracking-widest mb-4">
-                    <i class="fa-solid fa-coins text-indigo-400 mr-1.5"></i>
-                    <span id="sspnFormHeader">Log Wallet Record</span>
+                    <i class="fa-solid fa-coins text-indigo-400 mr-1.5"></i>Log Wallet Record
                 </h4>
-                
                 <form id="sspnForm" onsubmit="handleSspnSubmit(event)" class="space-y-4">
-                    <!-- Date (Date Picker with secure calendar selector trigger wrapper) -->
                     <div>
                         <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1" for="sspnDate">Transaction Date</label>
-                        <div class="relative cursor-pointer">
-                            <input type="date" id="sspnDate" required
-                                class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-4 pr-10 py-2 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-xs cursor-pointer block [color-scheme:dark]">
-                            <div class="absolute right-3.5 top-1/2 -translate-y-1/2 text-indigo-400 pointer-events-none">
-                                <i class="fa-solid fa-calendar-days text-xs"></i>
-                            </div>
-                        </div>
+                        <input type="date" id="sspnDate" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-slate-100 focus:outline-none focus:border-indigo-500 text-xs block [color-scheme:dark]">
                     </div>
-
-                    <!-- Dynamic Channels -->
                     <div>
                         <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1" for="sspnChannel">Channel Selection</label>
-                        <select id="sspnChannel" required
-                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 cursor-pointer">
-                            <!-- Populated dynamically -->
-                        </select>
+                        <select id="sspnChannel" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500"></select>
                     </div>
-
-                    <!-- Dynamic Devices -->
                     <div>
                         <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1" for="sspnDevice">Target Device</label>
-                        <select id="sspnDevice" required
-                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 cursor-pointer">
-                            <!-- Populated dynamically -->
-                        </select>
+                        <select id="sspnDevice" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500"></select>
                     </div>
-
-                    <!-- Dynamic Methods -->
                     <div>
                         <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1" for="sspnMethod">Payment Method</label>
-                        <select id="sspnMethod" required
-                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 cursor-pointer">
-                            <!-- Populated dynamically -->
-                        </select>
+                        <select id="sspnMethod" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500"></select>
                     </div>
-
-                    <!-- Amount with Premium Dynamic Logic (+ is deposit, - is withdrawal) -->
                     <div>
                         <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1" for="sspnAmount">Amount</label>
                         <div class="flex gap-2">
-                            <!-- Touch sign switcher toggle -->
-                            <button type="button" id="sspnSignBtn" onclick="toggleSspnSign()"
-                                class="w-14 bg-emerald-500/25 border border-emerald-500/40 text-emerald-400 font-bold rounded-xl text-center text-sm flex items-center justify-center transition duration-150">
-                                +
-                            </button>
+                            <button type="button" id="sspnSignBtn" onclick="toggleSspnSign()" class="w-14 bg-emerald-500/25 border border-emerald-500/40 text-emerald-400 font-bold rounded-xl text-center text-sm flex items-center justify-center transition duration-150">+</button>
                             <div class="relative flex-1">
                                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-semibold">RM</span>
-                                <input type="number" step="0.01" min="0.01" id="sspnAmount" required placeholder="0.00"
-                                    class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-xs">
+                                <input type="number" step="0.01" min="0.01" id="sspnAmount" required placeholder="0.00" class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-slate-100 text-sm focus:outline-none focus:border-indigo-500">
                             </div>
                         </div>
-                        <span class="text-[9px] text-slate-500 mt-1 block leading-normal">
-                            Tap <strong class="text-emerald-400">+</strong> for savings additions/dividends or <strong class="text-rose-400">-</strong> for payout withdrawals.
-                        </span>
                     </div>
-
-                    <!-- Reflection audit switcher -->
-                    <div class="flex items-center justify-between bg-slate-950 border border-slate-850 p-3 rounded-xl">
-                        <div class="space-y-0.5">
-                            <span class="block text-[10px] uppercase font-bold text-slate-400">Ledger Status</span>
-                            <span id="sspnReflectionDesc" class="text-[9px] text-emerald-400 font-medium">Reflected instantly in banking statements</span>
-                        </div>
-                        <label class="relative flex items-center cursor-pointer select-none">
-                            <input type="checkbox" id="sspnReflected" checked onchange="handleSspnReflectionChange()" class="sr-only peer">
-                            <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-300 after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-500"></div>
-                        </label>
-                    </div>
-
-                    <!-- Remarks -->
-                    <div>
-                        <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1" for="sspnRemarks">Remarks / Reference</label>
-                        <input type="text" id="sspnRemarks" placeholder="e.g. Shopee voucher payout, May dividend"
-                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-xs">
-                    </div>
-
-                    <!-- Submit action buttons -->
-                    <div class="flex gap-2">
-                        <button type="button" id="sspnCancelEditBtn" onclick="cancelSspnEdit()" class="hidden flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
-                            Cancel
-                        </button>
-                        <button type="submit" id="sspnSubmitBtn" class="flex-[2] bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 rounded-xl shadow-lg transition duration-200 text-xs uppercase tracking-widest">
-                            Commit Ledger Entry
-                        </button>
-                    </div>
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-widest transition">
+                        Save SSPN Record
+                    </button>
                 </form>
             </div>
+        </section>
 
-            <!-- SSPN Mini Card Deck on Mobile viewports -->
-            <div class="space-y-4">
-                <div class="flex justify-between items-center">
-                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest">Active Ledger Entries</h4>
-                    <span class="text-[9px] text-slate-500 font-mono" id="sspnRecordCount">0 records loaded</span>
-                </div>
-                <div id="sspnMobileCardContainer" class="space-y-3">
-                    <!-- Populated dynamically -->
+        <!-- Dynamic Maintenance Panel -->
+        <section id="tabContent-cardManager" class="hidden space-y-6">
+            <div class="glass-card rounded-2xl p-6">
+                <h3 class="text-base font-bold text-slate-200 uppercase tracking-wider mb-4">Credit Card Configurations</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-slate-300">
+                        <thead class="bg-slate-900/60 uppercase text-[10px] tracking-widest text-slate-500 font-bold border-b border-slate-800">
+                            <tr>
+                                <th class="py-3 px-4">Card Identifier</th>
+                                <th class="py-3 px-4">Theme Variant</th>
+                                <th class="py-3 px-4">Billing Day</th>
+                                <th class="py-3 px-4">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cardManagerTableBody"></tbody>
+                    </table>
                 </div>
             </div>
         </section>
 
-        <!-- Maintenance Hub -->
-        <section id="tabContent-cardManager" class="hidden space-y-8">
-            <div class="grid cols-1 lg:grid-cols-5 gap-6">
-                <!-- Left Hand Configurator Forms -->
-                <div class="lg:col-span-2 space-y-6">
-                    <!-- Configurator panel for Cards -->
-                    <div class="glass-card rounded-2xl p-6" id="cardFormContainer">
-                        <h3 class="text-base font-bold text-slate-200 mb-2 uppercase tracking-wider">
-                            <i class="fa-solid fa-plus text-indigo-400 mr-2" id="cardFormIcon"></i>
-                            <span id="cardFormHeader">Configure Credit Card</span>
-                        </h3>
-                        <p class="text-xs text-slate-500 mb-6">Create new reward rules. Formulate custom category multipliers or intricate spend-tiered bracket rates here.</p>
-
-                        <form id="cardConfigForm" onsubmit="handleCardSubmit(event)" class="space-y-4">
-                            <!-- Card Name -->
-                            <div>
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5" for="cardName">Card Name</label>
-                                <input type="text" id="cardName" required placeholder="e.g. Sapphire Prestige Gold"
-                                    class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-sm">
-                            </div>
-
-                            <!-- Base Rate and Design Presets -->
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5" for="cardBaseRate">
-                                        Default Base Rate (%) 
-                                    </label>
-                                    <input type="number" step="0.01" min="0" max="100" id="cardBaseRate" required placeholder="1.5"
-                                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-sm">
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5" for="cardStyleSelect">Card Theme</label>
-                                    <select id="cardStyleSelect" onchange="handleCardStyleChange()"
-                                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 cursor-pointer">
-                                        <option value="grad-indigo">👑 Dark Indigo Elite</option>
-                                        <option value="grad-purple-glow">🖤 Violet Cyber Glow</option>
-                                        <option value="grad-emerald">💚 Emerald Quartz</option>
-                                        <option value="grad-obsidian">🤍 Obsidian Luxury</option>
-                                        <option value="custom">🖼️ Upload Custom Illustration</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!-- Multi-tier dynamic toggle and system -->
-                            <div class="border-t border-slate-800/80 pt-4">
-                                <div class="flex justify-between items-center mb-2">
-                                    <label class="block text-xs font-bold text-indigo-400 uppercase tracking-wider select-none cursor-pointer" for="toggleTiers">Multi-Tier Base Rates</label>
-                                    <label class="relative flex items-center cursor-pointer select-none">
-                                        <input type="checkbox" id="toggleTiers" onchange="toggleTiersVisibility()" class="sr-only peer">
-                                        <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-slate-300 after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-500"></div>
-                                    </label>
-                                </div>
-                                <p class="text-[10px] text-slate-500 mb-3">Enable bracketed tiers (e.g. RM 0-RM 500 @ 0.1%, RM 500+ @ 1%). If disabled, the card uses a flat default base rate.</p>
-
-                                <div id="tiersSectionContainer" class="hidden space-y-3 bg-slate-950 p-3 rounded-xl border border-slate-800/80">
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-[10px] uppercase font-bold text-slate-400">Bracket Configuration</span>
-                                        <button type="button" onclick="addTierInputRow()" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-indigo-400 font-bold px-2 py-1 rounded">
-                                            <i class="fa-solid fa-plus mr-1"></i>Add Bracket
-                                        </button>
-                                    </div>
-                                    <div id="tierRowsContainer" class="space-y-2">
-                                        <!-- Instantiated dynamically -->
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Custom Illustration File Picker -->
-                            <div id="customIllustrationContainer" class="hidden bg-slate-950 border border-slate-800/85 p-3.5 rounded-xl space-y-2">
-                                <label class="block text-xs font-bold text-slate-400" for="cardIllustrationFile">Custom Image Upload</label>
-                                <input type="file" id="cardIllustrationFile" accept="image/*" onchange="processCardIllustration()"
-                                    class="w-full text-xs text-slate-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-indigo-400 hover:file:bg-slate-700 cursor-pointer">
-                                <span class="text-[10px] block text-slate-500 italic">Images scaled automatically to ultra-light optimized sizes to preserve storage space.</span>
-                            </div>
-
-                            <!-- Billing Reset Configuration -->
-                            <div class="border-t border-slate-800/80 pt-4 grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5" for="cardCycleType">Billing Window Cycle</label>
-                                    <select id="cardCycleType" onchange="handleCycleTypeChange()"
-                                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 cursor-pointer">
-                                        <option value="calendar">📅 Calendar Month</option>
-                                        <option value="statement">🧾 Statement Close Date</option>
-                                    </select>
-                                </div>
-                                <div id="statementDayContainer" class="invisible">
-                                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5" for="cardStatementCloseDay">Close Day (1-28)</label>
-                                    <input type="number" id="cardStatementCloseDay" min="1" max="28" value="15"
-                                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-sm">
-                                </div>
-                            </div>
-
-                            <!-- Booster Category Configurations -->
-                            <div class="border-t border-slate-800/80 pt-4 space-y-3">
-                                <div class="flex justify-between items-center">
-                                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-400">Card Multipliers / Boosters</label>
-                                    <button type="button" onclick="addBoosterInputRow()" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-indigo-400 font-bold px-2.5 py-1 rounded-lg">
-                                        <i class="fa-solid fa-plus mr-1"></i>Add Multiplier
-                                    </button>
-                                </div>
-                                <div id="boosterRowsContainer" class="space-y-2">
-                                    <!-- Boosters added dynamically -->
-                                </div>
-                            </div>
-
-                            <!-- Advanced Constraints -->
-                            <div class="border-t border-slate-800/80 pt-4 space-y-4">
-                                <h5 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Advanced Rewards Limits</h5>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-xs font-semibold text-slate-500 mb-1.5" for="cardMonthlyCap">Monthly Cashback Cap (RM)</label>
-                                        <input type="number" step="1" id="cardMonthlyCap" placeholder="No limit"
-                                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-sm">
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-semibold text-slate-500 mb-1.5" for="cardTierSpendThreshold">Bonus Milestone Spend (RM)</label>
-                                        <input type="number" step="10" id="cardTierSpendThreshold" placeholder="e.g. 1000"
-                                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-sm">
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-xs font-semibold text-slate-500 mb-1.5" for="cardMinTxAmount">Min Tx for Cashback (RM)</label>
-                                        <input type="number" step="1" id="cardMinTxAmount" placeholder="e.g. 100 (0 is off)"
-                                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-sm">
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-semibold text-slate-500 mb-1.5" for="cardTierSpendRate">Milestone Rate (%)</label>
-                                        <input type="number" step="0.01" id="cardTierSpendRate" placeholder="e.g. 2.50"
-                                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-sm">
-                                    </div>
-                                </div>
-                                <p class="text-[9px] text-slate-500 mt-1">If "Min Tx" is set, transactions with amount less than this setting earn no cashback. If Milestone Spend is reached, Milestone rate takes precedence.</p>
-                            </div>
-
-                            <!-- Submit action buttons -->
-                            <div class="flex gap-2">
-                                <button type="button" id="cardCancelEditBtn" onclick="cancelCardEdit()" class="hidden flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
-                                    Cancel
-                                </button>
-                                <button type="submit" id="cardSubmitBtn" class="flex-[2] bg-[#6366f1] hover:bg-[#5053df] text-white font-bold py-3 rounded-xl shadow-lg transition duration-200 text-xs uppercase tracking-widest">
-                                    Create Credit Card Template
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+        <!-- Koofr Sync Settings Screen -->
+        <section id="tabContent-koofrSync" class="hidden space-y-6 max-w-lg mx-auto">
+            <div class="glass-card rounded-2xl p-6 space-y-4">
+                <h3 class="text-base font-bold text-slate-200 uppercase tracking-wider"><i class="fa-solid fa-cloud mr-2 text-indigo-400"></i>WebDAV Koofr Credentials</h3>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">WebDAV Endpoint URL</label>
+                    <input type="text" id="syncEndpoint" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none" placeholder="https://app.koofr.net/dav/Koofr">
                 </div>
-
-                <!-- Right Hand Vault Panel -->
-                <div class="lg:col-span-3 space-y-6">
-                    <h4 class="text-sm font-bold uppercase tracking-wider text-slate-200">Registered Premium Cards Vault</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="cardVaultDeck">
-                        <!-- Card structures printed dynamically -->
-                    </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Account Username (Email)</label>
+                    <input type="email" id="syncUser" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none">
                 </div>
-            </div>
-        </section>
-
-        <!-- Koofr Cloud Sync Dashboard -->
-        <section id="tabContent-koofrSync" class="hidden space-y-8">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Sync Connection Configuration Card -->
-                <div class="glass-card rounded-2xl p-6 lg:col-span-1 space-y-5">
-                    <div>
-                        <h3 class="text-base font-bold text-slate-200 mb-2 uppercase tracking-wider">Sync Connection Hub</h3>
-                        <p class="text-xs text-slate-500">Enable automated backups across all platforms using a secure Cloudflare Worker connected to Koofr WebDAV.</p>
-                    </div>
-
-                    <div class="space-y-4 pt-2">
-                        <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5" for="syncWorkerUrl">Worker Agent Proxy URL</label>
-                            <input type="url" id="syncWorkerUrl" placeholder="https://your-worker.workers.dev" onchange="saveSyncConfig()"
-                                class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-sm">
-                        </div>
-                    </div>
-
-                    <div class="border-t border-slate-800/80 pt-4 flex gap-3">
-                        <button onclick="handleCloudSync('push')" class="flex-1 bg-[#6366f1] hover:bg-[#5053df] text-white font-bold py-2.5 px-4 rounded-xl text-xs uppercase tracking-wider transition shadow">
-                            <i class="fa-solid fa-cloud-arrow-up mr-1.5"></i>Push to Cloud
-                        </button>
-                        <button onclick="handleCloudSync('pull')" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-2.5 px-4 rounded-xl text-xs uppercase tracking-wider transition border border-slate-700">
-                            <i class="fa-solid fa-cloud-arrow-down mr-1.5"></i>Pull from Cloud
-                        </button>
-                    </div>
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">App-Specific Password</label>
+                    <input type="password" id="syncPass" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-100 focus:outline-none">
                 </div>
-
-                <!-- Setup Instructions -->
-                <div class="glass-card rounded-2xl p-6 lg:col-span-2 space-y-6">
-                    <div>
-                        <h3 class="text-base font-bold text-slate-200 mb-2 uppercase tracking-wider">Deploy Your Secure Infrastructure</h3>
-                        <p class="text-xs text-slate-500">Hosting on GitHub is fully static. Configure a free Cloudflare Worker to proxy your requests safely to Koofr.</p>
-                    </div>
-
-                    <div class="space-y-4">
-                        <h4 class="text-xs font-bold text-[#6366f1] uppercase tracking-widest border-b border-slate-800 pb-2">Step-by-Step Configuration</h4>
-                        <ol class="list-decimal list-inside space-y-2 text-xs text-slate-400">
-                            <li>Sign in to your <strong class="text-slate-200">Koofr</strong> dashboard, head to <strong class="text-slate-200">Preferences → Security</strong>, and generate an <strong class="text-slate-200">App Password</strong> for WebDAV.</li>
-                            <li>Sign up at <strong class="text-slate-200">Cloudflare Workers</strong> and instantiate a new Worker.</li>
-                            <li>Embed the verified logic compiled inside the developer portal below into your Worker script.</li>
-                            <li>Define the environment variables inside Cloudflare Worker Settings:
-                                <ul class="list-disc list-inside ml-6 mt-1 space-y-1 text-slate-500">
-                                    <li><code class="text-slate-300 font-mono">KOOFR_USER</code>: Your Koofr register email.</li>
-                                    <li><code class="text-slate-300 font-mono">KOOFR_PASS</code>: The generated App Password.</li>
-                                </ul>
-                            </li>
-                        </ol>
-                    </div>
-
-                    <div class="space-y-2">
-                        <div class="flex justify-between items-center">
-                            <h4 class="text-xs font-bold text-slate-300 uppercase">Cloudflare Worker Logic Code (Token-Free)</h4>
-                            <button onclick="copyWorkerToClipboard()" class="text-[10px] bg-slate-800 hover:bg-slate-700 text-indigo-400 font-mono font-bold px-2 py-1 rounded">
-                                <i class="fa-solid fa-copy mr-1"></i>Copy Code
-                            </button>
-                        </div>
-                        <pre class="bg-slate-950 p-4 rounded-xl text-[10px] text-slate-400 overflow-x-auto border border-slate-900 leading-normal font-mono" id="workerSourceCode">
-addEventListener('fetch', event => {
-  event.respondWith(
-    handleRequest(event.request).catch(err => {
-      return new Response(JSON.stringify({ error: err.message, stack: err.stack }), {
-        status: 500,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-          'Access-Control-Allow-Methods': 'GET, PUT, OPTIONS',
-          'Content-Type': 'application/json'
-        }
-      })
-    })
-  )
-})
-
-async function handleRequest(request) {
-  const allowedHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    'Access-Control-Allow-Methods': 'GET, PUT, OPTIONS',
-    'Content-Type': 'application/json'
-  }
-
-  if (request.method === 'OPTIONS') {
-    return new Response(null, { headers: allowedHeaders })
-  }
-
-  const remoteUrl = "https://app.koofr.net/dav/Koofr/cashback_ledger_sync.json"
-  const koofrAuth = btoa(`${KOOFR_USER}:${KOOFR_PASS}`)
-
-  if (request.method === 'PUT') {
-    try {
-      const payload = await request.text()
-      const response = await fetch(remoteUrl, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Basic ${koofrAuth}`,
-          'Content-Type': 'application/json'
-        },
-        body: payload
-      })
-      if (response.ok) {
-        return new Response(JSON.stringify({ status: 'success' }), { headers: allowedHeaders })
-      }
-      return new Response(JSON.stringify({ error: 'WebDAV connection error' }), { status: response.status, headers: allowedHeaders })
-    } catch(err) {
-      return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: allowedHeaders })
-    }
-  }
-
-  if (request.method === 'GET') {
-    try {
-      const response = await fetch(remoteUrl, {
-        method: 'GET',
-        headers: { 'Authorization': `Basic ${koofrAuth}` }
-      })
-      if (response.status === 404) {
-        return new Response(JSON.stringify({ empty: true }), { headers: allowedHeaders })
-      }
-      const data = await response.text()
-      return new Response(data, { headers: allowedHeaders })
-    } catch(err) {
-      return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: allowedHeaders })
-    }
-  }
-
-  return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405, headers: allowedHeaders })
-}</pre>
-                    </div>
-                </div>
+                <button onclick="saveSyncSettings()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
+                    Save Config to Browser Storage
+                </button>
             </div>
         </section>
     </main>
 
-    <!-- SSPN & Tags Global Settings Portal Modal -->
-    <div id="sspnSettingsModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm hidden">
-        <div class="glass-card bg-[#0b0f19] border border-slate-800 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-            <div class="flex justify-between items-center p-5 border-b border-slate-800">
-                <div class="flex items-center gap-2">
-                    <i class="fa-solid fa-sliders text-[#6366f1]"></i>
-                    <h3 class="text-sm font-bold uppercase tracking-wider text-slate-200">Workspace Configurations</h3>
-                </div>
-                <button onclick="closeSspnSettingsModal()" class="text-slate-400 hover:text-rose-400 transition text-lg"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-
-            <div class="p-6 overflow-y-auto space-y-6">
-                <!-- Config Section: Channels -->
-                <div class="space-y-3">
-                    <h4 class="text-xs font-bold text-indigo-400 uppercase tracking-wide">SSPN Channels</h4>
-                    <div class="flex gap-2">
-                        <input type="text" id="addChannelInput" placeholder="e.g. Shopee Pay, Lazada, FPX"
-                            class="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
-                        <button onclick="addConfigItem('channel')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-3 py-1.5 rounded-lg text-xs tracking-wider transition">Add</button>
-                    </div>
-                    <div id="channelConfigList" class="flex flex-wrap gap-1.5 p-2 bg-slate-950/50 rounded-xl border border-slate-900 max-h-[90px] overflow-y-auto"></div>
-                </div>
-
-                <!-- Config Section: Devices -->
-                <div class="space-y-3 border-t border-slate-900 pt-4">
-                    <h4 class="text-xs font-bold text-indigo-400 uppercase tracking-wide">SSPN Devices</h4>
-                    <div class="flex gap-2">
-                        <input type="text" id="addDeviceInput" placeholder="e.g. Primary Mobile, Laptop"
-                            class="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
-                        <button onclick="addConfigItem('device')" class="bg-[#6366f1] hover:bg-[#5053df] text-white font-bold px-3 py-1.5 rounded-lg text-xs tracking-wider transition">Add</button>
-                    </div>
-                    <div id="deviceConfigList" class="flex flex-wrap gap-1.5 p-2 bg-slate-950/50 rounded-xl border border-slate-900 max-h-[90px] overflow-y-auto"></div>
-                </div>
-
-                <!-- Config Section: Methods -->
-                <div class="space-y-3 border-t border-slate-900 pt-4">
-                    <h4 class="text-xs font-bold text-[#6366f1] uppercase tracking-wide">SSPN Payment Methods</h4>
-                    <div class="flex gap-2">
-                        <input type="text" id="addMethodInput" placeholder="e.g. Debit Card, E-Wallet"
-                            class="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
-                        <button onclick="addConfigItem('method')" class="bg-[#6366f1] hover:bg-[#5053df] text-white font-bold px-3 py-1.5 rounded-lg text-xs tracking-wider transition">Add</button>
-                    </div>
-                    <div id="methodConfigList" class="flex flex-wrap gap-1.5 p-2 bg-slate-950/50 rounded-xl border border-slate-900 max-h-[90px] overflow-y-auto"></div>
-                </div>
-
-                <!-- Config Section: Personal Budget Tags -->
-                <div class="space-y-3 border-t border-slate-900 pt-4">
-                    <h4 class="text-xs font-bold text-[#6366f1] uppercase tracking-wide">Card Personal Categories</h4>
-                    <div class="flex gap-2">
-                        <input type="text" id="newCategoryInput" placeholder="e.g. ☕ Cafe & Treats"
-                            class="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
-                        <button onclick="handleAddInternalCategory()" class="bg-[#6366f1] hover:bg-[#5053df] text-white font-bold px-3 py-1.5 rounded-lg text-xs tracking-wider transition">Add</button>
-                    </div>
-                    <div id="categoryConfigList" class="flex flex-wrap gap-1.5 p-2 bg-slate-950/50 rounded-xl border border-slate-900 max-h-[95px] overflow-y-auto"></div>
-                </div>
-            </div>
-
-            <div class="p-4 bg-slate-950/60 border-t border-slate-800 flex justify-end">
-                <button onclick="closeSspnSettingsModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2 rounded-xl text-xs font-semibold tracking-wider transition">
-                    Done & Apply Settings
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Canvas scaler utility container -->
-    <canvas id="scaleCanvas" class="hidden"></canvas>
-
+    <!-- Global App Engine JavaScript Controller -->
     <script>
-        let transactions = [];
-        let cards = [];
-        let internalCategories = [];
-        let sspnRecords = [];
-
-        // Track editing template references
-        let editingCardId = null;
-        let editingSspnId = null;
-
-        // Global selected dashboard card filter state
-        let activeDashboardCardId = "all";
-        
-        // Global selected historical period timeline state
-        let activeDashboardPeriod = "all";
-
-        // Dynamic Settings Configurations (Configurable via settings portal modal)
-        let sspnChannels = [];
-        let sspnDevices = [];
-        let sspnMethods = [];
-
-        let syncConfig = {
-            workerUrl: ''
+        // Memory DB Architecture Defaults
+        let database = {
+            transactions: [],
+            sspnRecords: [],
+            cards: [
+                { id: "Maybank2Gold", name: "Maybank 2 Gold", theme: "purple", billingDay: 25, rules: { "Weekend Dining": 0.05, "Utilities": 0.01, "Other": 0.002 } },
+                { id: "PublicBankQuantum", name: "Public Bank Quantum", theme: "emerald", billingDay: 10, rules: { "Online/Contactless": 0.02, "Other": 0.003 } },
+                { id: "CIMBCashback", name: "CIMB Cashback", theme: "indigo", billingDay: 15, rules: { "Groceries": 0.04, "Other": 0.002 } }
+            ],
+            settings: {
+                internalCategories: ["Dining", "Utilities", "Groceries", "Shopping", "Transport", "Investment"],
+                sspnChannels: ["PTPTN Portal", "Bank Transfer", "Salary Deduction"],
+                sspnDevices: ["Mobile Phone", "Web Browser", "Counter Kiosk"],
+                sspnMethods: ["FPX Online", "Credit Card Route", "Direct Debit"]
+            }
         };
 
-        // SSPN sign flag (true = positive, false = negative)
-        let sspnIsPositive = true;
-
-        // Base Scale compression utility
-        let tempIllustrationData = null;
-
-        // Dynamic System Defaults
-        const DEFAULT_INTERNAL_CATEGORIES = [
-            "🏠 Personal Life",
-            "🛒 Essential Utility",
-            "💼 Business & Capital",
-            "✨ Leisures & Entertainment"
-        ];
-
-        const DEFAULT_CHANNELS = ["Shopee Pay", "Lazada Wallet", "FPX Direct", "Direct Bank transfer", "Maybank QR Pay"];
-        const DEFAULT_DEVICES = ["iPhone 15 Pro", "Personal Laptop", "Work Station Station", "iPad Touch Mini"];
-        const DEFAULT_METHODS = ["Debit Card", "Credit Card", "E-Wallet Balance", "SSPN Direct Debit"];
-
-        const PRESET_CARDS = [
-            {
-                id: "card-1",
-                name: "Aura Infinite Elite",
-                baseRate: 1.5,
-                theme: "grad-indigo",
-                illustration: null,
-                cycleType: "statement", 
-                statementCloseDay: 15,  
-                boosters: [
-                    { category: "Dining", rate: 5.0 },
-                    { category: "Travel", rate: 4.0 },
-                    { category: "Groceries", rate: 2.0 }
-                ],
-                monthlyCap: null,
-                useTiers: false,
-                tiers: [],
-                tierSpendThreshold: 1000,
-                tierSpendRate: 2.5,
-                minTxAmount: 100 // Cashback requires RM 100 min single purchase
-            },
-            {
-                id: "card-2",
-                name: "Vertex Horizon",
-                baseRate: 1.0,
-                theme: "grad-purple-glow",
-                illustration: null,
-                cycleType: "calendar",  
-                statementCloseDay: null,
-                boosters: [
-                    { category: "Groceries", rate: 6.0 },
-                    { category: "Utilities", rate: 4.0 },
-                    { category: "Online Services", rate: 3.5 }
-                ],
-                monthlyCap: 50, 
-                useTiers: false,
-                tiers: [],
-                tierSpendThreshold: null,
-                tierSpendRate: null,
-                minTxAmount: null
-            }
-        ];
-
-        const PRESET_TRANSACTIONS = [
-            {
-                id: "tx-1",
-                date: "2026-05-10",
-                amount: 150.00,
-                cardId: "card-1",
-                category: "Dining",
-                internalCategory: "🏠 Personal Life",
-                description: "Michelin Dining Lounge",
-                cashback: 7.50
-            },
-            {
-                id: "tx-2",
-                date: "2026-05-12",
-                amount: 80.50,
-                cardId: "card-2",
-                category: "Groceries",
-                internalCategory: "🛒 Essential Utility",
-                description: "Organic Supermarket",
-                cashback: 4.83
-            },
-            {
-                id: "tx-3",
-                date: "2026-04-18",
-                amount: 450.00,
-                cardId: "card-1",
-                category: "Travel",
-                internalCategory: "🏠 Personal Life",
-                description: "Historical Flight Ticket",
-                cashback: 18.00
-            },
-            {
-                id: "tx-4",
-                date: "2026-04-20",
-                amount: 120.00,
-                cardId: "card-2",
-                category: "Groceries",
-                internalCategory: "🛒 Essential Utility",
-                description: "April Grocery Stock",
-                cashback: 7.20
-            }
-        ];
-
-        const PRESET_SSPN_RECORDS = [
-            {
-                id: "sspn-1",
-                date: "2026-05-18",
-                channel: "Shopee Pay",
-                device: "iPhone 15 Pro",
-                method: "E-Wallet Balance",
-                amount: 150.00, // positive amount is deposit
-                reflected: true,
-                remarks: "Education fund self deposit"
-            },
-            {
-                id: "sspn-2",
-                date: "2026-05-15",
-                channel: "Lazada Wallet",
-                device: "Personal Laptop",
-                method: "Credit Card",
-                amount: -75.00, // negative is withdrawal
-                reflected: false,
-                remarks: "Textbook checkout payout withdrawal"
-            }
-        ];
-
-        // Chart declarations
-        let trendChartInstance = null;
-        let pieChartInstance = null;
-        let cardPieChartInstance = null;
+        let currentFilterCard = "ALL";
+        let currentFilterPeriod = "ALL";
+        let sspnSignIsPositive = true;
+        let trendChartObj = null, cardPieChartObj = null, catPieChartObj = null;
 
         window.onload = function() {
-            setPresetDateInputs();
-            loadStateFromLocalStorage();
-            initializeDefaultBoostersInForm();
+            loadFromLocalStorage();
+            initDatePickers();
+            populateDropdownOptions();
             refreshLedgerAndCalculations();
-            
-            // Connect resize event for charts
-            window.addEventListener('resize', () => {
-                if (trendChartInstance) trendChartInstance.resize();
-                if (pieChartInstance) pieChartInstance.resize();
-                if (cardPieChartInstance) cardPieChartInstance.resize();
-            });
         };
 
-        function setPresetDateInputs() {
-            const today = new Date();
-            const year = today.getFullYear();
-            const month = String(today.getMonth() + 1).padStart(2, '0');
-            const day = String(today.getDate()).padStart(2, '0');
-            const formattedDate = `${year}-${month}-${day}`;
-            document.getElementById('txDate').value = formattedDate;
-            document.getElementById('sspnDate').value = formattedDate;
-        }
-
-        function loadStateFromLocalStorage() {
-            try {
-                const storedCards = localStorage.getItem('premium_cards_vault');
-                const storedTxs = localStorage.getItem('premium_transactions_ledger');
-                const storedConfig = localStorage.getItem('premium_sync_config');
-                const storedCategories = localStorage.getItem('premium_internal_categories');
-                const storedSspn = localStorage.getItem('premium_sspn_records');
-
-                // Load customizable dropdown selections from LocalStorage
-                const storedChannels = localStorage.getItem('sspn_custom_channels');
-                const storedDevices = localStorage.getItem('sspn_custom_devices');
-                const storedMethods = localStorage.getItem('sspn_custom_methods');
-
-                if (storedCards) cards = JSON.parse(storedCards);
-                else cards = [...PRESET_CARDS];
-
-                if (storedTxs) transactions = JSON.parse(storedTxs);
-                else transactions = [...PRESET_TRANSACTIONS];
-
-                if (storedSspn) sspnRecords = JSON.parse(storedSspn);
-                else sspnRecords = [...PRESET_SSPN_RECORDS];
-
-                if (storedConfig) {
-                    syncConfig = JSON.parse(storedConfig);
-                    document.getElementById('syncWorkerUrl').value = syncConfig.workerUrl || '';
-                }
-
-                if (storedCategories) internalCategories = JSON.parse(storedCategories);
-                else internalCategories = [...DEFAULT_INTERNAL_CATEGORIES];
-
-                // Load custom options or fallback
-                sspnChannels = storedChannels ? JSON.parse(storedChannels) : [...DEFAULT_CHANNELS];
-                sspnDevices = storedDevices ? JSON.parse(storedDevices) : [...DEFAULT_DEVICES];
-                sspnMethods = storedMethods ? JSON.parse(storedMethods) : [...DEFAULT_METHODS];
-
-            } catch (err) {
-                showToast("Failed to load local DB state. Restoring baseline parameters.", "fa-triangle-exclamation", "text-rose-400");
-                cards = [...PRESET_CARDS];
-                transactions = [...PRESET_TRANSACTIONS];
-                sspnRecords = [...PRESET_SSPN_RECORDS];
-                internalCategories = [...DEFAULT_INTERNAL_CATEGORIES];
-                sspnChannels = [...DEFAULT_CHANNELS];
-                sspnDevices = [...DEFAULT_DEVICES];
-                sspnMethods = [...DEFAULT_METHODS];
+        // FIXED: Restored missing core formatting and design utility function
+        function getThemeStyles(theme) {
+            switch(theme) {
+                case 'purple': return { bg: 'grad-purple-glow', badge: 'bg-purple-500/10 text-purple-400 border-purple-500/20' };
+                case 'emerald': return { bg: 'grad-emerald', badge: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' };
+                case 'indigo': return { bg: 'grad-indigo', badge: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' };
+                default: return { bg: 'grad-obsidian', badge: 'bg-slate-500/10 text-slate-400 border-slate-500/20' };
             }
         }
 
-        function saveStateToLocalStorage() {
-            try {
-                localStorage.setItem('premium_cards_vault', JSON.stringify(cards));
-                localStorage.setItem('premium_transactions_ledger', JSON.stringify(transactions));
-                localStorage.setItem('premium_sspn_records', JSON.stringify(sspnRecords));
-                localStorage.setItem('premium_internal_categories', JSON.stringify(internalCategories));
-
-                // Save custom configurations
-                localStorage.setItem('sspn_custom_channels', JSON.stringify(sspnChannels));
-                localStorage.setItem('sspn_custom_devices', JSON.stringify(sspnDevices));
-                localStorage.setItem('sspn_custom_methods', JSON.stringify(sspnMethods));
-            } catch (err) {
-                showToast("Local DB write capacity exceeded.", "fa-triangle-exclamation", "text-rose-400");
-            }
+        function showToast(msg, type = "info") {
+            const container = document.getElementById("toastContainer");
+            const toast = document.createElement("div");
+            toast.className = `px-4 py-3 rounded-xl text-xs font-semibold shadow-xl border backdrop-blur-md transition-all duration-300 transform translate-y-2 opacity-0 ${
+                type === 'error' ? 'bg-rose-950/90 text-rose-300 border-rose-800' : 'bg-slate-900/90 text-indigo-300 border-indigo-900'
+            }`;
+            toast.innerText = msg;
+            container.appendChild(toast);
+            setTimeout(() => { toast.classList.remove('translate-y-2', 'opacity-0'); }, 10);
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-[-10px]');
+                setTimeout(() => { toast.remove(); }, 300);
+            }, 3500);
         }
 
-        function saveSyncConfig() {
-            syncConfig.workerUrl = document.getElementById('syncWorkerUrl').value.trim();
-            localStorage.setItem('premium_sync_config', JSON.stringify(syncConfig));
-        }
+        function switchTab(tabId) {
+            document.querySelectorAll("main >= section, main > section").forEach(s => s.classList.add("hidden"));
+            const targetSec = document.getElementById(`tabContent-${tabId}`);
+            if(targetSec) targetSec.classList.remove("hidden");
 
-        function switchTab(targetTabId) {
-            const tabIds = ['dashboard', 'quickLog', 'sspn', 'cardManager', 'koofrSync'];
-            
-            tabIds.forEach(id => {
-                const element = document.getElementById(`tabContent-${id}`);
-                const button = document.getElementById(`tabBtn-${id}`);
-                
-                if (id === targetTabId) {
-                    element.classList.remove('hidden');
-                    button.className = "px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 bg-[#6366f1] text-white shadow-md";
-                } else {
-                    element.classList.add('hidden');
-                    button.className = "px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-slate-100";
-                }
+            document.querySelectorAll("nav button").forEach(btn => {
+                btn.className = "px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 text-slate-400 hover:text-slate-100";
             });
+            const activeBtn = document.getElementById(`tabBtn-${tabId}`);
+            if(activeBtn) activeBtn.className = "px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-all duration-200 bg-indigo-600 text-white shadow-md";
+        }
 
-            if (targetTabId === 'dashboard') {
-                setTimeout(refreshCharts, 100);
+        function initDatePickers() {
+            const today = new Date().toISOString().split('T')[0];
+            if(document.getElementById("txDate")) document.getElementById("txDate").value = today;
+            if(document.getElementById("sspnDate")) document.getElementById("sspnDate").value = today;
+        }
+
+        function populateDropdownOptions() {
+            const txCard = document.getElementById("txCard");
+            if(txCard) {
+                txCard.innerHTML = database.cards.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+                handleTxCardChange();
             }
-        }
-
-        /* Settings Modal Operations */
-        function openSspnSettingsModal() {
-            document.getElementById('sspnSettingsModal').classList.remove('hidden');
-            renderModalConfigLists();
-        }
-
-        function closeSspnSettingsModal() {
-            document.getElementById('sspnSettingsModal').classList.add('hidden');
-            saveStateToLocalStorage();
-            refreshLedgerAndCalculations();
-        }
-
-        function renderModalConfigLists() {
-            // Render Channels
-            const channelContainer = document.getElementById('channelConfigList');
-            channelContainer.innerHTML = '';
-            sspnChannels.forEach((item, idx) => {
-                channelContainer.appendChild(createBadgeElement(item, () => removeConfigItem('channel', idx)));
-            });
-
-            // Render Devices
-            const deviceContainer = document.getElementById('deviceConfigList');
-            deviceContainer.innerHTML = '';
-            sspnDevices.forEach((item, idx) => {
-                deviceContainer.appendChild(createBadgeElement(item, () => removeConfigItem('device', idx)));
-            });
-
-            // Render Methods
-            const methodContainer = document.getElementById('methodConfigList');
-            methodContainer.innerHTML = '';
-            sspnMethods.forEach((item, idx) => {
-                methodContainer.appendChild(createBadgeElement(item, () => removeConfigItem('method', idx)));
-            });
-
-            // Render Categories
-            const categoryContainer = document.getElementById('categoryConfigList');
-            categoryContainer.innerHTML = '';
-            internalCategories.forEach((item, idx) => {
-                categoryContainer.appendChild(createBadgeElement(item, () => removeConfigItem('category', idx)));
-            });
-        }
-
-        function createBadgeElement(label, removeCallback) {
-            const span = document.createElement('span');
-            span.className = "inline-flex items-center gap-1.5 bg-slate-900 border border-slate-800 text-slate-300 text-[10px] font-medium px-2 py-1 rounded-lg transition hover:border-rose-500/50 hover:text-rose-400";
-            span.innerHTML = `
-                <span>${label}</span>
-                <button type="button" class="text-slate-500 hover:text-rose-400"><i class="fa-solid fa-circle-xmark text-[9px]"></i></button>
-            `;
-            span.onclick = (e) => {
-                e.stopPropagation();
-                removeCallback();
-            };
-            return span;
-        }
-
-        function addConfigItem(type) {
-            let inputId = '';
-            let targetArray = null;
-            if (type === 'channel') { inputId = 'addChannelInput'; targetArray = sspnChannels; }
-            else if (type === 'device') { inputId = 'addDeviceInput'; targetArray = sspnDevices; }
-            else if (type === 'method') { inputId = 'addMethodInput'; targetArray = sspnMethods; }
-
-            const input = document.getElementById(inputId);
-            const val = input.value.trim();
-            if (!val) {
-                showToast("Please enter a valid configuration title", "fa-triangle-exclamation", "text-amber-400");
-                return;
-            }
-            if (targetArray.includes(val)) {
-                showToast("Configuration option already exists", "fa-triangle-exclamation", "text-amber-400");
-                return;
-            }
-            targetArray.push(val);
-            input.value = '';
-            renderModalConfigLists();
-            showToast(`Added: ${val}`, "fa-plus", "text-emerald-400");
-        }
-
-        function removeConfigItem(type, index) {
-            let targetArray = null;
-            if (type === 'channel') targetArray = sspnChannels;
-            else if (type === 'device') targetArray = sspnDevices;
-            else if (type === 'method') targetArray = sspnMethods;
-            else if (type === 'category') {
-                const tagValue = internalCategories[index];
-                const isUsed = transactions.some(t => t.internalCategory === tagValue);
-                if (isUsed) {
-                    showToast("Tag is actively referenced on credit card ledger", "fa-lock", "text-amber-400");
-                    return;
-                }
-                internalCategories.splice(index, 1);
-                renderModalConfigLists();
-                return;
-            }
-
-            const itemValue = targetArray[index];
-            const isUsed = sspnRecords.some(r => r.channel === itemValue || r.device === itemValue || r.method === itemValue);
-            if (isUsed) {
-                showToast("Cannot delete: Option is actively logged on SSPN ledger", "fa-lock", "text-amber-400");
-                return;
-            }
-
-            targetArray.splice(index, 1);
-            renderModalConfigLists();
-            showToast("Option deleted", "fa-trash", "text-slate-400");
-        }
-
-        // Card tag addition from config portal
-        function handleAddInternalCategory() {
-            const inputEl = document.getElementById('newCategoryInput');
-            const val = inputEl.value.trim();
-            if (!val) {
-                showToast("Please input a valid tag name", "fa-triangle-exclamation", "text-amber-400");
-                return;
-            }
-            if (internalCategories.includes(val)) {
-                showToast("Category tag already exists", "fa-triangle-exclamation", "text-amber-400");
-                return;
-            }
-            internalCategories.push(val);
-            inputEl.value = '';
-            renderModalConfigLists();
-            showToast(`Added Tag: ${val}`, "fa-tag", "text-emerald-400");
-        }
-
-        function renderInternalCategorySettings() {
-            // Maintained for baseline structure safety
-        }
-
-        function repopulateInternalCategoryLogDropdown() {
-            const selectEl = document.getElementById('txInternalCategory');
-            if (!selectEl) return;
-            selectEl.innerHTML = '';
-
-            if (internalCategories.length === 0) {
-                selectEl.innerHTML = `<option value="">-- No Categories Defined --</option>`;
-                return;
-            }
-
-            internalCategories.forEach(tag => {
-                const opt = document.createElement('option');
-                opt.value = tag;
-                opt.innerText = tag;
-                selectEl.appendChild(opt);
-            });
-        }
-
-        function repopulateSspnSelectOptions() {
-            // Repopulate Channels
-            const chanSelect = document.getElementById('sspnChannel');
-            chanSelect.innerHTML = '';
-            sspnChannels.forEach(item => {
-                const opt = document.createElement('option');
-                opt.value = item;
-                opt.innerText = item;
-                chanSelect.appendChild(opt);
-            });
-
-            // Repopulate Devices
-            const devSelect = document.getElementById('sspnDevice');
-            devSelect.innerHTML = '';
-            sspnDevices.forEach(item => {
-                const opt = document.createElement('option');
-                opt.value = item;
-                opt.innerText = item;
-                devSelect.appendChild(opt);
-            });
-
-            // Repopulate Methods
-            const methSelect = document.getElementById('sspnMethod');
-            methSelect.innerHTML = '';
-            sspnMethods.forEach(item => {
-                const opt = document.createElement('option');
-                opt.value = item;
-                opt.innerText = item;
-                methSelect.appendChild(opt);
-            });
-        }
-
-        function toggleSspnSign() {
-            sspnIsPositive = !sspnIsPositive;
-            const btn = document.getElementById('sspnSignBtn');
-            if (sspnIsPositive) {
-                btn.innerText = "+";
-                btn.className = "w-14 bg-emerald-500/25 border border-emerald-500/40 text-emerald-400 font-bold rounded-xl text-center text-sm flex items-center justify-center transition duration-150";
-            } else {
-                btn.innerText = "-";
-                btn.className = "w-14 bg-rose-500/25 border border-rose-500/40 text-rose-400 font-bold rounded-xl text-center text-sm flex items-center justify-center transition duration-150";
-            }
-        }
-
-        function handleSspnReflectionChange() {
-            const isChecked = document.getElementById('sspnReflected').checked;
-            const desc = document.getElementById('sspnReflectionDesc');
-            if (isChecked) {
-                desc.innerText = "Reflected instantly in banking statements";
-                desc.className = "text-[9px] text-emerald-400 font-medium";
-            } else {
-                desc.innerText = "Pending transaction verification";
-                desc.className = "text-[9px] text-indigo-400 font-medium";
-            }
-        }
-
-        /* SSPN edit action loader */
-        function editSspnRecord(id) {
-            const record = sspnRecords.find(r => r.id === id);
-            if (!record) return;
-            
-            editingSspnId = id;
-            
-            // Set fields to values
-            document.getElementById('sspnDate').value = record.date;
-            document.getElementById('sspnChannel').value = record.channel;
-            document.getElementById('sspnDevice').value = record.device;
-            document.getElementById('sspnMethod').value = record.method;
-            
-            // Handle signed value
-            const parsedAmt = parseFloat(record.amount) || 0;
-            sspnIsPositive = parsedAmt >= 0;
-            const btn = document.getElementById('sspnSignBtn');
-            if (sspnIsPositive) {
-                btn.innerText = "+";
-                btn.className = "w-14 bg-emerald-500/25 border border-emerald-500/40 text-emerald-400 font-bold rounded-xl text-center text-sm flex items-center justify-center transition duration-150";
-                document.getElementById('sspnAmount').value = parsedAmt;
-            } else {
-                btn.innerText = "-";
-                btn.className = "w-14 bg-rose-500/25 border border-rose-500/40 text-rose-400 font-bold rounded-xl text-center text-sm flex items-center justify-center transition duration-150";
-                document.getElementById('sspnAmount').value = Math.abs(parsedAmt);
-            }
-
-            document.getElementById('sspnReflected').checked = record.reflected;
-            handleSspnReflectionChange();
-            
-            document.getElementById('sspnRemarks').value = record.remarks || "";
-
-            // Adjust interface buttons for edit action
-            document.getElementById('sspnSubmitBtn').innerText = "Update Record";
-            document.getElementById('sspnFormHeader').innerText = "Edit SSPN Wallet Record";
-            document.getElementById('sspnCancelEditBtn').classList.remove('hidden');
-
-            // Scroll form smoothly into view
-            document.getElementById('sspnFormContainer').scrollIntoView({ behavior: 'smooth' });
-            showToast("SSPN record loaded. Modify and submit.", "fa-pencil", "text-indigo-400");
-        }
-
-        function cancelSspnEdit() {
-            editingSspnId = null;
-            document.getElementById('sspnForm').reset();
-            document.getElementById('sspnSubmitBtn').innerText = "Commit Ledger Entry";
-            document.getElementById('sspnFormHeader').innerText = "Log Wallet Record";
-            document.getElementById('sspnCancelEditBtn').classList.add('hidden');
-            
-            // Reset to positive default sign
-            sspnIsPositive = true;
-            const btn = document.getElementById('sspnSignBtn');
-            btn.innerText = "+";
-            btn.className = "w-14 bg-emerald-500/25 border border-emerald-500/40 text-emerald-400 font-bold rounded-xl text-center text-sm flex items-center justify-center transition duration-150";
-            
-            handleSspnReflectionChange();
-        }
-
-        /* Direct click shortcut to toggle reflection status instantly from mobile card */
-        function toggleSspnReflectionDirect(id) {
-            const index = sspnRecords.findIndex(r => r.id === id);
-            if (index !== -1) {
-                sspnRecords[index].reflected = !sspnRecords[index].reflected;
-                saveStateToLocalStorage();
-                refreshLedgerAndCalculations();
-                showToast(`Status updated to ${sspnRecords[index].reflected ? 'Reflected' : 'Pending'}`, "fa-rotate", "text-emerald-400");
-            }
-        }
-
-        function handleSspnSubmit(event) {
-            event.preventDefault();
-            const date = document.getElementById('sspnDate').value;
-            const channel = document.getElementById('sspnChannel').value;
-            const device = document.getElementById('sspnDevice').value;
-            const method = document.getElementById('sspnMethod').value;
-            const inputAmount = parseFloat(document.getElementById('sspnAmount').value);
-            const reflected = document.getElementById('sspnReflected').checked;
-            const remarks = document.getElementById('sspnRemarks').value.trim();
-
-            if (isNaN(inputAmount) || inputAmount <= 0) {
-                showToast("Please enter a valid savings amount", "fa-triangle-exclamation", "text-rose-400");
-                return;
-            }
-
-            const signedAmount = sspnIsPositive ? inputAmount : -inputAmount;
-
-            if (editingSspnId) {
-                // Update existing record
-                const index = sspnRecords.findIndex(r => r.id === editingSspnId);
-                if (index !== -1) {
-                    sspnRecords[index] = {
-                        id: editingSspnId,
-                        date,
-                        channel,
-                        device,
-                        method,
-                        amount: signedAmount,
-                        reflected,
-                        remarks: remarks || "Unspecified entry reference"
-                    };
-                    showToast("SSPN Ledger entry updated!", "fa-check", "text-emerald-400");
-                }
-                cancelSspnEdit();
-            } else {
-                // Create new record
-                const newRecord = {
-                    id: 'sspn-' + Date.now(),
-                    date,
-                    channel,
-                    device,
-                    method,
-                    amount: signedAmount,
-                    reflected,
-                    remarks: remarks || "Unspecified entry reference"
-                };
-
-                sspnRecords.push(newRecord);
-                showToast("SSPN Ledger entry saved!", "fa-graduation-cap", "text-emerald-400");
-            }
-
-            saveStateToLocalStorage();
-            refreshLedgerAndCalculations();
-
-            document.getElementById('sspnAmount').value = '';
-            document.getElementById('sspnRemarks').value = '';
-        }
-
-        function renderSspnLedger() {
-            const container = document.getElementById('sspnMobileCardContainer');
-            if (!container) return;
-            container.innerHTML = '';
-
-            const countEl = document.getElementById('sspnRecordCount');
-            countEl.innerText = `${sspnRecords.length} records processed`;
-
-            if (sspnRecords.length === 0) {
-                container.innerHTML = `
-                    <div class="bg-[#0b0f19] border border-slate-900 rounded-2xl p-8 text-center text-slate-500 text-xs">
-                        <i class="fa-solid fa-coins text-3xl mb-2 text-slate-700 block"></i>
-                        No active records present in SSPN ledger
-                    </div>
-                `;
-                return;
-            }
-
-            const sorted = [...sspnRecords].sort((a,b) => new Date(b.date) - new Date(a.date));
-
-            sorted.forEach(r => {
-                const card = document.createElement('div');
-                card.className = "glass-card rounded-2xl p-4 flex flex-col justify-between border border-slate-800/60 hover:border-slate-700 transition duration-150";
-
-                const isAddition = parseFloat(r.amount) >= 0;
-                
-                // Clicking the badge directly toggles its verification state
-                const statusBadge = r.reflected 
-                    ? `<button type="button" onclick="toggleSspnReflectionDirect('${r.id}')" title="Click to mark as Pending" class="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/15 text-[9px] font-bold px-2 py-0.5 rounded-md flex items-center gap-1 transition"><i class="fa-solid fa-check"></i>Reflected</button>` 
-                    : `<button type="button" onclick="toggleSspnReflectionDirect('${r.id}')" title="Click to mark as Reflected" class="bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 border border-indigo-500/15 text-[9px] font-bold px-2 py-0.5 rounded-md flex items-center gap-1 transition"><i class="fa-solid fa-circle-notch animate-spin text-[8px]"></i>Pending</button>`;
-
-                const typeLabel = isAddition 
-                    ? `<span class="text-xs font-bold text-emerald-400"><i class="fa-solid fa-circle-plus mr-1"></i>Addition</span>`
-                    : `<span class="text-xs font-bold text-rose-400"><i class="fa-solid fa-circle-minus mr-1"></i>Withdrawal</span>`;
-
-                const formattedAmt = isAddition 
-                    ? `+RM ${parseFloat(r.amount).toFixed(2)}` 
-                    : `-RM ${Math.abs(parseFloat(r.amount)).toFixed(2)}`;
-
-                const formattedDate = formatDateString(r.date);
-
-                card.innerHTML = `
-                    <div class="flex justify-between items-start mb-2.5">
-                        <div class="space-y-0.5">
-                            <span class="text-[10px] font-mono text-slate-500 block">${formattedDate}</span>
-                            <div class="flex items-center gap-2">
-                                ${typeLabel}
-                                ${statusBadge}
-                            </div>
-                        </div>
-                        <h4 class="text-sm font-black ${isAddition ? 'text-emerald-400' : 'text-rose-400'}">${formattedAmt}</h4>
-                    </div>
-
-                    <div class="grid grid-cols-3 gap-2 py-2 border-y border-slate-900 text-[10px] text-slate-400 mb-2.5">
-                        <div>
-                            <span class="text-[8px] uppercase font-bold text-slate-500 block">Channel</span>
-                            <span class="font-semibold text-slate-200 truncate block" title="${r.channel}">${r.channel}</span>
-                        </div>
-                        <div>
-                            <span class="text-[8px] uppercase font-bold text-slate-500 block">Device</span>
-                            <span class="font-semibold text-slate-200 truncate block" title="${r.device}">${r.device}</span>
-                        </div>
-                        <div>
-                            <span class="text-[8px] uppercase font-bold text-slate-500 block">Method</span>
-                            <span class="font-semibold text-slate-200 truncate block" title="${r.method}">${r.method}</span>
-                        </div>
-                    </div>
-
-                    <div class="flex justify-between items-center text-[10px]">
-                        <span class="text-slate-400 italic font-medium truncate max-w-[150px] sm:max-w-[200px]" title="${r.remarks}">
-                            Ref: ${r.remarks || "No reference remarks"}
-                        </span>
-                        <div class="flex gap-1.5">
-                            <button onclick="editSspnRecord('${r.id}')" class="text-indigo-400 hover:text-indigo-300 p-1.5 transition" title="Edit Record">
-                                <i class="fa-solid fa-pen-to-square text-xs"></i>
-                            </button>
-                            <button onclick="deleteSspnRecord('${r.id}')" class="text-slate-500 hover:text-rose-400 p-1.5 transition" title="Delete Record">
-                                <i class="fa-solid fa-trash-can text-xs"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        function recalculateSspnKPIs() {
-            let additions = 0;
-            let withdrawals = 0;
-
-            sspnRecords.forEach(r => {
-                const amt = parseFloat(r.amount) || 0;
-                if (amt >= 0) additions += amt;
-                else withdrawals += Math.abs(amt);
-            });
-
-            const net = additions - withdrawals;
-
-            document.getElementById('sspnKpiNet').innerText = `RM ${net.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            document.getElementById('sspnKpiDeposits').innerText = `RM ${additions.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            document.getElementById('sspnKpiWithdrawals').innerText = `RM ${withdrawals.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-        }
-
-        function deleteSspnRecord(id) {
-            sspnRecords = sspnRecords.filter(r => r.id !== id);
-            if (editingSspnId === id) cancelSspnEdit();
-            saveStateToLocalStorage();
-            refreshLedgerAndCalculations();
-            showToast("SSPN transaction removed", "fa-trash", "text-slate-400");
-        }
-
-        function getBillingCycleKey(card, dateStr) {
-            if (!card) return "unknown";
-            const date = new Date(dateStr);
-            if (isNaN(date.getTime())) return "unknown";
-            
-            if (card.cycleType === 'calendar') {
-                return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-            } else {
-                const closeDay = card.statementCloseDay || 15;
-                let year = date.getFullYear();
-                let month = date.getMonth(); 
-                const day = date.getDate();
-                
-                let cycleYear, cycleMonth;
-                if (day <= closeDay) {
-                    cycleYear = year;
-                    cycleMonth = month;
-                } else {
-                    cycleMonth = month + 1;
-                    if (cycleMonth > 11) {
-                        cycleMonth = 0;
-                        cycleYear = year + 1;
-                    } else {
-                        cycleYear = year;
-                    }
-                }
-                return `statement-${cycleYear}-${String(cycleMonth + 1).padStart(2, '0')}`;
-            }
-        }
-
-        function getBillingCycleLabel(card, dateStr) {
-            if (!card) return "N/A";
-            const date = new Date(dateStr);
-            if (isNaN(date.getTime())) return "N/A";
-            
-            if (card.cycleType === 'calendar') {
-                const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                return `${months[date.getMonth()]} ${date.getFullYear()}`;
-            } else {
-                const closeDay = card.statementCloseDay || 15;
-                let year = date.getFullYear();
-                let month = date.getMonth();
-                const day = date.getDate();
-                
-                let cycleYear, cycleMonth;
-                if (day <= closeDay) {
-                    cycleYear = year;
-                    cycleMonth = month;
-                } else {
-                    cycleMonth = month + 1;
-                    if (cycleMonth > 11) {
-                        cycleMonth = 0;
-                        cycleYear = year + 1;
-                    } else {
-                        cycleYear = year;
-                    }
-                }
-                const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                return `Statement Cycle (Closes ${months[cycleMonth]} ${closeDay})`;
-            }
-        }
-
-        function getMonthlySpendForCard(card, targetDateStr) {
-            const cycleKey = getBillingCycleKey(card, targetDateStr);
-            return transactions
-                .filter(t => t.cardId === card.id && getBillingCycleKey(card, t.date) === cycleKey)
-                .reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
-        }
-
-        function getMonthlyCashbackForCard(card, dateStr) {
-            const cycleKey = getBillingCycleKey(card, dateStr);
-            return transactions
-                .filter(t => t.cardId === card.id && getBillingCycleKey(card, t.date) === cycleKey)
-                .reduce((sum, t) => sum + parseFloat(t.cashback || 0), 0);
-        }
-
-        function calculateTieredBaseCashback(amount, currentSpend, tiers, baseRate) {
-            let sortedTiers = [];
-            if (tiers && tiers.length > 0) {
-                sortedTiers = [...tiers].sort((a, b) => a.minSpend - b.minSpend);
-            } else {
-                sortedTiers = [{ minSpend: 0, rate: baseRate }];
-            }
-
-            if (sortedTiers[0].minSpend > 0) {
-                sortedTiers.unshift({ minSpend: 0, rate: baseRate });
-            }
-
-            let totalCashback = 0;
-            let remainingAmount = amount;
-            let activeSpend = currentSpend;
-            let computationSteps = [];
-
-            while (remainingAmount > 0) {
-                let currentTierIndex = -1;
-                for (let i = 0; i < sortedTiers.length; i++) {
-                    if (activeSpend >= sortedTiers[i].minSpend) {
-                        currentTierIndex = i;
-                    }
-                }
-
-                let currentTier = sortedTiers[currentTierIndex];
-                let nextTier = sortedTiers[currentTierIndex + 1];
-                
-                let rate = currentTier.rate / 100;
-                let limit = nextTier ? nextTier.minSpend : Infinity;
-                let roomInCurrentTier = limit - activeSpend;
-
-                if (roomInCurrentTier <= 0) break; 
-
-                let chunk = Math.min(remainingAmount, roomInCurrentTier);
-                let chunkCashback = chunk * rate;
-                totalCashback += chunkCashback;
-
-                computationSteps.push({ chunk, rate: currentTier.rate, earned: chunkCashback });
-
-                activeSpend += chunk;
-                remainingAmount -= chunk;
-            }
-
-            return { totalCashback, computationSteps };
-        }
-
-        function calculateCashback(card, amount, category, txDateStr) {
-            if (!card) return 0;
-            
-            const parsedAmount = parseFloat(amount) || 0;
-            if (parsedAmount <= 0) return 0;
-
-            if (card.minTxAmount && parsedAmount < parseFloat(card.minTxAmount)) {
-                return 0; // Below minimum single transaction eligibility
-            }
-
-            let calculatedReward = 0;
-            const isGeneralSpend = category.trim().toLowerCase() === "general spend" || category.trim() === "";
-
-            if (isGeneralSpend) {
-                if (card.useTiers && card.tiers && card.tiers.length > 0) {
-                    const accumulatedSpend = getMonthlySpendForCard(card, txDateStr);
-                    const tierCalc = calculateTieredBaseCashback(parsedAmount, accumulatedSpend, card.tiers, card.baseRate);
-                    calculatedReward = tierCalc.totalCashback;
-                } else {
-                    let activeBaseRate = parseFloat(card.baseRate) || 0;
-                    if (card.tierSpendThreshold && card.tierSpendRate) {
-                        const threshold = parseFloat(card.tierSpendThreshold);
-                        const accumulatedSpend = getMonthlySpendForCard(card, txDateStr);
-                        
-                        if (accumulatedSpend + parsedAmount >= threshold) {
-                            activeBaseRate = parseFloat(card.tierSpendRate);
-                        }
-                    }
-                    calculatedReward = parsedAmount * (activeBaseRate / 100);
-                }
-            } else {
-                let rateToApply = parseFloat(card.baseRate) || 0;
-                if (card.boosters && Array.isArray(card.boosters)) {
-                    const matchingBooster = card.boosters.find(b => b.category.trim().toLowerCase() === category.trim().toLowerCase());
-                    if (matchingBooster) {
-                        rateToApply = parseFloat(matchingBooster.rate);
-                    }
-                }
-                calculatedReward = parsedAmount * (rateToApply / 100);
-            }
-
-            if (card.monthlyCap && card.monthlyCap > 0) {
-                const maxAllowedCap = parseFloat(card.monthlyCap);
-                const currentAccumulatedCashback = getMonthlyCashbackForCard(card, txDateStr);
-                
-                if (currentAccumulatedCashback >= maxAllowedCap) {
-                    return 0; 
-                } else if (currentAccumulatedCashback + calculatedReward > maxAllowedCap) {
-                    calculatedReward = maxAllowedCap - currentAccumulatedCashback;
-                }
-            }
-
-            return parseFloat(calculatedReward.toFixed(2));
-        }
-
-        function calculateRealtimeCashback() {
-            const cardId = document.getElementById('txCard').value;
-            const amount = parseFloat(document.getElementById('txAmount').value) || 0;
-            const category = document.getElementById('txCategory').value;
-            const date = document.getElementById('txDate').value;
-
-            const selectedCard = cards.find(c => c.id === cardId);
-            if (!selectedCard) {
-                document.getElementById('cashbackPreviewVal').innerText = "RM 0.00";
-                document.getElementById('cashbackPreviewRate').innerText = "Select card to view details";
-                return;
-            }
-
-            const isBelowMinThreshold = selectedCard.minTxAmount && amount < parseFloat(selectedCard.minTxAmount);
-            let calculatedReward = 0;
-            let activeRateLabel = "";
-            let breakdownMessage = "";
-
-            if (isBelowMinThreshold) {
-                activeRateLabel = "Not Eligible";
-                breakdownMessage = `Purchase amount is below card limit of RM ${parseFloat(selectedCard.minTxAmount).toFixed(2)}.`;
-            } else {
-                const isGeneralSpend = category === "General Spend";
-
-                if (isGeneralSpend && selectedCard.useTiers && selectedCard.tiers && selectedCard.tiers.length > 0) {
-                    const accumulatedSpend = getMonthlySpendForCard(selectedCard, date);
-                    const tierCalc = calculateTieredBaseCashback(amount, accumulatedSpend, selectedCard.tiers, selectedCard.baseRate);
-                    
-                    activeRateLabel = "Tiered Rates Apply";
-                    let stepStrings = tierCalc.computationSteps.map(step => 
-                        `RM ${step.chunk.toFixed(2)} @ ${step.rate}% (+RM ${step.earned.toFixed(2)})`
-                    );
-                    breakdownMessage = `Bracket: ${stepStrings.join(" + ")}. Spent: RM ${accumulatedSpend.toFixed(2)}.`;
-                } else {
-                    let activeRate = selectedCard.baseRate;
-                    if (!isGeneralSpend && selectedCard.boosters) {
-                        const match = selectedCard.boosters.find(b => b.category === category);
-                        if (match) activeRate = match.rate;
-                    } else if (selectedCard.tierSpendThreshold && selectedCard.tierSpendRate) {
-                        const currentCycleSpend = getMonthlySpendForCard(selectedCard, date);
-                        if (currentCycleSpend + amount >= selectedCard.tierSpendThreshold) {
-                            activeRate = selectedCard.tierSpendRate;
-                        }
-                    }
-                    activeRateLabel = `Active Rate: ${activeRate}%`;
-                    breakdownMessage = "Standard cashback calculation applied.";
-                }
-
-                calculatedReward = calculateCashback(selectedCard, amount, category, date);
-            }
-
-            document.getElementById('cashbackPreviewVal').innerText = `RM ${calculatedReward.toFixed(2)}`;
-            document.getElementById('cashbackPreviewRate').innerText = activeRateLabel;
-
-            const cycleLabel = getBillingCycleLabel(selectedCard, date);
-            document.getElementById('cashbackPreviewCycleMsg').innerHTML = `
-                <div class="flex flex-col gap-1">
-                    <span><i class="fa-solid fa-circle-info text-indigo-400 mr-1"></i> Cycle: <strong>${cycleLabel}</strong></span>
-                    ${breakdownMessage ? `<span class="text-[9px] text-slate-400 italic leading-snug">${breakdownMessage}</span>` : ''}
-                </div>
-            `;
-        }
-
-        function handleCardStyleChange() {
-            const theme = document.getElementById('cardStyleSelect').value;
-            const container = document.getElementById('customIllustrationContainer');
-            if (theme === 'custom') container.classList.remove('hidden');
-            else {
-                container.classList.add('hidden');
-                tempIllustrationData = null;
-            }
-        }
-
-        function handleCycleTypeChange() {
-            const type = document.getElementById('cardCycleType').value;
-            const closeContainer = document.getElementById('statementDayContainer');
-            if (type === 'statement') closeContainer.classList.remove('invisible');
-            else closeContainer.classList.add('invisible');
-        }
-
-        function processCardIllustration() {
-            const fileInput = document.getElementById('cardIllustrationFile');
-            const file = fileInput.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.getElementById('scaleCanvas');
-                    const ctx = canvas.getContext('2d');
-
-                    const maxWidth = 180;
-                    const maxHeight = 114;
-                    let width = img.width;
-                    let height = img.height;
-
-                    if (width > height) {
-                        if (width > maxWidth) {
-                            height *= maxWidth / width;
-                            width = maxWidth;
-                        }
-                    } else {
-                        if (height > maxHeight) {
-                            width *= maxHeight / height;
-                            height = maxHeight;
-                        }
-                    }
-
-                    canvas.width = width;
-                    canvas.height = height;
-                    ctx.drawImage(img, 0, 0, width, height);
-
-                    tempIllustrationData = canvas.toDataURL('image/jpeg', 0.6);
-                    showToast("Illustration processed successfully!", "fa-image", "text-emerald-400");
-                };
-                img.src = event.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function toggleTiersVisibility() {
-            const isChecked = document.getElementById('toggleTiers').checked;
-            const container = document.getElementById('tiersSectionContainer');
-            if (isChecked) {
-                container.classList.remove('hidden');
-                if (document.getElementById('tierRowsContainer').children.length === 0) {
-                    addTierInputRow(0, document.getElementById('cardBaseRate').value || 0.1, true);
-                }
-            } else {
-                container.classList.add('hidden');
-            }
-        }
-
-        function addTierInputRow(minSpend = '', rate = '', isBaseline = false) {
-            const container = document.getElementById('tierRowsContainer');
-            const rowId = 'tier-row-' + Date.now() + Math.random().toString(36).substr(2, 4);
-
-            const div = document.createElement('div');
-            div.id = rowId;
-            div.className = "grid grid-cols-12 gap-2 items-center text-xs";
-            div.innerHTML = `
-                <div class="col-span-5 relative">
-                    <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-[10px]">RM</span>
-                    <input type="number" step="10" placeholder="Minimum Spend" value="${minSpend}" ${isBaseline ? 'disabled' : 'required'}
-                        class="tier-min-spend w-full bg-slate-900 border border-slate-800 rounded-lg pl-8 pr-2 py-1.5 text-slate-100 focus:outline-none focus:border-indigo-500 text-xs">
-                    ${isBaseline ? '<span class="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] text-slate-500 font-mono">Baseline</span>' : ''}
-                </div>
-                <div class="col-span-5 relative">
-                    <input type="number" step="0.01" min="0" placeholder="Rate" value="${rate}" required
-                        class="tier-rate w-full bg-slate-900 border border-slate-800 rounded-lg pl-2 pr-6 py-1.5 text-slate-100 focus:outline-none focus:border-indigo-500 text-xs">
-                    <span class="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-500">%</span>
-                </div>
-                <div class="col-span-2 text-center">
-                    ${isBaseline ? '<span class="text-slate-600 text-[9px]"><i class="fa-solid fa-lock"></i></span>' : `
-                        <button type="button" onclick="removeTierRow('${rowId}')" class="text-slate-600 hover:text-rose-400">
-                            <i class="fa-solid fa-circle-minus"></i>
-                        </button>
-                    `}
-                </div>
-            `;
-            container.appendChild(div);
-        }
-
-        function removeTierRow(rowId) {
-            const element = document.getElementById(rowId);
-            if (element) element.remove();
-        }
-
-        function addBoosterInputRow(cat = '', rate = '') {
-            const container = document.getElementById('boosterRowsContainer');
-            const rowId = 'booster-row-' + Date.now() + Math.random().toString(36).substr(2, 4);
-
-            const div = document.createElement('div');
-            div.id = rowId;
-            div.className = "grid grid-cols-12 gap-2 items-center text-xs";
-            div.innerHTML = `
-                <div class="col-span-6">
-                    <input type="text" placeholder="Category Name" value="${cat}" required
-                        class="booster-cat-name w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-slate-100 focus:outline-none focus:border-indigo-500 text-xs">
-                </div>
-                <div class="col-span-4 relative">
-                    <input type="number" step="0.01" min="0" placeholder="Rate" value="${rate}" required
-                        class="booster-cat-rate w-full bg-slate-900 border border-slate-800 rounded-lg pl-3 pr-6 py-1.5 text-slate-100 focus:outline-none focus:border-indigo-500 text-xs">
-                    <span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-[10px] text-slate-500">%</span>
-                </div>
-                <div class="col-span-2 text-center">
-                    <button type="button" onclick="removeBoosterRow('${rowId}')" class="text-slate-600 hover:text-rose-400">
-                        <i class="fa-solid fa-circle-minus"></i>
-                    </button>
-                </div>
-            `;
-            container.appendChild(div);
-        }
-
-        function removeBoosterRow(rowId) {
-            const element = document.getElementById(rowId);
-            if (element) element.remove();
-        }
-
-        function initializeDefaultBoostersInForm() {
-            const container = document.getElementById('boosterRowsContainer');
-            container.innerHTML = '';
-            addBoosterInputRow("Dining", 3.0);
-            addBoosterInputRow("Groceries", 2.0);
-        }
-
-        function handleCardSubmit(event) {
-            event.preventDefault();
-
-            const name = document.getElementById('cardName').value;
-            const baseRate = parseFloat(document.getElementById('cardBaseRate').value);
-            const theme = document.getElementById('cardStyleSelect').value;
-            const cycleType = document.getElementById('cardCycleType').value;
-            const statementCloseDay = cycleType === 'statement' ? parseInt(document.getElementById('cardStatementCloseDay').value) : null;
-
-            const boosters = [];
-            const catElements = document.querySelectorAll('.booster-cat-name');
-            const rateElements = document.querySelectorAll('.booster-cat-rate');
-
-            catElements.forEach((el, index) => {
-                const catVal = el.value.trim();
-                const rateVal = parseFloat(rateElements[index].value);
-                if (catVal && !isNaN(rateVal)) {
-                    boosters.push({ category: catVal, rate: rateVal });
-                }
-            });
-
-            const useTiers = document.getElementById('toggleTiers').checked;
-            const tiers = [];
-            if (useTiers) {
-                const minSpendElements = document.querySelectorAll('.tier-min-spend');
-                const tierRateElements = document.querySelectorAll('.tier-rate');
-
-                minSpendElements.forEach((el, index) => {
-                    const spendVal = el.disabled ? 0 : parseFloat(el.value);
-                    const rateVal = parseFloat(tierRateElements[index].value);
-                    if (!isNaN(spendVal) && !isNaN(rateVal)) {
-                        tiers.push({ minSpend: spendVal, rate: rateVal });
-                    }
-                });
-                tiers.sort((a, b) => a.minSpend - b.minSpend);
-            }
-
-            const monthlyCapVal = document.getElementById('cardMonthlyCap').value;
-            const monthlyCap = monthlyCapVal !== '' ? parseFloat(monthlyCapVal) : null;
-
-            const tierSpendThresholdVal = document.getElementById('cardTierSpendThreshold').value;
-            const tierSpendRateVal = document.getElementById('cardTierSpendRate').value;
-            const tierSpendThreshold = tierSpendThresholdVal !== '' ? parseFloat(tierSpendThresholdVal) : null;
-            const tierSpendRate = tierSpendRateVal !== '' ? parseFloat(tierSpendRateVal) : null;
-
-            const minTxAmountVal = document.getElementById('cardMinTxAmount').value;
-            const minTxAmount = minTxAmountVal !== '' && parseFloat(minTxAmountVal) > 0 ? parseFloat(minTxAmountVal) : null;
-
-            if (editingCardId) {
-                // Update card structure in place
-                const index = cards.findIndex(c => c.id === editingCardId);
-                if (index !== -1) {
-                    cards[index] = {
-                        id: editingCardId,
-                        name,
-                        baseRate,
-                        theme,
-                        illustration: tempIllustrationData,
-                        cycleType,
-                        statementCloseDay,
-                        boosters,
-                        useTiers,
-                        tiers,
-                        monthlyCap,
-                        tierSpendThreshold,
-                        tierSpendRate,
-                        minTxAmount
-                    };
-                    showToast("Credit card template amended successfully!", "fa-check", "text-emerald-400");
-                }
-                cancelCardEdit();
-            } else {
-                // Create new card design
-                const newCard = {
-                    id: 'card-' + Date.now(),
-                    name,
-                    baseRate,
-                    theme,
-                    illustration: tempIllustrationData,
-                    cycleType,
-                    statementCloseDay,
-                    boosters,
-                    useTiers,
-                    tiers,
-                    monthlyCap,
-                    tierSpendThreshold,
-                    tierSpendRate,
-                    minTxAmount
-                };
-
-                cards.push(newCard);
-                showToast(`Card template registered: ${name}`, "fa-wallet", "text-indigo-400");
-            }
-
-            saveStateToLocalStorage();
-            refreshLedgerAndCalculations();
-
-            // Clear card input form
-            document.getElementById('cardConfigForm').reset();
-            document.getElementById('boosterRowsContainer').innerHTML = '';
-            document.getElementById('tierRowsContainer').innerHTML = '';
-            document.getElementById('toggleTiers').checked = false;
-            document.getElementById('tiersSectionContainer').classList.add('hidden');
-            tempIllustrationData = null;
-            document.getElementById('customIllustrationContainer').classList.add('hidden');
-            addBoosterInputRow();
-            addBoosterInputRow();
-        }
-
-        function deleteCard(cardId) {
-            const hasAssociated = transactions.some(t => t.cardId === cardId);
-            if (hasAssociated) {
-                showToast("Cannot delete: active transactions rely on this template.", "fa-triangle-exclamation", "text-rose-400");
-                return;
-            }
-
-            cards = cards.filter(c => c.id !== cardId);
-            // Fallback dashboard filter if currently selected card is deleted
-            if (activeDashboardCardId === cardId) {
-                activeDashboardCardId = "all";
-            }
-            saveStateToLocalStorage();
-            refreshLedgerAndCalculations();
-            showToast("Credit card design destroyed", "fa-trash-can", "text-slate-400");
-        }
-
-        function handleTransactionSubmit(event) {
-            event.preventDefault();
-
-            const date = document.getElementById('txDate').value;
-            const cardId = document.getElementById('txCard').value;
-            const category = document.getElementById('txCategory').value;
-            const internalCategory = document.getElementById('txInternalCategory').value;
-            const amount = parseFloat(document.getElementById('txAmount').value);
-            const rawDescription = document.getElementById('txDescription').value.trim();
-            // Handle fallback description if none provided by the user
-            const description = rawDescription || "General Purchase";
-
-            const selectedCard = cards.find(c => c.id === cardId);
-            if (!selectedCard) {
-                showToast("Invalid card baseline", "fa-triangle-exclamation", "text-rose-400");
-                return;
-            }
-
-            const calculatedCashbackValue = calculateCashback(selectedCard, amount, category, date);
-
-            const newTx = {
-                id: 'tx-' + Date.now(),
-                date,
-                amount,
-                cardId,
-                category,
-                internalCategory,
-                description,
-                cashback: calculatedCashbackValue
-            };
-
-            transactions.push(newTx);
-            saveStateToLocalStorage();
-            refreshLedgerAndCalculations();
-
-            document.getElementById('txAmount').value = '';
-            document.getElementById('txDescription').value = '';
-            calculateRealtimeCashback();
-
-            showToast(`Cashback processed! +RM ${calculatedCashbackValue.toFixed(2)}`, "fa-check-circle", "text-emerald-400");
-        }
-
-        function deleteTransaction(txId) {
-            transactions = transactions.filter(t => t.id !== txId);
-            saveStateToLocalStorage();
-            refreshLedgerAndCalculations();
-            showToast("Transaction removed from ledger", "fa-trash", "text-slate-400");
-        }
-
-        function refreshLedgerAndCalculations() {
-            renderInternalCategorySettings();
-            repopulateInternalCategoryLogDropdown();
-            renderCardsVault();
-            repopulateFormDropdowns();
-            
-            // Re-render dashboard selector card deck
-            renderDashboardFilterDeck();
-
-            // Re-render timeline period selector pills
-            renderTimelinePeriodContainer();
-
-            // Re-render world-class dashboard billing progress monitor (Statement Cycle Progress bars)
-            renderBillingCycleProgressPanel();
-
-            renderTransactionLedgerTable();
-            recalculateKPICounters();
-            
-            // Dynamic SSPN refresh
-            repopulateSspnSelectOptions();
-            renderSspnLedger();
-            recalculateSspnKPIs();
-
-            setTimeout(refreshCharts, 100);
-        }
-
-        function repopulateFormDropdowns() {
-            const cardSelect = document.getElementById('txCard');
-            if (!cardSelect) return;
-            const prevSelectedValue = cardSelect.value;
-            
-            cardSelect.innerHTML = '';
-
-            if (cards.length === 0) {
-                cardSelect.innerHTML = `<option value="">-- No Cards Configured --</option>`;
-                document.getElementById('txCategory').innerHTML = '';
-                document.getElementById('selectedCardRuleLabel').innerText = "Configure card in Tab 4";
-                return;
-            }
-
-            cards.forEach(card => {
-                const opt = document.createElement('option');
-                opt.value = card.id;
-                opt.innerText = card.name;
-                cardSelect.appendChild(opt);
-            });
-
-            if (prevSelectedValue && cards.some(c => c.id === prevSelectedValue)) {
-                cardSelect.value = prevSelectedValue;
-            }
-
-            handleTxCardChange();
+            const txIntSel = document.getElementById("txInternalCategory");
+            if(txIntSel) txIntSel.innerHTML = database.settings.internalCategories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
+
+            const chSel = document.getElementById("sspnChannel");
+            if(chSel) chSel.innerHTML = database.settings.sspnChannels.map(i => `<option value="${i}">${i}</option>`).join('');
+            const devSel = document.getElementById("sspnDevice");
+            if(devSel) devSel.innerHTML = database.settings.sspnDevices.map(i => `<option value="${i}">${i}</option>`).join('');
+            const metSel = document.getElementById("sspnMethod");
+            if(metSel) metSel.innerHTML = database.settings.sspnMethods.map(i => `<option value="${i}">${i}</option>`).join('');
         }
 
         function handleTxCardChange() {
-            const cardId = document.getElementById('txCard').value;
-            const categorySelect = document.getElementById('txCategory');
-            if (!categorySelect) return;
-            categorySelect.innerHTML = '';
-
-            const card = cards.find(c => c.id === cardId);
-            if (!card) return;
-
-            const genOpt = document.createElement('option');
-            genOpt.value = "General Spend";
-            genOpt.innerText = `General Spend (${card.useTiers ? 'Tiered Base' : card.baseRate + '%'})`;
-            categorySelect.appendChild(genOpt);
-
-            if (card.boosters && card.boosters.length > 0) {
-                card.boosters.forEach(b => {
-                    const opt = document.createElement('option');
-                    opt.value = b.category;
-                    opt.innerText = `${b.category} (${b.rate}%)`;
-                    categorySelect.appendChild(opt);
-                });
+            const cardId = document.getElementById("txCard").value;
+            const card = database.cards.find(c => c.id === cardId);
+            const catSel = document.getElementById("txCategory");
+            const label = document.getElementById("selectedCardRuleLabel");
+            if(card && catSel) {
+                label.innerText = `${Object.keys(card.rules).length} Processing Rules Defined`;
+                catSel.innerHTML = Object.keys(card.rules).map(k => `<option value="${k}">${k} (${(card.rules[k]*100).toFixed(1)}%)</option>`).join('');
             }
-
-            document.getElementById('selectedCardRuleLabel').innerText = card.useTiers 
-                ? `${card.tiers.length} Brackets` 
-                : `${card.boosters.length} Custom Multipliers`;
         }
 
-        /* Render dynamic timeline period selector pills */
-        function renderTimelinePeriodContainer() {
-            const container = document.getElementById('timelinePeriodContainer');
-            if (!container) return;
-            container.innerHTML = '';
-
-            // Compute unique period values from transactions
-            const periodsSet = new Set();
-            transactions.forEach(t => {
-                const date = new Date(t.date);
-                if (isNaN(date.getTime())) return;
-                
-                // Formulate month name matching user's May.2026 format from the screenshot
-                const monthsList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                const key = `${monthsList[date.getMonth()]} ${date.getFullYear()}`;
-                periodsSet.add(key);
-            });
-
-            // Master "All Time" timeline filter block
-            const allBtn = document.createElement('button');
-            allBtn.type = 'button';
-            allBtn.onclick = () => selectDashboardPeriod('all');
-            allBtn.className = `px-4 py-2 rounded-xl text-xs font-bold transition duration-150 ${activeDashboardPeriod === 'all' ? 'bg-[#6366f1] text-white shadow-md shadow-indigo-500/10' : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-100'}`;
-            allBtn.innerText = "All Time";
-            container.appendChild(allBtn);
-
-            // Print sorted historical month list
-            const sortedPeriods = Array.from(periodsSet).sort((a,b) => {
-                // Parse "May 2026" to compare chronologically
-                const monthsList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                const [m1, y1] = a.split(' ');
-                const [m2, y2] = b.split(' ');
-                if (y1 !== y2) return parseInt(y2) - parseInt(y1);
-                return monthsList.indexOf(m2) - monthsList.indexOf(m1);
-            });
-
-            sortedPeriods.forEach(p => {
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.onclick = () => selectDashboardPeriod(p);
-                btn.className = `px-4 py-2 rounded-xl text-xs font-bold transition duration-150 ${activeDashboardPeriod === p ? 'bg-[#6366f1] text-white shadow-md shadow-indigo-500/10' : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-100'}`;
-                btn.innerText = p;
-                container.appendChild(btn);
-            });
-        }
-
-        function selectDashboardPeriod(periodKey) {
-            activeDashboardPeriod = periodKey;
+        function calculateRealtimeCashback() {
+            const cardId = document.getElementById("txCard").value;
+            const catKey = document.getElementById("txCategory").value;
+            const amount = parseFloat(document.getElementById("txAmount").value) || 0;
+            const card = database.cards.find(c => c.id === cardId);
             
-            const badge = document.getElementById('activePeriodBadge');
-            if (periodKey === 'all') {
-                badge.innerText = "All Time View";
-                badge.className = "text-[9px] bg-indigo-950 text-indigo-300 border border-indigo-850 px-2 py-0.5 rounded-md font-bold uppercase";
-            } else {
-                badge.innerText = `${periodKey} Filtered`;
-                badge.className = "text-[9px] bg-emerald-950 text-emerald-300 border border-emerald-850 px-2 py-0.5 rounded-md font-bold uppercase";
+            if(card && catKey && card.rules[catKey] !== undefined) {
+                const rate = card.rules[catKey];
+                const yieldAmt = amount * rate;
+                document.getElementById("cashbackPreviewRate").innerText = `${(rate*100).toFixed(2)}% Scheme Rule`;
+                document.getElementById("cashbackPreviewVal").innerText = `RM ${yieldAmt.toFixed(2)}`;
+                document.getElementById("cashbackPreviewCycleMsg").innerText = `Billing Cycle Day: ${card.billingDay}`;
             }
-
-            // Sync metrics, progress monitors, and transactions list
-            renderBillingCycleProgressPanel();
-            renderTransactionLedgerTable();
-            recalculateKPICounters();
-            setTimeout(refreshCharts, 50);
         }
 
-        /* Render dynamic dashboard filter card deck */
-        function renderDashboardFilterDeck() {
-            const deck = document.getElementById('dashboardFilterDeck');
-            if (!deck) return;
-            deck.innerHTML = '';
+        function handleTransactionSubmit(e) {
+            e.preventDefault();
+            const cardId = document.getElementById("txCard").value;
+            const catKey = document.getElementById("txCategory").value;
+            const amount = parseFloat(document.getElementById("txAmount").value);
+            const card = database.cards.find(c => c.id === cardId);
+            const rate = card.rules[catKey];
 
-            // Master "All Cards" filtering block
-            const allBtn = document.createElement('button');
-            allBtn.type = 'button';
-            allBtn.onclick = () => selectDashboardFilterCard('all');
-            allBtn.className = `glass-card text-left p-3.5 rounded-xl transition duration-150 relative overflow-hidden flex flex-col justify-between border min-h-[85px] ${activeDashboardCardId === 'all' ? 'active-filter-card bg-indigo-950/20' : 'border-slate-800'}`;
-            allBtn.innerHTML = `
-                <div class="flex justify-between items-start w-full">
-                    <span class="text-[9px] uppercase tracking-widest text-slate-400 font-bold">Workspace View</span>
-                    <i class="fa-solid fa-globe text-indigo-400 text-xs"></i>
-                </div>
-                <h5 class="text-xs font-black text-white mt-2">All Cards Combined</h5>
-            `;
-            deck.appendChild(allBtn);
+            const record = {
+                id: 'tx-' + Date.now(),
+                date: document.getElementById("txDate").value,
+                cardId: cardId,
+                category: catKey,
+                internalTag: document.getElementById("txInternalCategory").value,
+                description: document.getElementById("txDescription").value || "General Expense",
+                amount: amount,
+                cashback: amount * rate
+            };
 
-            // Print individual configurable cards
-            cards.forEach(card => {
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.onclick = () => selectDashboardFilterCard(card.id);
-                btn.className = `glass-card text-left p-3.5 rounded-xl transition duration-150 relative overflow-hidden flex flex-col justify-between border min-h-[85px] ${activeDashboardCardId === card.id ? 'active-filter-card bg-indigo-950/20' : 'border-slate-800'}`;
-                
-                let themeIcon = 'fa-credit-card text-indigo-400';
-                if (card.theme === 'grad-emerald') themeIcon = 'fa-credit-card text-emerald-400';
-                else if (card.theme === 'grad-purple-glow') themeIcon = 'fa-credit-card text-purple-400';
-
-                btn.innerHTML = `
-                    <div class="flex justify-between items-start w-full">
-                        <span class="text-[9px] uppercase tracking-widest text-slate-400 font-bold truncate max-w-[85px]">${card.name}</span>
-                        <i class="fa-solid ${themeIcon} text-xs"></i>
-                    </div>
-                    <div class="mt-2 flex justify-between items-end w-full">
-                        <span class="text-[9px] text-slate-500 font-medium">Reset: ${card.cycleType}</span>
-                        <span class="text-[10px] font-bold text-indigo-400">${card.baseRate}% Base</span>
-                    </div>
-                `;
-                deck.appendChild(btn);
-            });
+            database.transactions.push(record);
+            saveToLocalStorage();
+            refreshLedgerAndCalculations();
+            document.getElementById("quickLogForm").reset();
+            initDatePickers();
+            handleTxCardChange();
+            showToast("Transaction committed to data workspace!");
         }
 
-        function selectDashboardFilterCard(cardId) {
-            activeDashboardCardId = cardId;
+        function toggleSspnSign() {
+            sspnSignIsPositive = !sspnSignIsPositive;
+            const btn = document.getElementById("sspnSignBtn");
+            if(sspnSignIsPositive) {
+                btn.className = "w-14 bg-emerald-500/25 border border-emerald-500/40 text-emerald-400 font-bold rounded-xl text-center text-sm flex items-center justify-center transition duration-150";
+                btn.innerText = "+";
+            } else {
+                btn.className = "w-14 bg-rose-500/25 border border-rose-500/40 text-rose-400 font-bold rounded-xl text-center text-sm flex items-center justify-center transition duration-150";
+                btn.innerText = "-";
+            }
+        }
+
+        function handleSspnSubmit(e) {
+            e.preventDefault();
+            let baseAmount = parseFloat(document.getElementById("sspnAmount").value);
+            if(!sspnSignIsPositive) baseAmount = -baseAmount;
+
+            const rec = {
+                id: 'sspn-' + Date.now(),
+                date: document.getElementById("sspnDate").value,
+                channel: document.getElementById("sspnChannel").value,
+                device: document.getElementById("sspnDevice").value,
+                method: document.getElementById("sspnMethod").value,
+                amount: baseAmount
+            };
+
+            database.sspnRecords.push(rec);
+            saveToLocalStorage();
+            refreshLedgerAndCalculations();
+            document.getElementById("sspnForm").reset();
+            initDatePickers();
+            showToast("SSPN Balance adjustment saved.");
+        }
+
+        function deleteTx(id) {
+            database.transactions = database.transactions.filter(t => t.id !== id);
+            saveToLocalStorage();
+            refreshLedgerAndCalculations();
+            showToast("Ledger record purged.", "info");
+        }
+
+        function refreshLedgerAndCalculations() {
+            renderFilterDecks();
+            renderCardsVault();
             
-            const badge = document.getElementById('activeFilterBadge');
-            if (cardId === 'all') {
-                badge.innerText = "All Cards Active";
-                badge.className = "text-[9px] bg-indigo-950 text-indigo-300 border border-indigo-850 px-2 py-0.5 rounded-md font-bold uppercase";
-            } else {
-                const matched = cards.find(c => c.id === cardId);
-                badge.innerText = matched ? `${matched.name} Filtered` : "Filtered";
-                badge.className = "text-[9px] bg-emerald-950 text-emerald-300 border border-emerald-850 px-2 py-0.5 rounded-md font-bold uppercase";
+            let filtered = database.transactions.filter(t => {
+                const cardMatch = (currentFilterCard === "ALL" || t.cardId === currentFilterCard);
+                const periodMatch = (currentFilterPeriod === "ALL" || t.date.substring(0,7) === currentFilterPeriod);
+                return cardMatch && periodMatch;
+            });
+
+            filtered.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+            // Populate Table
+            const body = document.getElementById("transactionLedgerBody");
+            if(body) {
+                body.innerHTML = filtered.map(t => {
+                    const card = database.cards.find(c => c.id === t.cardId) || {name: t.cardId};
+                    return `<tr class="hover:bg-slate-900/40 transition">
+                        <td class="py-3 px-4 font-mono text-[11px]">${t.date}</td>
+                        <td class="py-3 px-4 font-semibold">${card.name}</td>
+                        <td class="py-3 px-4 text-indigo-400">${t.category}</td>
+                        <td class="py-3 px-4 text-slate-400">${t.internalTag}</td>
+                        <td class="py-3 px-4 text-slate-400">${t.description}</td>
+                        <td class="py-3 px-4 text-right font-semibold">RM ${t.amount.toFixed(2)}</td>
+                        <td class="py-3 px-4 text-right font-bold text-indigo-400">RM ${t.cashback.toFixed(2)}</td>
+                        <td class="py-3 px-4 text-center">
+                            <button onclick="deleteTx('${t.id}')" class="text-rose-500 hover:text-rose-400 p-1"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>`;
+                }).join('');
             }
 
-            // Instantly sync visual highlighted state, KPIs, ledger, and charts
-            renderDashboardFilterDeck();
-            renderBillingCycleProgressPanel();
-            renderTransactionLedgerTable();
-            recalculateKPICounters();
-            setTimeout(refreshCharts, 50);
+            // Calculations for KPIs
+            let totalSpend = 0, totalCashback = 0;
+            filtered.forEach(t => { totalSpend += t.amount; totalCashback += t.cashback; });
+            const avgRate = totalSpend > 0 ? (totalCashback / totalSpend) * 100 : 0;
+
+            document.getElementById("kpiTotalCashback").innerText = `RM ${totalCashback.toFixed(2)}`;
+            document.getElementById("kpiTotalSpend").innerText = `RM ${totalSpend.toFixed(2)}`;
+            document.getElementById("kpiAverageRate").innerText = `${avgRate.toFixed(2)}%`;
+            document.getElementById("kpiActiveCards").innerText = database.cards.length;
+
+            // SSPN Calculations
+            let sspnDep = 0, sspnWith = 0;
+            database.sspnRecords.forEach(r => {
+                if(r.amount > 0) sspnDep += r.amount;
+                else sspnWith += Math.abs(r.amount);
+            });
+            document.getElementById("sspnKpiNet").innerText = `RM ${(sspnDep - sspnWith).toFixed(2)}`;
+            document.getElementById("sspnKpiDeposits").innerText = `RM ${sspnDep.toFixed(2)}`;
+            document.getElementById("sspnKpiWithdrawals").innerText = `RM ${sspnWith.toFixed(2)}`;
+
+            renderCharts(filtered);
         }
 
-        /* Render real-time statement cycle progress panels on dashboard */
-        function renderBillingCycleProgressPanel() {
-            const container = document.getElementById('billingCycleProgressContainer');
-            if (!container) return;
-            container.innerHTML = '';
+        function renderFilterDecks() {
+            // Timeline Period Generation
+            const periods = new Set();
+            database.transactions.forEach(t => periods.add(t.date.substring(0,7)));
+            const sortedPeriods = Array.from(periods).sort().reverse();
 
-            // Filter shown cycles based on dynamic card selector state
-            const cardsToRender = activeDashboardCardId === 'all'
-                ? cards
-                : cards.filter(c => c.id === activeDashboardCardId);
-
-            if (cardsToRender.length === 0) {
-                container.innerHTML = `
-                    <div class="col-span-2 bg-[#090d16] border border-slate-900 rounded-2xl p-6 text-center text-xs text-slate-500">
-                        No credit card templates defined to evaluate billing metrics.
-                    </div>
-                `;
-                return;
+            const pContainer = document.getElementById("timelinePeriodContainer");
+            if(pContainer) {
+                let html = `<button onclick="setPeriodFilter('ALL')" class="px-2.5 py-1 text-[10px] font-bold rounded-md border transition uppercase ${currentFilterPeriod === 'ALL' ? 'bg-indigo-600 border-indigo-500 text-white' : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'}">All View</button>`;
+                html += sortedPeriods.map(p => `<button onclick="setPeriodFilter('${p}')" class="px-2.5 py-1 text-[10px] font-bold rounded-md border transition uppercase font-mono ${currentFilterPeriod === p ? 'bg-indigo-600 border-indigo-500 text-white' : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200'}">${p}</button>`).join('');
+                pContainer.innerHTML = html;
             }
 
-            cardsToRender.forEach(card => {
-                const rangeText = getCurrentCycleDateRange(card);
-                const { cycleSpend, cycleCashback } = getCycleMetrics(card);
+            // Dashboard Filter Deck Cards
+            const deck = document.getElementById("dashboardFilterDeck");
+            if(deck) {
+                let html = `<div onclick="setCardFilter('ALL')" class="glass-card rounded-xl p-3 cursor-pointer border transition text-center ${currentFilterCard === 'ALL' ? 'active-filter-card' : ''}">
+                    <span class="text-[10px] font-black uppercase text-slate-300">All Instruments</span>
+                    <h4 class="text-xs font-mono text-slate-500 mt-1">Global Database</h4>
+                </div>`;
+                html += database.cards.map(c => {
+                    const styles = getThemeStyles(c.theme);
+                    const txs = database.transactions.filter(t => t.cardId === c.id);
+                    const totalCB = txs.reduce((sum, t) => sum + t.cashback, 0);
+                    return `<div onclick="setCardFilter('${c.id}')" class="glass-card rounded-xl p-3 cursor-pointer border transition ${styles.bg} ${currentFilterCard === c.id ? 'active-filter-card' : ''}">
+                        <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded ${styles.badge} mb-1 inline-block">${c.id}</span>
+                        <h4 class="text-xs font-bold text-slate-200 truncate">${c.name}</h4>
+                        <p class="text-[10px] text-indigo-400 font-bold mt-1">RM ${totalCB.toFixed(2)}</p>
+                    </div>`;
+                }).join('');
+                deck.innerHTML = html;
+            }
+        }
 
-                // Compute Cap Usage percentage
-                let capPercent = 0;
-                let capRatioText = "Unlimited limit";
-                if (card.monthlyCap && card.monthlyCap > 0) {
-                    const maxCap = parseFloat(card.monthlyCap);
-                    capPercent = Math.min((cycleCashback / maxCap) * 100, 100);
-                    capRatioText = `RM ${cycleCashback.toFixed(2)} / RM ${maxCap.toFixed(2)}`;
-                } else {
-                    capRatioText = `RM ${cycleCashback.toFixed(2)} accumulated`;
-                }
+        function setCardFilter(cardId) {
+            currentFilterCard = cardId;
+            document.getElementById("activeFilterBadge").innerText = cardId === "ALL" ? "All Cards Active" : `${cardId} Selected`;
+            refreshLedgerAndCalculations();
+        }
 
-                // Compute Milestone Rate progress
-                let milestonePercent = 0;
-                let milestoneRatioText = "Milestone inactive";
-                let milestoneClass = "hidden";
-                if (card.tierSpendThreshold && card.tierSpendThreshold > 0) {
-                    milestoneClass = "block";
-                    const thresh = parseFloat(card.tierSpendThreshold);
-                    milestonePercent = Math.min((cycleSpend / thresh) * 100, 100);
-                    if (cycleSpend >= thresh) {
-                        milestoneRatioText = `🎉 Threshold reached! Rate boosted to ${card.tierSpendRate}%`;
-                    } else {
-                        milestoneRatioText = `RM ${cycleSpend.toFixed(2)} / RM ${thresh.toFixed(2)} to unlock ${card.tierSpendRate}% rate`;
-                    }
-                }
-
-                const cycleCard = document.createElement('div');
-                cycleCard.className = "glass-card rounded-2xl p-5 border border-slate-800/80 hover:border-slate-700/60 flex flex-col justify-between space-y-4";
-                cycleCard.innerHTML = `
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h5 class="text-sm font-extrabold text-slate-200 tracking-tight">${card.name}</h5>
-                            <span class="text-[9px] uppercase font-bold text-slate-500 block mt-0.5"><i class="fa-solid fa-calendar mr-1 text-[#6366f1]"></i>Cycle: ${rangeText}</span>
-                        </div>
-                        <span class="text-[9px] bg-slate-900 border border-slate-800 text-indigo-400 px-2 py-0.5 rounded font-mono font-bold capitalize">${card.cycleType} Reset</span>
-                    </div>
-
-                    <!-- Cap usage progress tracker -->
-                    <div class="space-y-1.5">
-                        <div class="flex justify-between items-center text-[10px]">
-                            <span class="text-slate-400 font-semibold">Cashback Cap Consumed</span>
-                            <span class="font-bold text-indigo-400">${capRatioText}</span>
-                        </div>
-                        <div class="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden">
-                            <div class="bg-gradient-to-r from-indigo-500 to-purple-500 h-1.5 rounded-full" style="width: ${card.monthlyCap ? capPercent : 100}%"></div>
-                        </div>
-                    </div>
-
-                    <!-- Milestone threshold progress tracker -->
-                    <div class="space-y-1.5 border-t border-slate-900/60 pt-3.5 ${milestoneClass}">
-                        <div class="flex justify-between items-center text-[10px]">
-                            <span class="text-slate-400 font-semibold">Spending Milestone Target</span>
-                            <span class="font-bold text-emerald-400">${milestoneRatioText}</span>
-                        </div>
-                        <div class="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden">
-                            <div class="bg-gradient-to-r from-emerald-500 to-teal-400 h-1.5 rounded-full" style="width: ${milestonePercent}%"></div>
-                        </div>
-                    </div>
-
-                    <div class="flex justify-between items-center text-[10px] text-slate-500 pt-1 border-t border-slate-900/40">
-                        <span>Spend in active cycle: <strong>RM ${cycleSpend.toFixed(2)}</strong></span>
-                        <span>Single-tx min req: <strong>${card.minTxAmount ? `RM ${card.minTxAmount}` : 'None'}</strong></span>
-                    </div>
-                `;
-                container.appendChild(cycleCard);
-            });
+        function setPeriodFilter(p) {
+            currentFilterPeriod = p;
+            document.getElementById("activePeriodBadge").innerText = p === "ALL" ? "All Time View" : `Cycle: ${p}`;
+            refreshLedgerAndCalculations();
         }
 
         function renderCardsVault() {
-            const vaultDeck = document.getElementById('cardVaultDeck');
-            if (!vaultDeck) return;
-            vaultDeck.innerHTML = '';
-
-            if (cards.length === 0) {
-                vaultDeck.innerHTML = `
-                    <div class="col-span-1 md:col-span-2 bg-slate-950 border border-slate-800/80 rounded-2xl p-12 text-center text-slate-500 text-xs">
-                        <i class="fa-solid fa-wallet text-5xl mb-4 text-slate-700 block"></i>
-                        No credit cards registered yet.
-                    </div>
-                `;
-                return;
-            }
-
-            cards.forEach(card => {
-                let boostersHtml = '';
-                if (card.boosters && card.boosters.length > 0) {
-                    card.boosters.forEach(b => {
-                        boostersHtml += `
-                            <div class="bg-slate-950/80 border border-slate-800/80 rounded-lg p-2 flex flex-col items-center">
-                                <span class="text-[9px] text-slate-400 uppercase tracking-wider block truncate max-w-[80px]">${b.category}</span>
-                                <span class="text-xs font-bold text-indigo-400">${b.rate}%</span>
-                            </div>
-                        `;
-                    });
-                } else {
-                    boostersHtml = `
-                        <div class="col-span-3 text-center text-[10px] text-slate-500 py-2">
-                            No custom boosters added. Runs standard Base rate only.
-                        </div>
-                    `;
-                }
-
-                const billingMethodText = card.cycleType === 'statement' 
-                    ? `Statement Cycle (closes ${card.statementCloseDay}th)` 
-                    : 'Standard Calendar Reset';
-
-                const hasCustomIllustration = card.theme === 'custom' && card.illustration;
-                const customStyleString = getThemeStyles(card.theme);
-
-                const cardElement = document.createElement('div');
-                cardElement.className = "glass-card border rounded-2xl p-6 shadow-xl relative overflow-hidden group hover:border-slate-500 transition-all duration-300 min-h-[220px] flex flex-col justify-between";
-                cardElement.style = hasCustomIllustration ? "" : customStyleString;
-
-                let customIllustrationLayout = '';
-                if (hasCustomIllustration) {
-                    customIllustrationLayout = `
-                        <div class="absolute inset-0 z-0 opacity-45 select-none pointer-events-none">
-                            <img src="${card.illustration}" class="w-full h-full object-cover filter brightness-75 contrast-125" alt="card bg">
-                        </div>
-                    `;
-                }
-
-                let baseRateDisplay = '';
-                if (card.useTiers && card.tiers && card.tiers.length > 0) {
-                    let ranges = card.tiers.map((t, idx) => {
-                        let limit = card.tiers[idx + 1] ? `RM ${card.tiers[idx + 1].minSpend}` : '∞';
-                        return `<span class="block text-[9px] tracking-tight leading-normal text-slate-300">RM ${t.minSpend} to ${limit} → <strong class="text-indigo-400">${t.rate}%</strong></span>`;
-                    }).join('');
-                    baseRateDisplay = `
-                        <div class="col-span-3 bg-slate-950/80 border border-slate-800/80 rounded-lg p-2 text-left">
-                            <span class="text-[9px] text-slate-400 uppercase tracking-widest block font-bold mb-1 border-b border-slate-900 pb-0.5"><i class="fa-solid fa-layer-group text-indigo-400 mr-1"></i>Base Rate Tiers</span>
-                            <div class="space-y-0.5">${ranges}</div>
-                        </div>
-                    `;
-                } else {
-                    baseRateDisplay = `
-                        <div class="bg-slate-950/80 border border-slate-800/80 rounded-lg p-2 flex flex-col items-center justify-center">
-                            <span class="text-[9px] text-slate-400 uppercase tracking-wider block">Base Rate</span>
-                            <span class="text-xs font-bold text-slate-300">${card.baseRate}%</span>
-                        </div>
-                    `;
-                }
-
-                cardElement.innerHTML = `
-                    ${customIllustrationLayout}
-                    <div class="relative z-10">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <h4 class="text-base font-bold text-white tracking-wide truncate max-w-[200px]" title="${card.name}">${card.name}</h4>
-                                <p class="text-[10px] text-slate-400 font-mono mt-0.5">${billingMethodText}</p>
-                            </div>
-                            <div class="flex gap-1">
-                                <button onclick="editCard('${card.id}')" class="text-slate-500 hover:text-indigo-400 p-1.5 rounded transition" title="Edit Template Config">
-                                    <i class="fa-solid fa-pen-to-square text-xs"></i>
-                                </button>
-                                <button onclick="deleteCard('${card.id}')" class="text-slate-500 hover:text-rose-400 p-1.5 rounded transition" title="Delete Template">
-                                    <i class="fa-solid fa-trash-can text-xs"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="flex gap-1.5 items-center mb-6">
-                            <div class="w-8 h-6 bg-gradient-to-br from-indigo-200 to-indigo-500 rounded-md shadow-inner flex items-center justify-center opacity-85">
-                                <i class="fa-solid fa-microchip text-slate-950 text-xs"></i>
-                            </div>
-                            <i class="fa-solid fa-wifi text-slate-500 text-xs transform rotate-90"></i>
-                        </div>
-
-                        <div class="mb-4">
-                            <span class="text-[10px] text-slate-400 uppercase tracking-widest block mb-2 font-bold">Category Boosters</span>
-                            <div class="grid grid-cols-3 gap-2">
-                                ${card.useTiers ? baseRateDisplay : baseRateDisplay + boostersHtml}
-                            </div>
-                            ${card.useTiers ? `
-                            <div class="mt-2 grid grid-cols-3 gap-2">
-                                ${boostersHtml}
-                            </div>` : ''}
-                        </div>
-                    </div>
-
-                    <div class="relative z-10 mt-4 pt-4 border-t border-slate-800/60 grid grid-cols-2 gap-4 text-xs text-slate-400">
-                        <div class="flex flex-col gap-1">
-                            <span class="text-[10px] text-slate-500 block uppercase tracking-widest font-mono">Monthly Cap</span>
-                            <span class="font-semibold text-slate-200">${card.monthlyCap ? `RM ${card.monthlyCap}` : 'Unlimited'}</span>
-                            <span class="text-[10px] text-slate-500 block uppercase tracking-widest font-mono mt-1">Min Tx Threshold</span>
-                            <span class="font-semibold text-emerald-400">${card.minTxAmount ? `RM ${card.minTxAmount}` : 'No threshold'}</span>
-                        </div>
-                        <div>
-                            <span class="text-[10px] text-slate-500 block uppercase tracking-widest font-mono">Spend Milestone</span>
-                            <span class="font-semibold text-slate-200">${card.tierSpendThreshold ? `Spend RM ${card.tierSpendThreshold} for ${card.tierSpendRate}%` : 'Disabled'}</span>
-                        </div>
-                    </div>
-                `;
-                vaultDeck.appendChild(cardElement);
-            });
-        }
-
-        /* Amend Credit Card Template - Loaded back into configuration form */
-        function editCard(cardId) {
-            const card = cards.find(c => c.id === cardId);
-            if (!card) return;
-            editingCardId = cardId;
-
-            // Load properties back to input fields
-            document.getElementById('cardName').value = card.name;
-            document.getElementById('cardBaseRate').value = card.baseRate;
-            document.getElementById('cardStyleSelect').value = card.theme;
-            handleCardStyleChange();
-
-            // Set dynamic illustration file reference
-            tempIllustrationData = card.illustration;
-
-            document.getElementById('cardCycleType').value = card.cycleType;
-            handleCycleTypeChange();
-            if (card.cycleType === 'statement') {
-                document.getElementById('cardStatementCloseDay').value = card.statementCloseDay || 15;
-            }
-
-            // Restore Multi-tier base rate configuration state
-            const toggleTiers = document.getElementById('toggleTiers');
-            toggleTiers.checked = card.useTiers;
-            toggleTiersVisibility();
-
-            const tierContainer = document.getElementById('tierRowsContainer');
-            tierContainer.innerHTML = '';
-            if (card.useTiers && card.tiers) {
-                card.tiers.forEach((tier, idx) => {
-                    addTierInputRow(tier.minSpend, tier.rate, idx === 0);
-                });
-            }
-
-            // Restore Multipliers/Boosters
-            const boosterContainer = document.getElementById('boosterRowsContainer');
-            boosterContainer.innerHTML = '';
-            if (card.boosters && card.boosters.length > 0) {
-                card.boosters.forEach(b => {
-                    addBoosterInputRow(b.category, b.rate);
-                });
-            } else {
-                addBoosterInputRow();
-            }
-
-            // Restore limits
-            document.getElementById('cardMonthlyCap').value = card.monthlyCap || '';
-            document.getElementById('cardMinTxAmount').value = card.minTxAmount || '';
-            document.getElementById('cardTierSpendThreshold').value = card.tierSpendThreshold || '';
-            document.getElementById('cardTierSpendRate').value = card.tierSpendRate || '';
-
-            // Update submit button states
-            document.getElementById('cardSubmitBtn').innerText = "Update Card Template";
-            document.getElementById('cardFormHeader').innerText = "Update Credit Card";
-            document.getElementById('cardFormIcon').className = "fa-solid fa-pen-to-square text-indigo-400 mr-2";
-            document.getElementById('cardCancelEditBtn').classList.remove('hidden');
-
-            // Scroll configurator form smoothly into focus
-            document.getElementById('cardFormContainer').scrollIntoView({ behavior: 'smooth' });
-            showToast(`Loading: ${card.name}. Ready for amendment!`, "fa-sliders", "text-indigo-400");
-        }
-
-        function cancelCardEdit() {
-            editingCardId = null;
-            document.getElementById('cardConfigForm').reset();
-            document.getElementById('cardSubmitBtn').innerText = "Create Credit Card Template";
-            document.getElementById('cardFormHeader').innerText = "Configure Credit Card";
-            document.getElementById('cardFormIcon').className = "fa-solid fa-plus text-indigo-400 mr-2";
-            document.getElementById('cardCancelEditBtn').classList.add('hidden');
-
-            // Reset dynamic structures
-            document.getElementById('boosterRowsContainer').innerHTML = '';
-            document.getElementById('tierRowsContainer').innerHTML = '';
-            document.getElementById('toggleTiers').checked = false;
-            document.getElementById('tiersSectionContainer').classList.add('hidden');
-            tempIllustrationData = null;
-            document.getElementById('customIllustrationContainer').classList.add('hidden');
-            addBoosterInputRow();
-            addBoosterInputRow();
-
-            showToast("Template amendment cancelled.", "fa-xmark", "text-slate-400");
-        }
-
-        /* Filter transactions array dynamically using card & timeline selectors */
-        function getFilteredTransactions() {
-            let list = [...transactions];
-            
-            // 1. Card Filter
-            if (activeDashboardCardId !== 'all') {
-                list = list.filter(t => t.cardId === activeDashboardCardId);
-            }
-
-            // 2. Timeline period filter
-            if (activeDashboardPeriod !== 'all') {
-                list = list.filter(t => {
-                    const date = new Date(t.date);
-                    if (isNaN(date.getTime())) return false;
-                    const monthsList = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                    const key = `${monthsList[date.getMonth()]} ${date.getFullYear()}`;
-                    return key === activeDashboardPeriod;
-                });
-            }
-            return list;
-        }
-
-        function renderTransactionLedgerTable() {
-            const tableBody = document.getElementById('transactionLedgerBody');
-            if (!tableBody) return;
-            tableBody.innerHTML = '';
-
-            const filteredLedgerList = getFilteredTransactions();
-
-            if (filteredLedgerList.length === 0) {
-                tableBody.innerHTML = `
-                    <tr>
-                        <td colspan="8" class="text-center py-10 text-slate-500 italic">
-                            No ledger recordings registered for this dashboard filter context.
-                        </td>
+            const body = document.getElementById("cardManagerTableBody");
+            if(body) {
+                body.innerHTML = database.cards.map(c => `
+                    <tr class="border-b border-slate-900">
+                        <td class="py-3 px-4 font-bold text-slate-200">${c.name} (${c.id})</td>
+                        <td class="py-3 px-4 uppercase text-xs text-indigo-400 font-mono">${c.theme}</td>
+                        <td class="py-3 px-4 text-slate-400">Day ${c.billingDay}</td>
+                        <td class="py-3 px-4"><span class="text-slate-500">System Managed</span></td>
                     </tr>
-                `;
-                return;
+                `).join('');
             }
-
-            const sorted = filteredLedgerList.sort((a,b) => new Date(b.date) - new Date(a.date));
-
-            sorted.forEach(t => {
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-900/40 transition duration-150";
-
-                const cardRef = cards.find(c => c.id === t.cardId) || { name: "Deleted Card Template" };
-                const formattedDate = formatDateString(t.date);
-
-                let tagBg = 'bg-slate-900 border border-slate-800 text-slate-400';
-                if (t.internalCategory.includes('Personal')) tagBg = 'bg-sky-500/10 text-sky-400 border border-sky-500/15';
-                else if (t.internalCategory.includes('Essential')) tagBg = 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/15';
-                else if (t.internalCategory.includes('Business')) tagBg = 'bg-purple-500/10 text-purple-400 border border-purple-500/15';
-                else if (t.internalCategory.includes('Leisures') || t.internalCategory.includes('Fun')) tagBg = 'bg-amber-55/10 text-amber-400 border border-amber-55/15';
-                else tagBg = 'bg-indigo-500/10 text-indigo-300 border border-indigo-500/15';
-
-                const cashbackDisplay = parseFloat(t.cashback) > 0 
-                    ? `+RM ${parseFloat(t.cashback).toFixed(2)}`
-                    : `<span class="text-slate-500 font-normal">RM 0.00 (Ineligible)</span>`;
-
-                tr.innerHTML = `
-                    <td class="py-4 px-4 font-mono text-slate-400">${formattedDate}</td>
-                    <td class="py-4 px-4 font-semibold text-slate-200">${cardRef.name}</td>
-                    <td class="py-4 px-4"><span class="bg-slate-950 border border-slate-850 px-2.5 py-1 rounded-md text-[10px] text-slate-300 font-medium">${t.category}</span></td>
-                    <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-md text-[10px] font-medium ${tagBg}">${t.internalCategory}</span></td>
-                    <td class="py-4 px-4 text-slate-400 truncate max-w-[150px]" title="${t.description}">${t.description}</td>
-                    <td class="py-4 px-4 text-right font-semibold text-slate-100">RM ${t.amount.toFixed(2)}</td>
-                    <td class="py-4 px-4 text-right font-bold text-emerald-400">${cashbackDisplay}</td>
-                    <td class="py-4 px-4 text-center">
-                        <button onclick="deleteTransaction('${t.id}')" class="text-slate-500 hover:text-rose-400 p-1 rounded transition" title="Delete Ledger Record">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
-                    </td>
-                `;
-                tableBody.appendChild(tr);
-            });
         }
 
-        function formatDateString(dateStr) {
-            const date = new Date(dateStr);
-            if (isNaN(date.getTime())) return dateStr;
-            const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-            return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
-        }
+        function renderCharts(records) {
+            const chartData = {};
+            const cardData = {};
+            const catData = {};
 
-        function recalculateKPICounters() {
-            // Respect active dashboard timeline + card filters
-            const targetTxs = getFilteredTransactions();
-
-            const totalCashback = targetTxs.reduce((sum, t) => sum + parseFloat(t.cashback), 0);
-            const totalSpend = targetTxs.reduce((sum, t) => sum + parseFloat(t.amount), 0);
-            const averageRate = totalSpend > 0 ? (totalCashback / totalSpend) * 100 : 0;
-
-            document.getElementById('kpiTotalCashback').innerText = `RM ${totalCashback.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            document.getElementById('kpiTotalSpend').innerText = `RM ${totalSpend.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            document.getElementById('kpiAverageRate').innerText = `${averageRate.toFixed(2)}%`;
-            document.getElementById('kpiActiveCards').innerText = cards.length;
-        }
-
-        function refreshCharts() {
-            const trendCtx = document.getElementById('cashbackTrendChart');
-            const pieCtx = document.getElementById('categoryPieChart');
-            const cardPieCtx = document.getElementById('cardCashbackPieChart');
-            
-            if (!trendCtx || !pieCtx || !cardPieCtx) return;
-
-            // Apply global filters
-            const targetTxs = getFilteredTransactions();
-
-            // Process Trend Data grouped by month
-            const monthlyBuckets = {};
-            targetTxs.forEach(t => {
-                const date = new Date(t.date);
-                if (isNaN(date.getTime())) return;
-                const label = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-                
-                if (!monthlyBuckets[label]) {
-                    monthlyBuckets[label] = { spend: 0, cashback: 0 };
-                }
-                monthlyBuckets[label].spend += parseFloat(t.amount);
-                monthlyBuckets[label].cashback += parseFloat(t.cashback);
+            records.forEach(t => {
+                chartData[t.date] = (chartData[t.date] || 0) + t.cashback;
+                cardData[t.cardId] = (cardData[t.cardId] || 0) + t.cashback;
+                catData[t.internalTag] = (catData[t.internalTag] || 0) + t.cashback;
             });
 
-            const sortedMonths = Object.keys(monthlyBuckets).sort();
-            const spendData = sortedMonths.map(m => monthlyBuckets[m].spend);
-            const cashbackData = sortedMonths.map(m => monthlyBuckets[m].cashback);
+            const sortedDates = Object.keys(chartData).sort();
 
-            if (trendChartInstance) trendChartInstance.destroy();
+            if(trendChartObj) trendChartObj.destroy();
+            if(cardPieChartObj) cardPieChartObj.destroy();
+            if(catPieChartObj) catPieChartObj.destroy();
 
-            trendChartInstance = new Chart(trendCtx.getContext('2d'), {
-                type: 'line',
-                data: {
-                    labels: sortedMonths,
-                    datasets: [
-                        {
-                            label: 'Cashback Earned (RM)',
-                            data: cashbackData,
-                            borderColor: '#10b981', 
-                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                            tension: 0.35,
+            const ctx1 = document.getElementById('cashbackTrendChart');
+            if(ctx1) {
+                trendChartObj = new Chart(ctx1, {
+                    type: 'line',
+                    data: {
+                        labels: sortedDates,
+                        datasets: [{
+                            label: 'Yield (RM)',
+                            data: sortedDates.map(d => chartData[d]),
+                            borderColor: '#6366f1',
+                            backgroundColor: 'rgba(99, 102, 241, 0.05)',
                             fill: true,
-                            yAxisID: 'y'
-                        },
-                        {
-                            label: 'Total Spend (RM)',
-                            data: spendData,
-                            borderColor: '#6366f1', 
-                            backgroundColor: 'transparent',
-                            tension: 0.35,
-                            borderDash: [5, 5],
-                            yAxisID: 'y1'
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { labels: { color: '#94a3b8', font: { size: 10 } } }
+                            tension: 0.3
+                        }]
                     },
-                    scales: {
-                        x: { grid: { color: 'rgba(148, 163, 184, 0.05)' }, ticks: { color: '#94a3b8', font: { size: 10 } } },
-                        y: { position: 'left', grid: { color: 'rgba(148, 163, 184, 0.05)' }, ticks: { color: '#94a3b8' } },
-                        y1: { position: 'right', grid: { drawOnChartArea: false }, ticks: { color: '#94a3b8' } }
-                    }
-                }
-            });
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                });
+            }
 
-            // Process Category Pie Data
-            const categoryBuckets = {};
-            targetTxs.forEach(t => {
-                const cat = t.category || "General Spend";
-                if (!categoryBuckets[cat]) categoryBuckets[cat] = 0;
-                categoryBuckets[cat] += parseFloat(t.cashback);
-            });
+            const ctx2 = document.getElementById('cardCashbackPieChart');
+            if(ctx2) {
+                cardPieChartObj = new Chart(ctx2, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(cardData),
+                        datasets: [{ data: Object.values(cardData), backgroundColor: ['#6366f1', '#10b981', '#f59e0b', '#ec4899'] }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                });
+            }
 
-            const pieLabels = Object.keys(categoryBuckets);
-            const pieData = pieLabels.map(l => categoryBuckets[l]);
-
-            if (pieChartInstance) pieChartInstance.destroy();
-
-            pieChartInstance = new Chart(pieCtx.getContext('2d'), {
-                type: 'doughnut',
-                data: {
-                    labels: pieLabels,
-                    datasets: [{
-                        data: pieData,
-                        backgroundColor: [
-                            'rgba(99, 102, 241, 0.8)',   
-                            'rgba(124, 58, 237, 0.8)',   
-                            'rgba(16, 185, 129, 0.8)',   
-                            'rgba(14, 165, 233, 0.8)',   
-                            'rgba(236, 72, 153, 0.8)'    
-                        ],
-                        borderColor: '#080b11',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'right', labels: { color: '#94a3b8', font: { size: 8 } } }
-                    }
-                }
-            });
-
-            // Process Card Cashback Contribution Pie Data
-            const cardBuckets = {};
-            targetTxs.forEach(t => {
-                const cardRef = cards.find(c => c.id === t.cardId);
-                const cardLabel = cardRef ? cardRef.name : "Deleted Card";
-                if (!cardBuckets[cardLabel]) cardBuckets[cardLabel] = 0;
-                cardBuckets[cardLabel] += parseFloat(t.cashback);
-            });
-
-            const cardLabels = Object.keys(cardBuckets);
-            const cardData = cardLabels.map(l => cardBuckets[l]);
-
-            if (cardPieChartInstance) cardPieChartInstance.destroy();
-
-            cardPieChartInstance = new Chart(cardPieCtx.getContext('2d'), {
-                type: 'doughnut',
-                data: {
-                    labels: cardLabels,
-                    datasets: [{
-                        data: cardData,
-                        backgroundColor: [
-                            'rgba(124, 58, 237, 0.8)', // Purple
-                            'rgba(99, 102, 241, 0.8)',  // Indigo
-                            'rgba(16, 185, 129, 0.8)',  // Emerald
-                            'rgba(244, 63, 94, 0.8)',   // Rose
-                            'rgba(234, 179, 8, 0.8)'    // Amber
-                        ],
-                        borderColor: '#080b11',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'right', labels: { color: '#94a3b8', font: { size: 8 } } }
-                    }
-                }
-            });
+            const ctx3 = document.getElementById('categoryPieChart');
+            if(ctx3) {
+                catPieChartObj = new Chart(ctx3, {
+                    type: 'pie',
+                    data: {
+                        labels: Object.keys(catData),
+                        datasets: [{ data: Object.values(catData), backgroundColor: ['#ec4899', '#8b5cf6', '#3b82f6', '#14b8a6', '#f43f5e'] }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                });
+            }
         }
 
-        async function handleCloudSync(direction) {
-            let baseUrl = syncConfig.workerUrl;
-
-            if (!baseUrl) {
-                showToast("Worker Proxy URL is required to sync", "fa-triangle-exclamation", "text-amber-500");
+        function exportToExcel() {
+            if(database.transactions.length === 0) {
+                showToast("Ledger dashboard empty!", "error");
                 return;
             }
+            const worksheet = XLSX.utils.json_to_sheet(database.transactions);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Ledger Ledger Audit");
+            XLSX.writeFile(workbook, `Cashback_Ledger_Output.xlsx`);
+        }
 
-            // Auto-correct missing protocol
-            if (!/^https?:\/\//i.test(baseUrl)) {
-                baseUrl = 'https://' + baseUrl;
-            }
+        function saveToLocalStorage() {
+            localStorage.setItem("cc_sspn_db", JSON.stringify(database));
+        }
 
-            let syncUrl;
-            // Safe URL format test to block relative browser directory mappings
-            try {
-                syncUrl = new URL(baseUrl);
-            } catch (e) {
-                showToast("Invalid Worker URL format.", "fa-triangle-exclamation", "text-rose-400");
-                return;
-            }
-
-            showToast("Opening cloud pipeline...", "fa-circle-notch", "text-indigo-400 animate-spin");
-
-            if (direction === 'push') {
-                const payload = {
-                    cards: cards,
-                    transactions: transactions,
-                    sspnRecords: sspnRecords,
-                    internalCategories: internalCategories,
-                    sspnChannels: sspnChannels,
-                    sspnDevices: sspnDevices,
-                    sspnMethods: sspnMethods,
-                    timestamp: Date.now()
-                };
-
+        function loadFromLocalStorage() {
+            const data = localStorage.getItem("cc_sspn_db");
+            if(data) {
                 try {
-                    const res = await fetch(syncUrl.toString(), {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(payload)
-                    });
+                    const parsed = JSON.parse(data);
+                    if(parsed.transactions) database = parsed;
+                } catch(e) { console.error("Database structure corrupted, falling back to defaults.", e); }
+            }
+            
+            // Load cloud credentials into parameters form input views
+            document.getElementById("syncEndpoint").value = localStorage.getItem("koofr_endpoint") || "";
+            document.getElementById("syncUser").value = localStorage.getItem("koofr_user") || "";
+            document.getElementById("syncPass").value = localStorage.getItem("koofr_pass") || "";
+        }
 
-                    if (res.ok) {
-                        showToast("Koofr storage synchronized completely!", "fa-cloud-arrow-up", "text-emerald-400");
-                    } else {
-                        const errorDetails = await res.json().catch(() => ({}));
-                        showToast(`Server Sync Failed: ${errorDetails.error || res.statusText}`, "fa-triangle-exclamation", "text-rose-400");
-                    }
-                } catch (err) {
-                    console.error("Sync Push Error:", err);
-                    showToast(`Network Proxy Interrupted: ${err.message}. Verify Worker deployment.`, "fa-wifi", "text-rose-400");
+        function saveSyncSettings() {
+            localStorage.setItem("koofr_endpoint", document.getElementById("syncEndpoint").value.trim());
+            localStorage.setItem("koofr_user", document.getElementById("syncUser").value.trim());
+            localStorage.setItem("koofr_pass", document.getElementById("syncPass").value.trim());
+            showToast("Sync profile parameters saved locally.");
+        }
+
+        async function handleCloudSync(action) {
+            const url = localStorage.getItem("koofr_endpoint");
+            const user = localStorage.getItem("koofr_user");
+            const pass = localStorage.getItem("koofr_pass");
+
+            if(!url || !user || !pass) {
+                showToast("Missing cloud synchronization configuration profiling parameters.", "error");
+                switchTab('koofrSync');
+                return;
+            }
+
+            const targetUrl = url.endsWith('/') ? url + 'cc_sspn_backup.json' : url + '/cc_sspn_backup.json';
+            const headers = new Headers();
+            headers.set('Authorization', 'Basic ' + btoa(user + ":" + pass));
+
+            if(action === 'push') {
+                try {
+                    headers.set('Content-Type', 'application/json');
+                    const response = await fetch(targetUrl, { method: 'PUT', headers: headers, body: JSON.stringify(database) });
+                    if(response.ok || response.status === 201 || response.status === 204) {
+                        showToast("Workspace database securely snapshot backup pushed!");
+                    } else { throw new Error(`HTTP Status ${response.status}`); }
+                } catch(e) {
+                    showToast("Sync Push Error: " + e.message, "error");
                 }
-            } else if (direction === 'pull') {
+            } else if(action === 'pull') {
                 try {
-                    const res = await fetch(syncUrl.toString(), {
-                        method: 'GET'
-                    });
-
-                    if (res.ok) {
-                        const cloudData = await res.json();
-                        if (cloudData.empty) {
-                            showToast("No snapshot backup found on Koofr WebDAV", "fa-circle-question", "text-amber-500");
-                            return;
-                        }
-
-                        if (cloudData.cards && cloudData.transactions) {
-                            cards = cloudData.cards;
-                            transactions = cloudData.transactions;
-                            if (cloudData.sspnRecords) sspnRecords = cloudData.sspnRecords;
-                            if (cloudData.internalCategories) internalCategories = cloudData.internalCategories;
-                            
-                            if (cloudData.sspnChannels) sspnChannels = cloudData.sspnChannels;
-                            if (cloudData.sspnDevices) sspnDevices = cloudData.sspnDevices;
-                            if (cloudData.sspnMethods) sspnMethods = cloudData.sspnMethods;
-
-                            saveStateToLocalStorage();
+                    const response = await fetch(targetUrl, { method: 'GET', headers: headers });
+                    if(response.ok) {
+                        const cloudDb = await response.json();
+                        if(cloudDb && cloudDb.transactions) {
+                            database = cloudDb;
+                            saveToLocalStorage();
                             refreshLedgerAndCalculations();
-                            showToast("Cloud snapshot merged", "fa-cloud-arrow-down", "text-emerald-400");
-                        } else {
-                            showToast("Schema format mismatch", "fa-triangle-exclamation", "text-amber-500");
+                            populateDropdownOptions();
+                            showToast("Database pulled from Koofr.");
                         }
-                    } else {
-                        const errorDetails = await res.json().catch(() => ({}));
-                        showToast("Pull Failed", "fa-triangle-exclamation", "text-rose-400");
-                    }
-                } catch (err) {
-                    console.error("Sync Pull Error:", err);
-                    showToast(`Network Proxy Interrupted: ${err.message}. Verify Worker deployment.`, "fa-wifi", "text-rose-400");
+                    } else { throw new Error(`HTTP Status ${response.status}`); }
+                } catch(e) {
+                    showToast("Sync Pull Error: " + e.message, "error");
                 }
             }
         }
 
-        function copyWorkerToClipboard() {
-            const code = document.getElementById('workerSourceCode').innerText;
-            const textarea = document.createElement('textarea');
-            textarea.value = code;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textarea);
-            showToast("Worker code snippet copied to clipboard!", "fa-copy", "text-emerald-400");
-        }
-
-        function showToast(message, iconClass, colorClass) {
-            const container = document.getElementById('toastContainer');
-            const toastId = 'toast-' + Date.now();
-
-            const div = document.createElement('div');
-            div.id = toastId;
-            div.className = "glass-card border bg-[#0d1322] py-3.5 px-5 rounded-xl shadow-2xl flex items-center gap-3 text-xs animate-bounce max-w-[320px] transition-all duration-300 transform translate-x-12 opacity-0";
-            div.innerHTML = `
-                <i class="fa-solid ${iconClass} ${colorClass} text-base flex-shrink-0"></i>
-                <span class="text-slate-200 font-medium leading-tight">${message}</span>
-            `;
-
-            container.appendChild(div);
-
-            setTimeout(() => {
-                div.classList.remove('translate-x-12', 'opacity-0');
-                div.classList.add('translate-x-0', 'opacity-100');
-            }, 10);
-
-            setTimeout(() => {
-                div.classList.add('opacity-0', 'translate-y-2');
-                setTimeout(() => {
-                    div.remove();
-                }, 300);
-            }, 3500);
+        function openSettingsModal() {
+            showToast("Settings profiles can be updated via the Maintenance and Koofr Sync tabs directly.", "info");
         }
     </script>
 </body>
