@@ -312,7 +312,12 @@
                             <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400" for="txCategory">Bank Cashback Category</label>
                             <span class="text-[9px] text-indigo-400 font-bold" id="selectedCardRuleLabel">No card rules loaded</span>
                         </div>
-                        <select id="txCategory" required onchange="calculateRealtimeCashback()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 cursor-pointer"></select>
+                        <select id="txCategory" required onchange="calculateRealtimeCashback(); updateQuickLogMerchantBadge()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 cursor-pointer"></select>
+                        <!-- Dynamic Merchant Display for Mobile Logging -->
+                        <div id="txCategoryMerchantsBadge" class="text-[10px] text-indigo-300 font-semibold mt-2 select-none hidden flex items-start gap-1 p-2 rounded-lg bg-indigo-950/20 border border-indigo-900/30">
+                            <i class="fa-solid fa-store text-indigo-400 mt-0.5"></i>
+                            <span>Eligible: <span id="txCategoryMerchantsVal"></span></span>
+                        </div>
                     </div>
 
                     <div>
@@ -760,9 +765,9 @@
                     cycleMinSpend: 0,
                     cycleCashbackCap: 50,
                     rules: [
-                        { category: "Weekend Dining", rate: 0.05, minTxSpend: 0, categoryCap: 50, tiered: false, weekendOnly: true, tiers: [] },
-                        { category: "Utilities", rate: 0.01, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, tiers: [] },
-                        { category: "Other", rate: 0.002, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, tiers: [] }
+                        { category: "Weekend Dining", rate: 0.05, minTxSpend: 0, categoryCap: 50, tiered: false, weekendOnly: true, merchants: "McDonald's, Starbucks, Pizza Hut, KFC, Nando's", tiers: [] },
+                        { category: "Utilities", rate: 0.01, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "TNB, Syabas, Telekom Malaysia, Celcom, Maxis", tiers: [] },
+                        { category: "Other", rate: 0.002, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", tiers: [] }
                     ]
                 },
                 { 
@@ -776,8 +781,8 @@
                     cycleMinSpend: 0,
                     cycleCashbackCap: 30,
                     rules: [
-                        { category: "Online/Contactless", rate: 0.02, minTxSpend: 30, categoryCap: 30, tiered: false, weekendOnly: false, tiers: [] },
-                        { category: "Other", rate: 0.003, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, tiers: [] }
+                        { category: "Online/Contactless", rate: 0.02, minTxSpend: 30, categoryCap: 30, tiered: false, weekendOnly: false, merchants: "Shopee, Lazada, Grab, Foodpanda, Touch 'n Go, Taobao", tiers: [] },
+                        { category: "Other", rate: 0.003, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", tiers: [] }
                     ]
                 },
                 { 
@@ -798,12 +803,13 @@
                             categoryCap: 30, 
                             tiered: true, 
                             weekendOnly: false,
+                            merchants: "Aeon, Aeon Big, Lotus's, Giant, Jaya Grocer, Village Grocer",
                             tiers: [
                                 { minSpend: 500, rate: 0.02 },
                                 { minSpend: 1000, rate: 0.04 }
                             ] 
                         },
-                        { category: "Other", rate: 0.002, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, tiers: [] }
+                        { category: "Other", rate: 0.002, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", tiers: [] }
                     ]
                 }
             ],
@@ -1002,6 +1008,27 @@
                     const desc = r.tiered ? 'Tiered Scheme' : `${(r.rate*100).toFixed(1)}%`;
                     return `<option value="${r.category}">${r.category} (${desc})</option>`;
                 }).join('');
+                updateQuickLogMerchantBadge();
+            }
+        }
+
+        function updateQuickLogMerchantBadge() {
+            const cardId = document.getElementById("txCard").value;
+            const catKey = document.getElementById("txCategory").value;
+            const card = database.cards.find(c => c.id === cardId);
+            const badge = document.getElementById("txCategoryMerchantsBadge");
+            const valSpan = document.getElementById("txCategoryMerchantsVal");
+
+            if (card && badge && valSpan) {
+                const rule = card.rules ? card.rules.find(r => r.category === catKey) : null;
+                if (rule && rule.merchants) {
+                    valSpan.innerText = rule.merchants;
+                    badge.classList.remove("hidden");
+                } else {
+                    badge.classList.add("hidden");
+                }
+            } else if (badge) {
+                badge.classList.add("hidden");
             }
         }
 
@@ -1026,6 +1053,7 @@
                     document.getElementById("cashbackPreviewCycleMsg").innerText = `Billing Cycle Day: ${card.billingDay} | Min Tx: RM ${rule.minTxSpend || 0}`;
                 }
             }
+            updateQuickLogMerchantBadge();
         }
 
         function handleTransactionSubmit(e) {
@@ -1474,22 +1502,41 @@
 
                 let categoryProgressBars = "";
                 c.rules.forEach(r => {
+                    const catTxs = txs.filter(t => t.category === r.category);
+                    const catCB = catTxs.reduce((sum, t) => sum + t.calculatedCashback, 0);
+                    
+                    let capHeader = "";
+                    let progressMeter = "";
+                    
                     if (r.categoryCap > 0) {
-                        const catTxs = txs.filter(t => t.category === r.category);
-                        const catCB = catTxs.reduce((sum, t) => sum + t.calculatedCashback, 0);
                         const catPercent = Math.min((catCB / r.categoryCap) * 100, 100);
-                        categoryProgressBars += `
-                            <div class="space-y-1 pl-3 border-l border-slate-800">
-                                <div class="flex justify-between text-[9px] text-slate-400 font-semibold">
-                                    <span>Category Cap: ${r.category}</span>
-                                    <span>RM ${catCB.toFixed(2)} / RM ${r.categoryCap.toFixed(0)}</span>
-                                </div>
-                                <div class="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-slate-800/60">
-                                    <div class="bg-violet-500 h-full rounded-full transition-all duration-300" style="width: ${catPercent}%"></div>
-                                </div>
+                        capHeader = `<span>Category Cap: ${r.category} (RM ${catCB.toFixed(2)} / RM ${r.categoryCap.toFixed(0)})</span>`;
+                        progressMeter = `
+                            <div class="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden border border-slate-800/60">
+                                <div class="bg-violet-500 h-full rounded-full transition-all duration-300" style="width: ${catPercent}%"></div>
                             </div>
                         `;
+                    } else {
+                        capHeader = `<span>Rule: ${r.category} (Yield: RM ${catCB.toFixed(2)})</span>`;
                     }
+
+                    // World-class inline merchant representation inside the active cycle summary blocks
+                    const merchantLine = r.merchants ? `
+                        <div class="text-[9px] text-slate-400 mt-1 flex items-start gap-1">
+                            <i class="fa-solid fa-store text-indigo-400 mt-0.5"></i>
+                            <span>Eligible: <strong class="text-indigo-300 font-medium">${r.merchants}</strong></span>
+                        </div>
+                    ` : '';
+
+                    categoryProgressBars += `
+                        <div class="space-y-1 pl-3 border-l border-slate-800/80">
+                            <div class="flex justify-between text-[9px] text-slate-400 font-semibold">
+                                ${capHeader}
+                            </div>
+                            ${progressMeter}
+                            ${merchantLine}
+                        </div>
+                    `;
                 });
 
                 const last4Suffix = c.last4 ? ` •••• ${c.last4}` : '';
@@ -1536,7 +1583,9 @@
                         ${categoryProgressBars ? `
                             <div class="space-y-2 mt-2 pt-2 border-t border-slate-800/60">
                                 <span class="text-[9px] uppercase tracking-widest text-slate-500 font-bold block">Category-Level Cap Breakdowns</span>
-                                ${categoryProgressBars}
+                                <div class="space-y-3">
+                                    ${categoryProgressBars}
+                                </div>
                             </div>
                         ` : ''}
                     </div>
@@ -1605,14 +1654,14 @@
             document.getElementById("editCardMinSpend").value = "0";
             document.getElementById("editCardCashbackCap").value = "100";
             document.getElementById("rulesListContainer").innerHTML = "";
-            addRuleRow("Other", 0.002, 0, false, [], 0, false);
+            addRuleRow("Other", 0.002, 0, false, [], 0, false, "");
         }
 
         function hideCardEditor() {
             document.getElementById("cardEditorPanel").classList.add("hidden");
         }
 
-        function addRuleRow(category = "", rate = 0, minTx = 0, tiered = false, tiers = [], categoryCap = 0, weekendOnly = false) {
+        function addRuleRow(category = "", rate = 0, minTx = 0, tiered = false, tiers = [], categoryCap = 0, weekendOnly = false, merchants = "") {
             const container = document.getElementById("rulesListContainer");
             const ruleId = "rule-" + Date.now() + Math.random().toString(36).substr(2, 4);
             const row = document.createElement("div");
@@ -1636,7 +1685,7 @@
                     </div>
 
                     <div class="flex gap-1 items-center">
-                        <label class="text-[9px] uppercase font-bold text-amber-400">Weekend Only?</label>
+                        <label class="text-[9px] uppercase font-bold text-amber-400">Weekend?</label>
                         <input type="checkbox" ${weekendOnly ? 'checked' : ''} class="rule-weekend-checkbox rounded border-slate-800 text-amber-500 focus:ring-amber-500 cursor-pointer">
                     </div>
 
@@ -1646,6 +1695,12 @@
                     </div>
                     
                     <button type="button" onclick="this.parentElement.parentElement.remove()" class="text-rose-500 hover:text-rose-400 p-1 text-[11px]"><i class="fa-solid fa-trash"></i></button>
+                </div>
+
+                <!-- World-class maintenance entry for eligible merchants -->
+                <div class="grid grid-cols-1 gap-1 border-t border-slate-800/50 pt-2.5">
+                    <label class="text-[9px] uppercase font-bold text-indigo-300 flex items-center gap-1"><i class="fa-solid fa-store"></i> Eligible Merchants / Retailers (Comma Separated)</label>
+                    <input type="text" placeholder="e.g. AEON, AEON BIG, Lotus's, Giant" value="${merchants}" class="rule-merchants w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-[11px] text-slate-100 focus:outline-none focus:border-indigo-500">
                 </div>
 
                 <div class="rate-config-panel" id="ratePanel-${ruleId}">
@@ -1760,7 +1815,7 @@
             
             if (card.rules) {
                 card.rules.forEach(r => {
-                    addRuleRow(r.category, r.rate, r.minTxSpend, r.tiered, r.tiers, r.categoryCap || 0, r.weekendOnly || false);
+                    addRuleRow(r.category, r.rate, r.minTxSpend, r.tiered, r.tiers, r.categoryCap || 0, r.weekendOnly || false, r.merchants || "");
                 });
             }
         }
@@ -1802,6 +1857,7 @@
                 const categoryCapInput = row.querySelector(".rule-category-cap");
                 const tieredCheckbox = row.querySelector(".rule-tiered-checkbox");
                 const weekendCheckbox = row.querySelector(".rule-weekend-checkbox");
+                const merchantsInput = row.querySelector(".rule-merchants");
 
                 if (categoryInput && categoryInput.value.trim()) {
                     const ruleData = {
@@ -1810,6 +1866,7 @@
                         categoryCap: parseFloat(categoryCapInput.value) || 0,
                         tiered: tieredCheckbox.checked,
                         weekendOnly: weekendCheckbox ? weekendCheckbox.checked : false,
+                        merchants: merchantsInput ? merchantsInput.value.trim() : "",
                         rate: 0,
                         tiers: []
                     };
