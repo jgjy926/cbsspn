@@ -250,38 +250,46 @@
                 </div>
             </div>
 
-            <!-- Dynamic Bidirectional Cycle Spend Inspector -->
-            <div class="glass-card rounded-2xl p-6 border border-indigo-500/15 bg-gradient-to-br from-slate-950 via-[#0a0c16] to-slate-950 space-y-6">
-                <div>
-                    <h3 class="text-xs font-bold text-indigo-400 uppercase tracking-widest flex items-center gap-2">
-                        <i class="fa-solid fa-circle-check text-indigo-400 text-sm animate-pulse"></i>
-                        Interactive Cycle Spend Inspector (Supports 12+ Cards)
-                    </h3>
-                    <p class="text-[10px] text-slate-400 mt-1">Select any card below to synchronize scopes globally, or select "All Stack" to view consolidated database volumes.</p>
-                </div>
-
-                <div class="flex flex-col md:flex-row gap-6">
-                    <!-- Quick Card List Panel -->
-                    <div class="md:w-1/3 space-y-2">
-                        <label class="block text-[9px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Quick Selector</label>
-                        <select id="interactiveCardDropdownSelector" onchange="loadCardInteractiveMeter(this.value)" class="w-full bg-gray-900 border border-gray-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 cursor-pointer font-semibold mb-3">
-                        </select>
-                        <div id="interactiveCardGridSelector" class="grid grid-cols-2 gap-2 max-h-[220px] overflow-y-auto pr-1">
-                            <!-- Populated dynamically with mini sync buttons -->
-                        </div>
-                    </div>
-
-                    <!-- Inspector Screen Content -->
-                    <div class="md:w-2/3 bg-gray-900/40 p-5 rounded-2xl border border-gray-800/80 flex flex-col justify-between" id="interactiveInspectorContent">
-                        <!-- Populated dynamically with Card metrics or "ALL STACK" high-level summaries -->
-                    </div>
+            <!-- Dynamic Cycle Spend Inspector (Integrated Workspace Interface) -->
+            <div class="glass-card rounded-2xl p-6 border border-indigo-500/15 bg-gradient-to-br from-slate-950 via-[#0a0c16] to-slate-950">
+                <div class="bg-gray-900/40 p-5 rounded-2xl border border-gray-800/80 flex flex-col justify-between" id="interactiveInspectorContent">
+                    <!-- Populated dynamically with Card metrics or "ALL STACK" high-level summaries -->
                 </div>
             </div>
 
-            <!-- Real-Time Interactive Pie Chart & Processed Ledger -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Ledger View (Span 2) -->
-                <div class="glass-card rounded-2xl p-6 lg:col-span-2 space-y-4">
+            <!-- Real-Time Interactive Pie Chart & Processed Ledger (Stacked in Premium Viewport Hierarchy) -->
+            <div class="space-y-6">
+                <!-- Configurable Allocations Chart (Placed First for Visual Primacy) -->
+                <div class="glass-card rounded-2xl p-6 space-y-4">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-gray-800/60 pb-3">
+                        <div>
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-200">Interactive Allocation Analysis</h4>
+                            <p class="text-[10px] text-slate-400 mt-1">Configure chart metrics on-the-fly. Select any segment block to slice transaction tags.</p>
+                        </div>
+                        <select id="chartMetricSelector" onchange="refreshLedgerAndCalculations()" class="bg-gray-900 border border-gray-800 rounded-xl px-3 py-1.5 text-xs text-slate-100 font-bold focus:outline-none cursor-pointer focus:border-indigo-500">
+                            <option value="tag" selected>By Personal Tag</option>
+                            <option value="category">By Bank Category</option>
+                            <option value="card">By Origin Card</option>
+                            <option value="bank">By Bank Issuer</option>
+                            <option value="month">By Month</option>
+                            <option value="year">By Year</option>
+                            <option value="status">By Eligibility / Status</option>
+                            <option value="description">By Description / Vendor</option>
+                        </select>
+                    </div>
+
+                    <div class="h-[250px] w-full relative flex items-center justify-center py-4">
+                        <canvas id="categoryPieChart"></canvas>
+                    </div>
+
+                    <div class="bg-indigo-950/20 border border-indigo-500/10 rounded-xl p-3 text-[10px] leading-relaxed text-slate-400">
+                        <i class="fa-solid fa-lightbulb text-indigo-400 mr-1.5"></i>
+                        <strong>Interactive Legend:</strong> Click on segments inside the chart to isolate or compare metric slices. Toggle variables using the metric select option above.
+                    </div>
+                </div>
+
+                <!-- Processed Ledger Audit Table (Follows Below the Analytics Block) -->
+                <div class="glass-card rounded-2xl p-6 space-y-4">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-800/60 pb-4">
                         <div>
                             <h4 class="text-sm font-bold uppercase tracking-wider text-slate-200">Processed Ledger Audit</h4>
@@ -308,28 +316,8 @@
                                     <th class="py-3 px-4 text-center">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="transactionLedgerBody" class="divide-y divide-gray-800/60"></tbody>
+                            <tbody id="transactionLedgerBody" class="divide-y divide-gray-800/60 font-sans"></tbody>
                         </table>
-                    </div>
-                </div>
-
-                <!-- Internal Categories Allocation (Interactive Pie Chart Card) -->
-                <div class="glass-card rounded-2xl p-6 space-y-6 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-center border-b border-gray-800/60 pb-3">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-200">Personal Tag Allocation</h4>
-                            <span class="text-[9px] bg-slate-900 text-indigo-400 px-2 py-0.5 rounded border border-gray-800 font-mono">Real-Time Yields</span>
-                        </div>
-                        <p class="text-[10px] text-slate-400 mt-2">Breakdown of generated cashback yield matching your internal tracking tags. Click tags to isolate transactions.</p>
-                    </div>
-
-                    <div class="h-[250px] w-full relative flex items-center justify-center py-4">
-                        <canvas id="categoryPieChart"></canvas>
-                    </div>
-
-                    <div class="bg-indigo-950/20 border border-indigo-500/10 rounded-xl p-3 text-[10px] leading-relaxed text-slate-400">
-                        <i class="fa-solid fa-lightbulb text-indigo-400 mr-1.5"></i>
-                        <strong>Interactive Legend:</strong> Click on category markers inside the pie chart to toggle specific datasets on/off in real time.
                     </div>
                 </div>
             </div>
@@ -385,14 +373,14 @@
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5" for="txAmount">Amount (RM)</label>
+                            <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1" for="txAmount">Amount (RM)</label>
                             <div class="relative">
                                 <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm font-semibold">RM</span>
                                 <input type="number" step="0.01" min="0.01" id="txAmount" required placeholder="0.00" oninput="calculateRealtimeCashback()" class="w-full bg-gray-950 border border-gray-800 rounded-xl pl-10 pr-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-sm">
                             </div>
                         </div>
                         <div>
-                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5" for="txDescription">Description / Vendor</label>
+                            <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1" for="txDescription">Description / Vendor</label>
                             <input type="text" id="txDescription" placeholder="e.g. Aeon Grocer, Netflix" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-indigo-500 transition duration-200 text-sm">
                         </div>
                     </div>
@@ -443,7 +431,7 @@
                         </div>
                         <div>
                             <label class="block text-[9px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Retailer / Merchant (Optional)</label>
-                            <input type="text" id="optMerchant" placeholder="e.g. Aeon Big, Starbucks" oninput="runCashbackOptimization()" class="w-full bg-gray-900 border border-gray-800 rounded-xl px-3 py-2 text-slate-100 text-xs focus:outline-none focus:border-indigo-500 font-semibold">
+                            <input type="text" id="optMerchant" placeholder="e.g. Aeon Big, Starbucks" oninput="runCashbackOptimization()" class="w-full bg-gray-900 border border-gray-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 font-semibold">
                         </div>
                     </div>
 
@@ -938,9 +926,9 @@
                     cycleMinSpend: 0,
                     cycleCashbackCap: 50,
                     rules: [
-                        { category: "Weekend Dining", standardCategory: "Dining", rate: 0.05, minTxSpend: 0, categoryCap: 50, tiered: false, weekendOnly: true, merchants: "McDonald's, Starbucks, Pizza Hut, KFC, Nando's", daysOnly: "", tiers: [] },
-                        { category: "Utilities", standardCategory: "Utilities", rate: 0.01, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "TNB, Syabas, Telekom, Maxis", daysOnly: "", tiers: [] },
-                        { category: "Other spending", standardCategory: "Other Spending", rate: 0.002, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", daysOnly: "", tiers: [] }
+                        { category: "Weekend Dining", standardCategories: ["Dining"], rate: 0.05, minTxSpend: 0, categoryCap: 50, tiered: false, weekendOnly: true, merchants: "McDonald's, Starbucks, Pizza Hut, KFC, Nando's", daysOnly: "", monthsOnly: "", tiers: [] },
+                        { category: "Utilities", standardCategories: ["Utilities"], rate: 0.01, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "TNB, Syabas, Telekom, Maxis", daysOnly: "", monthsOnly: "", tiers: [] },
+                        { category: "Other spending", standardCategories: ["Other Spending"], rate: 0.002, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", daysOnly: "", monthsOnly: "", tiers: [] }
                     ]
                 },
                 { 
@@ -954,8 +942,8 @@
                     cycleMinSpend: 0,
                     cycleCashbackCap: 30,
                     rules: [
-                        { category: "Online/Contactless", standardCategory: "Online/Contactless", rate: 0.02, minTxSpend: 30, categoryCap: 30, tiered: false, weekendOnly: false, merchants: "Shopee, Lazada, Grab, Foodpanda, Touch 'n Go, Taobao", daysOnly: "", tiers: [] },
-                        { category: "Other spending", standardCategory: "Other Spending", rate: 0.003, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", daysOnly: "", tiers: [] }
+                        { category: "Online/Contactless", standardCategories: ["Online/Contactless"], rate: 0.02, minTxSpend: 30, categoryCap: 30, tiered: false, weekendOnly: false, merchants: "Shopee, Lazada, Grab, Foodpanda, Touch 'n Go, Taobao", daysOnly: "", monthsOnly: "", tiers: [] },
+                        { category: "Other spending", standardCategories: ["Other Spending"], rate: 0.003, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", daysOnly: "", monthsOnly: "", tiers: [] }
                     ]
                 },
                 { 
@@ -971,7 +959,7 @@
                     rules: [
                         { 
                             category: "Groceries", 
-                            standardCategory: "Groceries",
+                            standardCategories: ["Groceries"],
                             rate: 0.04, 
                             minTxSpend: 100, 
                             categoryCap: 30, 
@@ -979,12 +967,13 @@
                             weekendOnly: false,
                             merchants: "Aeon, Aeon Big, Lotus's, Giant, Jaya Grocer, Village Grocer",
                             daysOnly: "",
+                            monthsOnly: "",
                             tiers: [
                                 { minSpend: 500, rate: 0.02 },
                                 { minSpend: 1000, rate: 0.04 }
                             ] 
                         },
-                        { category: "Other spending", standardCategory: "Other Spending", rate: 0.002, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", daysOnly: "", tiers: [] }
+                        { category: "Other spending", standardCategories: ["Other Spending"], rate: 0.002, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", daysOnly: "", monthsOnly: "", tiers: [] }
                     ]
                 },
                 { 
@@ -1000,7 +989,7 @@
                     rules: [
                         { 
                             category: "AEON Shopping Days", 
-                            standardCategory: "Groceries",
+                            standardCategories: ["Groceries"],
                             rate: 0.08, 
                             minTxSpend: 0, 
                             categoryCap: 0, 
@@ -1008,9 +997,10 @@
                             weekendOnly: false,
                             merchants: "Aeon, Aeon Big, Aeon MaxValu",
                             daysOnly: "20, 28",
+                            monthsOnly: "",
                             tiers: [] 
                         },
-                        { category: "Other Spending", standardCategory: "Other Spending", rate: 0.005, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", daysOnly: "", tiers: [] }
+                        { category: "Other Spending", standardCategories: ["Other Spending"], rate: 0.005, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", daysOnly: "", monthsOnly: "", tiers: [] }
                     ]
                 }
             ],
@@ -1025,7 +1015,7 @@
 
         let currentFilterCard = "ALL";
         let sspnSignIsPositive = true;
-        let cardPieChartObj = null, catPieChartObj = null;
+        let catPieChartObj = null;
         let sspnTrendChartObj = null, sspnChannelPieChartObj = null;
         let currentInteractiveCardId = "ALL";
         let filterDeckCollapsed = true;
@@ -1481,6 +1471,17 @@
                             }
                         }
 
+                        // Configurable month check to solve Maybank Ikhwan month-of-year tiered profiles
+                        if (eligible && rule.monthsOnly) {
+                            const dateObj = new Date(t.date.replace(/-/g, "/"));
+                            const transMonth = String(dateObj.getMonth() + 1).padStart(2, '0');
+                            const allowedMonths = rule.monthsOnly.split(',').map(m => m.trim().padStart(2, '0'));
+                            if (allowedMonths.length > 0 && !allowedMonths.includes(transMonth)) {
+                                eligible = false;
+                                statusMsg = `Blocked: Promo active only in month(s) ${rule.monthsOnly}`;
+                            }
+                        }
+
                         if (eligible) {
                             if (rule.tiered && rule.tiers && rule.tiers.length > 0) {
                                 const sortedTiers = [...rule.tiers].sort((a,b) => b.minSpend - a.minSpend);
@@ -1617,8 +1618,12 @@
                     if (bestMatchedRule) ruleSource = "merchant";
                 }
 
+                // Upgraded Multi-Select Rule Search: Checks if selected category is within the standardCategories array
                 if (!bestMatchedRule) {
-                    bestMatchedRule = c.rules.find(r => r.standardCategory === selectedCat);
+                    bestMatchedRule = c.rules.find(r => {
+                        const activeCats = Array.isArray(r.standardCategories) ? r.standardCategories : (r.standardCategory ? [r.standardCategory] : []);
+                        return activeCats.includes(selectedCat);
+                    });
                 }
 
                 if (!bestMatchedRule) {
@@ -1674,6 +1679,16 @@
                         eligible = false;
                         hasDayConstraintMatch = false;
                         rejectReason = `Requires Day ${bestMatchedRule.daysOnly}`;
+                    }
+                }
+
+                if (eligible && bestMatchedRule.monthsOnly) {
+                    const transMonth = String(new Date().getMonth() + 1).padStart(2, '0');
+                    const allowedMonths = bestMatchedRule.monthsOnly.split(',').map(m => m.trim().padStart(2, '0'));
+                    if (allowedMonths.length > 0 && !allowedMonths.includes(transMonth)) {
+                        eligible = false;
+                        hasDayConstraintMatch = false;
+                        rejectReason = `Requires Month ${bestMatchedRule.monthsOnly}`;
                     }
                 }
 
@@ -1853,7 +1868,10 @@
             categories.forEach(cat => {
                 let maxRateVal = -1;
                 cards.forEach(c => {
-                    const r = c.rules ? c.rules.find(rule => rule.standardCategory === cat) : null;
+                    const r = c.rules ? c.rules.find(rule => {
+                        const activeCats = Array.isArray(rule.standardCategories) ? rule.standardCategories : (rule.standardCategory ? [rule.standardCategory] : []);
+                        return activeCats.includes(cat);
+                    }) : null;
                     if (r) {
                         const rate = r.rate || 0;
                         if (rate > maxRateVal) maxRateVal = rate;
@@ -1868,7 +1886,10 @@
                 bodyHtml += `<td class="py-2.5 px-3 text-slate-300 font-bold select-none text-[10px]">${cat}</td>`;
 
                 cards.forEach(c => {
-                    const rule = c.rules ? c.rules.find(r => r.standardCategory === cat) : null;
+                    const rule = c.rules ? c.rules.find(r => {
+                        const activeCats = Array.isArray(r.standardCategories) ? r.standardCategories : (r.standardCategory ? [r.standardCategory] : []);
+                        return activeCats.includes(cat);
+                    }) : null;
                     let displayValue = "-";
                     let isDominant = false;
 
@@ -1915,56 +1936,16 @@
             }
         }
 
-        /* Bidirectional Dynamic Interactive Cycle Inspector */
+        /* Direct Bidirectional Interface with Filter Deck (Replaced Redundant Quick Selector) */
         function renderInteractiveSelectorDeck() {
-            const dropdown = document.getElementById("interactiveCardDropdownSelector");
-            const grid = document.getElementById("interactiveCardGridSelector");
-            if (!dropdown || !grid) return;
-
-            // Add ALL option to selector
-            dropdown.innerHTML = `<option value="ALL">All Stack Consolidated</option>` + 
-                database.cards.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-
-            // Populate Quick Selector Buttons Grid with Bidirectional ALL Option Included
-            const allBtnBorder = currentInteractiveCardId === "ALL" ? 'border-indigo-500 shadow-md ring-1 ring-indigo-500/35 bg-indigo-950/30' : 'border-gray-800';
-            let gridHtml = `
-                <button onclick="loadCardInteractiveMeter('ALL')" class="col-span-2 text-left p-2.5 rounded-xl border text-[11px] font-bold tracking-wider transition ${allBtnBorder} flex items-center justify-between gap-1.5 hover:border-indigo-500">
-                    <span class="truncate text-indigo-400"><i class="fa-solid fa-layer-group mr-1"></i>All Stack Summary</span>
-                    <i class="fa-solid fa-calculator text-indigo-400"></i>
-                </button>
-            `;
-
-            gridHtml += database.cards.map(c => {
-                const styles = getThemeStyles(c.theme);
-                const activeBorder = currentInteractiveCardId === c.id ? 'border-indigo-500 shadow-md ring-1 ring-indigo-500/35 bg-indigo-950/30' : 'border-gray-800';
-                return `
-                    <button onclick="loadCardInteractiveMeter('${c.id}')" class="w-full text-left p-2.5 rounded-xl border text-[11px] font-semibold transition ${activeBorder} flex items-center justify-between gap-1.5 hover:border-indigo-500">
-                        <span class="truncate text-slate-200">${c.name}</span>
-                        ${getNetworkIcon(c.network)}
-                    </button>
-                `;
-            }).join('');
-
-            grid.innerHTML = gridHtml;
-
-            if (!currentInteractiveCardId) {
-                currentInteractiveCardId = "ALL";
-            }
-
-            dropdown.value = currentInteractiveCardId;
             renderInteractiveInspectorContent();
         }
 
         function loadCardInteractiveMeter(cardId) {
             currentInteractiveCardId = cardId;
+            currentFilterCard = cardId; // Direct bidirectional link
             
-            // Bidirectional State Synchronization: Set active filter deck card to match inspector!
-            currentFilterCard = cardId;
-            
-            // Update filter deck label & badge indicators dynamically
             const activeFilterText = document.getElementById("activeFilterBadge");
-            const dropdown = document.getElementById("interactiveCardDropdownSelector");
-            
             if (activeFilterText) {
                 if (cardId === "ALL") {
                     activeFilterText.innerText = "All Cards Active";
@@ -1973,10 +1954,6 @@
                 }
             }
 
-            // Sync dropdown value
-            if (dropdown) dropdown.value = cardId;
-
-            // Trigger full calculated workspace updates
             refreshLedgerAndCalculations();
         }
 
@@ -1989,7 +1966,6 @@
             const selectedMonth = document.getElementById("filterMonth").value;
             const simulatedTxs = evaluateCashbackSimulation();
 
-            // Scope filter label helper
             const filterLabel = (selectedMonth !== "ALL" ? selectedMonth : "All Months") + " " + (selectedYear !== "ALL" ? selectedYear : "All Years");
 
             if (currentInteractiveCardId === "ALL") {
@@ -2013,17 +1989,40 @@
                     totalConsolidatedSpend += totalSpendOnCard;
                     totalConsolidatedCashback += totalCBOnCard;
 
+                    // World-Class QA Audit calculation: Calculate remaining available quota on a PER-RULE breakdown first, then overall card cap
+                    let sumOfRemainingCategoryQuota = 0;
+                    let hasUnlimitedCategory = false;
+
+                    c.rules.forEach(r => {
+                        const catTxs = cardTxs.filter(t => t.category === r.category);
+                        const catCB = catTxs.reduce((sum, t) => sum + t.calculatedCashback, 0);
+                        
+                        if (r.categoryCap && r.categoryCap > 0) {
+                            sumOfRemainingCategoryQuota += Math.max(0, r.categoryCap - catCB);
+                        } else {
+                            hasUnlimitedCategory = true;
+                        }
+                    });
+
                     const limitCap = c.cycleCashbackCap || Infinity;
-                    if (limitCap !== Infinity) {
-                        totalRemainingCashbackQuota += Math.max(0, limitCap - totalCBOnCard);
+                    const remainingCardOverall = limitCap !== Infinity ? Math.max(0, limitCap - totalCBOnCard) : Infinity;
+
+                    let cardRemainingAllowed = 0;
+                    if (hasUnlimitedCategory) {
+                        cardRemainingAllowed = remainingCardOverall;
                     } else {
-                        // Mark as unlimited allowance index for display
-                        totalRemainingCashbackQuota += 9999; 
+                        cardRemainingAllowed = Math.min(sumOfRemainingCategoryQuota, remainingCardOverall);
+                    }
+
+                    if (cardRemainingAllowed !== Infinity) {
+                        totalRemainingCashbackQuota += cardRemainingAllowed;
+                    } else {
+                        totalRemainingCashbackQuota += 99999; 
                     }
                 });
 
                 const averageYield = totalConsolidatedSpend > 0 ? (totalConsolidatedCashback / totalConsolidatedSpend) * 100 : 0;
-                const remainingQuotaText = totalRemainingCashbackQuota >= 9999 
+                const remainingQuotaText = totalRemainingCashbackQuota >= 99999 
                     ? "Unlimited / Infinite" 
                     : `RM ${totalRemainingCashbackQuota.toFixed(2)}`;
 
@@ -2037,36 +2036,36 @@
                                 </h4>
                                 <span class="text-[9px] font-mono text-slate-500 uppercase tracking-widest">Active Filters: ${filterLabel}</span>
                             </div>
-                            <span class="text-[9px] font-black uppercase px-2.5 py-1 rounded-md bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">Unified Matrix Engine</span>
+                            <span class="text-[9px] font-black uppercase px-2.5 py-1 rounded-md bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 font-mono">Audit Standard: Per-Rule Cap Summed</span>
                         </div>
 
                         <!-- Consolidated Metrics Grid -->
                         <div class="grid grid-cols-2 gap-4">
                             <div class="bg-gray-950/60 p-4 rounded-xl border border-gray-800/80 space-y-1">
-                                <span class="text-[9px] font-semibold uppercase tracking-wider text-slate-400">Total Spend as of</span>
+                                <span class="text-[9px] font-semibold uppercase tracking-wider text-slate-400">Total Spend</span>
                                 <h2 class="text-xl font-bold text-slate-100 font-mono">RM ${totalConsolidatedSpend.toFixed(2)}</h2>
                                 <p class="text-[8px] text-slate-500">Combined ledger volumes</p>
                             </div>
                             <div class="bg-gray-950/60 p-4 rounded-xl border border-gray-800/80 space-y-1">
-                                <span class="text-[9px] font-semibold uppercase tracking-wider text-slate-400">Total Cash Back as of</span>
+                                <span class="text-[9px] font-semibold uppercase tracking-wider text-slate-400">Total Cash Back</span>
                                 <h2 class="text-xl font-bold text-emerald-400 font-mono">RM ${totalConsolidatedCashback.toFixed(2)}</h2>
                                 <p class="text-[8px] text-slate-500">Calculated earnings matches</p>
                             </div>
                             <div class="bg-gray-950/60 p-4 rounded-xl border border-gray-800/80 space-y-1">
-                                <span class="text-[9px] font-semibold uppercase tracking-wider text-slate-400">Cash Back Available as of</span>
+                                <span class="text-[9px] font-semibold uppercase tracking-wider text-slate-400">Cash Back Available</span>
                                 <h2 class="text-xl font-bold text-indigo-400 font-mono">${remainingQuotaText}</h2>
-                                <p class="text-[8px] text-slate-500">Combined available limits</p>
+                                <p class="text-[8px] text-slate-500 font-sans">Summed remaining tier breakdowns</p>
                             </div>
                             <div class="bg-gray-950/60 p-4 rounded-xl border border-gray-800/80 space-y-1">
-                                <span class="text-[9px] font-semibold uppercase tracking-wider text-slate-400">Cash Back Earned as of</span>
-                                <h2 class="text-xl font-bold text-violet-400 font-mono">RM ${totalConsolidatedCashback.toFixed(2)}</h2>
-                                <p class="text-[8px] text-slate-500">Yield Average: ${averageYield.toFixed(2)}%</p>
+                                <span class="text-[9px] font-semibold uppercase tracking-wider text-slate-400">Average Wallet Yield</span>
+                                <h2 class="text-xl font-bold text-violet-400 font-mono">${averageYield.toFixed(2)}%</h2>
+                                <p class="text-[8px] text-slate-500">Combined efficiency rating</p>
                             </div>
                         </div>
 
                         <div class="p-3 bg-gray-950 border border-gray-800 rounded-xl flex items-center gap-1.5 text-[10px] text-slate-400 leading-relaxed">
                             <i class="fa-solid fa-circle-info text-indigo-400"></i>
-                            <span>You are looking at high-level wallet metrics. Tap on any single card to customize individual billing thresholds, caps, and weekends.</span>
+                            <span>You are looking at high-level consolidated metrics. Expand the "Filter Workspace View" above and tap any single card to isolate individual parameters.</span>
                         </div>
                     </div>
                 `;
@@ -2127,6 +2126,7 @@
                 let restrictions = [];
                 if (r.weekendOnly) restrictions.push("Weekends");
                 if (r.daysOnly) restrictions.push(`Days: ${r.daysOnly}`);
+                if (r.monthsOnly) restrictions.push(`Months: ${r.monthsOnly}`);
                 const restrictBadge = restrictions.length > 0 ? `<span class="bg-indigo-950 text-indigo-400 text-[8px] px-1.5 py-0.2 rounded font-bold">${restrictions.join(" | ")}</span>` : "";
 
                 catHTML += `
@@ -2144,7 +2144,7 @@
             });
 
             inspector.innerHTML = `
-                <div class="space-y-4">
+                <div class="space-y-4 font-sans">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pb-2 border-b border-gray-800">
                         <div>
                             <h4 class="text-sm font-bold text-slate-100 flex items-center gap-2">
@@ -2157,7 +2157,7 @@
                     </div>
 
                     <!-- Meters Grid -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 font-sans">
                         <div class="bg-gray-950/60 p-3 rounded-xl border border-gray-800/80 space-y-2">
                             <div class="flex justify-between text-[10px] text-slate-400 font-semibold font-mono">
                                 <span>Cycle Spending Requirement</span>
@@ -2188,7 +2188,7 @@
 
                     <!-- Category cap breaks -->
                     <div class="space-y-2">
-                        <span class="text-[8px] uppercase tracking-widest text-slate-500 font-bold block">Internal Category Limit Breakdown</span>
+                        <span class="text-[8px] uppercase tracking-widest text-slate-500 font-bold block font-sans">Internal Category Limit Breakdown</span>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[160px] overflow-y-auto pr-1">
                             ${catHTML}
                         </div>
@@ -2242,7 +2242,7 @@
                         <td class="py-3 px-4 text-slate-400 font-semibold">${t.internalTag}</td>
                         <td class="py-3 px-4 text-slate-400">${t.description}</td>
                         <td class="py-3 px-4 text-right font-semibold">RM ${t.amount.toFixed(2)}</td>
-                        <td class="py-3 px-4 text-right font-bold text-indigo-400">RM ${t.calculatedCashback.toFixed(2)}</td>
+                        <td class="py-3 px-4 text-right font-bold text-indigo-400 font-mono">RM ${t.calculatedCashback.toFixed(2)}</td>
                         <td class="py-3 px-4 text-center"><span class="text-[9px] font-bold px-2 py-0.5 rounded-md ${statusClass}">${t.statusMessage}</span></td>
                         <td class="py-3 px-4 text-center">
                             <div class="flex gap-1 justify-center">
@@ -2338,7 +2338,7 @@
                 return `
                     <tr class="hover:bg-gray-900/40 transition">
                         <td class="py-2.5 px-4 font-mono text-[11px]">${r.date}</td>
-                        <td class="py-2.5 px-4 font-semibold text-slate-300 text-xs">
+                        <td class="py-2.5 px-4 font-semibold text-slate-300 text-xs font-sans">
                             <div>${r.channel}</div>
                             <div class="text-[9px] text-slate-500 font-normal">${r.method}</div>
                         </td>
@@ -2415,7 +2415,7 @@
                     <h4 class="text-[11px] font-bold text-slate-200 truncate" title="${bankPrefix}${c.name}">${c.name}</h4>
                     <div class="flex justify-between items-center mt-1">
                         <p class="text-[8px] font-mono text-slate-400">${last4Suffix}</p>
-                        <p class="text-[10px] text-indigo-400 font-bold">RM ${totalCB.toFixed(2)}</p>
+                        <p class="text-[10px] text-indigo-400 font-bold font-mono">RM ${totalCB.toFixed(2)}</p>
                     </div>
                 </div>`;
             }).join('');
@@ -2428,7 +2428,7 @@
 
         function setCardFilter(cardId) {
             currentFilterCard = cardId;
-            currentInteractiveCardId = cardId; // Unified state bidirectional sync
+            currentInteractiveCardId = cardId; // Direct sync linkage
             
             const activeFilterText = document.getElementById("activeFilterBadge");
             if(activeFilterText) {
@@ -2499,7 +2499,18 @@
             document.getElementById("cardEditorPanel").classList.add("hidden");
         }
 
-        function addRuleRow(category = "", rate = 0, minTx = 0, tiered = false, tiers = [], categoryCap = 0, weekendOnly = false, merchants = "", daysOnly = "", standardCategory = "") {
+        // Global rule pill helper
+        function toggleRuleStandardPill(btn, cat) {
+            if (btn.classList.contains('bg-indigo-600')) {
+                btn.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-500');
+                btn.classList.add('bg-slate-950', 'text-slate-400', 'border-gray-800');
+            } else {
+                btn.classList.remove('bg-slate-950', 'text-slate-400', 'border-gray-800');
+                btn.classList.add('bg-indigo-600', 'text-white', 'border-indigo-500');
+            }
+        }
+
+        function addRuleRow(category = "", rate = 0, minTx = 0, tiered = false, tiers = [], categoryCap = 0, weekendOnly = false, merchants = "", daysOnly = "", standardCategory = "", monthsOnly = "") {
             const container = document.getElementById("rulesListContainer");
             const ruleId = "rule-" + Date.now() + Math.random().toString(36).substr(2, 4);
             const row = document.createElement("div");
@@ -2508,54 +2519,79 @@
 
             const ratePct = (rate * 100).toFixed(1);
 
-            if (!standardCategory) {
-                standardCategory = (database.settings.optimizerCategories || []).find(c => category.toLowerCase().includes(c.toLowerCase())) || "Other Spending";
+            // Backwards compatibility migration to standardCategories Array
+            let activeCategories = [];
+            if (arguments[9] && Array.isArray(arguments[9])) {
+                activeCategories = arguments[9];
+            } else if (standardCategory) {
+                activeCategories = [standardCategory];
+            } else {
+                activeCategories = ["Other Spending"];
             }
 
-            const standardMappingOptions = (database.settings.optimizerCategories || ["Other Spending"]).map(cat => 
-                `<option value="${cat}" ${cat === standardCategory ? 'selected' : ''}>${cat}</option>`
-            ).join('');
+            // Standard Categories Multi-Select interactive pill elements
+            const standardCategoriesList = database.settings.optimizerCategories || ["Other Spending"];
+            const pillContainerHtml = standardCategoriesList.map(cat => {
+                const isSelected = activeCategories.includes(cat);
+                const activeClass = isSelected 
+                    ? 'bg-indigo-600 text-white border-indigo-500' 
+                    : 'bg-slate-950 text-slate-400 border-gray-800';
+                return `
+                    <button type="button" onclick="toggleRuleStandardPill(this, '${cat}')" class="rule-standard-pill px-2.5 py-1 rounded-lg text-[9px] font-bold border transition ${activeClass}" data-category="${cat}">
+                        ${cat}
+                    </button>
+                `;
+            }).join('');
 
             row.innerHTML = `
-                <div class="flex flex-wrap gap-2.5 items-center justify-between">
-                    <div class="flex flex-col gap-0.5 flex-1 min-w-[120px]">
-                        <label class="text-[9px] uppercase font-bold text-slate-500">Custom Category Name</label>
-                        <input type="text" placeholder="Category e.g. Weekend Dining" value="${category}" required class="rule-category bg-gray-950 border border-gray-800 rounded-lg px-2.5 py-1.5 text-[11px] text-slate-100 focus:outline-none focus:border-indigo-500 font-semibold">
+                <div class="flex flex-col gap-3">
+                    <div class="flex flex-wrap gap-2.5 items-center justify-between">
+                        <div class="flex flex-col gap-0.5 flex-1 min-w-[120px]">
+                            <label class="text-[9px] uppercase font-bold text-slate-500">Custom Category Name</label>
+                            <input type="text" placeholder="Category e.g. Weekend Dining" value="${category}" required class="rule-category bg-gray-950 border border-gray-800 rounded-lg px-2.5 py-1.5 text-[11px] text-slate-100 focus:outline-none focus:border-indigo-500 font-semibold">
+                        </div>
+
+                        <div class="flex gap-1.5 items-center mt-3 font-mono">
+                            <label class="text-[9px] uppercase font-bold text-slate-400">Min Tx</label>
+                            <input type="number" value="${minTx}" placeholder="0" class="rule-min-spend-tx w-14 bg-gray-950 border border-gray-800 rounded-lg px-2 py-1 text-[11px] text-slate-100 text-right">
+                        </div>
+
+                        <div class="flex gap-1.5 items-center mt-3 font-mono">
+                            <label class="text-[9px] uppercase font-bold text-indigo-400">Cat Cap</label>
+                            <input type="number" value="${categoryCap}" placeholder="0" class="rule-category-cap w-14 bg-gray-950 border border-gray-800 rounded-lg px-2 py-1 text-[11px] text-slate-100 text-right font-mono">
+                        </div>
+
+                        <div class="flex gap-1 items-center mt-3">
+                            <label class="text-[9px] uppercase font-bold text-amber-400">Weekend?</label>
+                            <input type="checkbox" ${weekendOnly ? 'checked' : ''} class="rule-weekend-checkbox rounded border-gray-800 text-amber-500 focus:ring-amber-500 cursor-pointer">
+                        </div>
+
+                        <div class="flex gap-1.5 items-center mt-3 font-mono">
+                            <label class="text-[9px] uppercase font-bold text-cyan-400">Days Only</label>
+                            <input type="text" value="${daysOnly}" placeholder="e.g. 20, 28" class="rule-days-only w-16 bg-gray-950 border border-gray-800 rounded-lg px-2 py-0.5 text-[11px] text-slate-100 text-center focus:outline-none focus:border-cyan-500">
+                        </div>
+
+                        <!-- Configurable Months Profile supporting Maybank Ikhwan month-dependent rate layers -->
+                        <div class="flex gap-1.5 items-center mt-3 font-mono">
+                            <label class="text-[9px] uppercase font-bold text-teal-400">Months Only</label>
+                            <input type="text" value="${monthsOnly}" placeholder="e.g. 05, 06" class="rule-months-only w-16 bg-gray-950 border border-gray-800 rounded-lg px-2 py-0.5 text-[11px] text-slate-100 text-center focus:outline-none focus:border-teal-500" title="Comma separated month numbers, e.g. 05, 06 for May & June">
+                        </div>
+
+                        <div class="flex gap-1 items-center mt-3">
+                            <label class="text-[9px] uppercase font-bold text-indigo-400">Tiered?</label>
+                            <input type="checkbox" ${tiered ? 'checked' : ''} onchange="toggleTieredRow(this, '${ruleId}')" class="rule-tiered-checkbox rounded border-gray-800 text-indigo-500 focus:ring-indigo-500 cursor-pointer">
+                        </div>
+                        
+                        <button type="button" onclick="this.parentElement.parentElement.parentElement.remove()" class="text-rose-500 hover:text-rose-400 p-1 text-[11px] mt-3"><i class="fa-solid fa-trash"></i></button>
                     </div>
 
-                    <div class="flex flex-col gap-0.5 min-w-[110px]">
-                        <label class="text-[9px] uppercase font-bold text-indigo-400">Standard Mapping</label>
-                        <select class="rule-standard-category bg-gray-950 border border-gray-800 rounded-lg px-2 py-1.5 text-[11px] text-slate-100 focus:outline-none focus:border-indigo-500 font-semibold cursor-pointer">
-                            ${standardMappingOptions}
-                        </select>
+                    <!-- Multi-Select Categories Container -->
+                    <div class="space-y-1">
+                        <label class="text-[9px] uppercase font-bold text-indigo-400 block mb-1">Standard Mapping Categories (Tap Multiple)</label>
+                        <div class="flex flex-wrap gap-1.5 bg-gray-950/40 p-2 rounded-xl border border-gray-800/80">
+                            ${pillContainerHtml}
+                        </div>
                     </div>
-                    
-                    <div class="flex gap-1.5 items-center mt-3 font-mono">
-                        <label class="text-[9px] uppercase font-bold text-slate-400">Min Tx</label>
-                        <input type="number" value="${minTx}" placeholder="0" class="rule-min-spend-tx w-14 bg-gray-950 border border-gray-800 rounded-lg px-2 py-1 text-[11px] text-slate-100 text-right">
-                    </div>
-
-                    <div class="flex gap-1.5 items-center mt-3 font-mono">
-                        <label class="text-[9px] uppercase font-bold text-indigo-400">Cat Cap</label>
-                        <input type="number" value="${categoryCap}" placeholder="0" class="rule-category-cap w-14 bg-gray-950 border border-gray-800 rounded-lg px-2 py-1 text-[11px] text-slate-100 text-right font-mono">
-                    </div>
-
-                    <div class="flex gap-1 items-center mt-3">
-                        <label class="text-[9px] uppercase font-bold text-amber-400">Weekend?</label>
-                        <input type="checkbox" ${weekendOnly ? 'checked' : ''} class="rule-weekend-checkbox rounded border-gray-800 text-amber-500 focus:ring-amber-500 cursor-pointer">
-                    </div>
-
-                    <div class="flex gap-1.5 items-center mt-3 font-mono">
-                        <label class="text-[9px] uppercase font-bold text-cyan-400">Days Only</label>
-                        <input type="text" value="${daysOnly}" placeholder="e.g. 20, 28" class="rule-days-only w-16 bg-gray-950 border border-gray-800 rounded-lg px-2 py-0.5 text-[11px] text-slate-100 text-center focus:outline-none focus:border-cyan-500">
-                    </div>
-
-                    <div class="flex gap-1 items-center mt-3">
-                        <label class="text-[9px] uppercase font-bold text-indigo-400">Tiered?</label>
-                        <input type="checkbox" ${tiered ? 'checked' : ''} onchange="toggleTieredRow(this, '${ruleId}')" class="rule-tiered-checkbox rounded border-gray-800 text-indigo-500 focus:ring-indigo-500 cursor-pointer">
-                    </div>
-                    
-                    <button type="button" onclick="this.parentElement.parentElement.remove()" class="text-rose-500 hover:text-rose-400 p-1 text-[11px] mt-3"><i class="fa-solid fa-trash"></i></button>
                 </div>
 
                 <div class="grid grid-cols-1 gap-1 border-t border-gray-850 pt-2.5">
@@ -2674,7 +2710,12 @@
             
             if (card.rules) {
                 card.rules.forEach(r => {
-                    addRuleRow(r.category, r.rate, r.minTxSpend, r.tiered, r.tiers, r.categoryCap || 0, r.weekendOnly || false, r.merchants || "", r.daysOnly || "", r.standardCategory || "");
+                    // Normalize standardCategories arrays for loaded profiles
+                    const targetCats = Array.isArray(r.standardCategories) 
+                        ? r.standardCategories 
+                        : (r.standardCategory ? [r.standardCategory] : ["Other Spending"]);
+
+                    addRuleRow(r.category, r.rate, r.minTxSpend, r.tiered, r.tiers, r.categoryCap || 0, r.weekendOnly || false, r.merchants || "", r.daysOnly || "", targetCats, r.monthsOnly || "");
                 });
             }
         }
@@ -2712,24 +2753,30 @@
             const rules = [];
             document.querySelectorAll(".rule-item-row").forEach(row => {
                 const categoryInput = row.querySelector(".rule-category");
-                const standardCategorySelect = row.querySelector(".rule-standard-category");
                 const minTxInput = row.querySelector(".rule-min-spend-tx");
                 const categoryCapInput = row.querySelector(".rule-category-cap");
                 const tieredCheckbox = row.querySelector(".rule-tiered-checkbox");
                 const weekendCheckbox = row.querySelector(".rule-weekend-checkbox");
                 const merchantsInput = row.querySelector(".rule-merchants");
                 const daysOnlyInput = row.querySelector(".rule-days-only");
+                const monthsOnlyInput = row.querySelector(".rule-months-only");
+
+                // Dynamic extraction of Standard Mapping Categories array from toggled active pills
+                const selectedPills = Array.from(row.querySelectorAll(".rule-standard-pill.bg-indigo-600"))
+                                            .map(btn => btn.getAttribute("data-category"));
 
                 if (categoryInput && categoryInput.value.trim()) {
                     const ruleData = {
                         category: categoryInput.value.trim(),
-                        standardCategory: standardCategorySelect ? standardCategorySelect.value : "Other Spending",
+                        standardCategories: selectedPills.length > 0 ? selectedPills : ["Other Spending"],
+                        standardCategory: selectedPills[0] || "Other Spending", // Fallback for backwards compatibility
                         minTxSpend: parseFloat(minTxInput.value) || 0,
                         categoryCap: parseFloat(categoryCapInput.value) || 0,
                         tiered: tieredCheckbox.checked,
                         weekendOnly: weekendCheckbox ? weekendCheckbox.checked : false,
                         merchants: merchantsInput ? merchantsInput.value.trim() : "",
                         daysOnly: daysOnlyInput ? daysOnlyInput.value.trim() : "",
+                        monthsOnly: monthsOnlyInput ? monthsOnlyInput.value.trim() : "",
                         rate: 0,
                         tiers: []
                     };
@@ -2922,18 +2969,41 @@
         }
 
         function renderCharts(records) {
-            const catData = {};
+            const metric = document.getElementById("chartMetricSelector")?.value || "tag";
+            const chartData = {};
 
             records.forEach(t => {
-                catData[t.internalTag] = (catData[t.internalTag] || 0) + t.calculatedCashback;
+                let key = "Other";
+                if (metric === "tag") {
+                    key = t.internalTag || "Unassigned";
+                } else if (metric === "category") {
+                    key = t.category || "Unassigned";
+                } else if (metric === "card") {
+                    const card = database.cards.find(c => c.id === t.cardId);
+                    key = card ? card.name : t.cardId;
+                } else if (metric === "bank") {
+                    const card = database.cards.find(c => c.id === t.cardId);
+                    key = card ? (card.bank || "Unknown Bank") : "Unknown Bank";
+                } else if (metric === "month") {
+                    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                    const m = new Date(t.date).getMonth();
+                    key = monthNames[m] || "Unknown Month";
+                } else if (metric === "year") {
+                    key = t.date.substring(0, 4) || "Unknown Year";
+                } else if (metric === "status") {
+                    key = t.statusMessage || "Unprocessed";
+                } else if (metric === "description") {
+                    key = t.description || "General Expense";
+                }
+                chartData[key] = (chartData[key] || 0) + t.calculatedCashback;
             });
 
             if(catPieChartObj) catPieChartObj.destroy();
 
             const ctx3 = document.getElementById('categoryPieChart');
             if(ctx3) {
-                const labels = Object.keys(catData);
-                const values = Object.values(catData);
+                const labels = Object.keys(chartData);
+                const values = Object.values(chartData);
 
                 catPieChartObj = new Chart(ctx3, {
                     type: 'doughnut',
