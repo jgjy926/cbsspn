@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Credit Card Cashback & SSPN Wallet</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -187,23 +187,28 @@
                 </div>
             </div>
 
-            <!-- 🌟 Premium Sweet-Spot Balance Awareness Monitor -->
+            <!-- 🌟 Premium Sweet-Spot Balance Awareness Monitor (Collapsible) -->
             <div class="glass-card rounded-2xl p-6 border border-emerald-500/15 bg-gradient-to-br from-slate-950 via-[#061512] to-slate-950 space-y-4">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-2">
+                <div class="flex items-center justify-between cursor-pointer select-none" onclick="toggleBalanceGauge()">
+                    <div class="flex items-center gap-3">
                         <div class="h-9 w-9 bg-emerald-500/10 text-emerald-400 rounded-xl flex items-center justify-center">
-                            <i class="fa-solid fa-gauge-high text-lg animate-pulse"></i>
+                            <i class="fa-solid fa-gauge-high text-lg"></i>
                         </div>
                         <div>
                             <h3 class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Optimized Balance Awareness Gauge</h3>
                             <p class="text-[10px] text-slate-400">Keep track of your statement sweet spot. Avoid missing min spends, and stop wasting spend once caps are maxed.</p>
                         </div>
                     </div>
-                    <span class="text-[9px] bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 px-2 py-0.5 rounded font-mono font-bold uppercase">Optimal Range Monitor</span>
+                    <div class="flex items-center gap-2.5">
+                        <span class="text-[9px] bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 px-2 py-0.5 rounded font-mono font-bold uppercase hidden sm:inline-block">Optimal Range Monitor</span>
+                        <button class="h-8 w-8 bg-slate-900 border border-slate-850 hover:border-emerald-500 text-emerald-400 rounded-lg flex items-center justify-center transition duration-150">
+                            <i id="balanceGaugeToggleIcon" class="fa-solid fa-chevron-down text-xs transition-transform duration-250"></i>
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Dynamic Sweet Spot Cards Container -->
-                <div id="sweetSpotIndicatorsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Dynamic Sweet Spot Cards Container (Collapsible Grid) -->
+                <div id="sweetSpotIndicatorsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 hidden">
                     <!-- Loaded dynamically via Javascript -->
                 </div>
             </div>
@@ -708,6 +713,10 @@
                                 <textarea id="settingsPersonalTags" class="w-full h-16 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 font-mono" placeholder="Dining, Groceries, Utilities..."></textarea>
                             </div>
                             <div>
+                                <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Standard Optimizer Categories (Comma separated)</label>
+                                <textarea id="settingsOptimizerCategories" class="w-full h-14 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 font-mono" placeholder="Dining, Groceries, Utilities, Petrol, Online/Contactless, Other Spending"></textarea>
+                            </div>
+                            <div>
                                 <label class="block text-[10px] font-semibold uppercase tracking-wider text-slate-400 mb-1">SSPN Saving Channels (Comma separated)</label>
                                 <textarea id="settingsSspnChannels" class="w-full h-12 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 font-mono" placeholder="PTPTN Portal, Bank Transfer..."></textarea>
                             </div>
@@ -876,9 +885,9 @@
                     cycleMinSpend: 0,
                     cycleCashbackCap: 50,
                     rules: [
-                        { category: "Weekend Dining", rate: 0.05, minTxSpend: 0, categoryCap: 50, tiered: false, weekendOnly: true, merchants: "McDonald's, Starbucks, Pizza Hut, KFC, Nando's", daysOnly: "", tiers: [] },
-                        { category: "Utilities", rate: 0.01, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "TNB, Syabas, Telekom Malaysia, Celcom, Maxis", daysOnly: "", tiers: [] },
-                        { category: "Other", rate: 0.002, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", daysOnly: "", tiers: [] }
+                        { category: "Weekend Dining", standardCategory: "Dining", rate: 0.05, minTxSpend: 0, categoryCap: 50, tiered: false, weekendOnly: true, merchants: "McDonald's, Starbucks, Pizza Hut, KFC, Nando's", daysOnly: "", tiers: [] },
+                        { category: "Utilities", standardCategory: "Utilities", rate: 0.01, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "TNB, Syabas, Telekom Malaysia, Celcom, Maxis", daysOnly: "", tiers: [] },
+                        { category: "Other", standardCategory: "Other Spending", rate: 0.002, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", daysOnly: "", tiers: [] }
                     ]
                 },
                 { 
@@ -892,8 +901,8 @@
                     cycleMinSpend: 0,
                     cycleCashbackCap: 30,
                     rules: [
-                        { category: "Online/Contactless", rate: 0.02, minTxSpend: 30, categoryCap: 30, tiered: false, weekendOnly: false, merchants: "Shopee, Lazada, Grab, Foodpanda, Touch 'n Go, Taobao", daysOnly: "", tiers: [] },
-                        { category: "Other", rate: 0.003, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", daysOnly: "", tiers: [] }
+                        { category: "Online/Contactless", standardCategory: "Online/Contactless", rate: 0.02, minTxSpend: 30, categoryCap: 30, tiered: false, weekendOnly: false, merchants: "Shopee, Lazada, Grab, Foodpanda, Touch 'n Go, Taobao", daysOnly: "", tiers: [] },
+                        { category: "Other", standardCategory: "Other Spending", rate: 0.003, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", daysOnly: "", tiers: [] }
                     ]
                 },
                 { 
@@ -909,6 +918,7 @@
                     rules: [
                         { 
                             category: "Groceries", 
+                            standardCategory: "Groceries",
                             rate: 0.04, 
                             minTxSpend: 100, 
                             categoryCap: 30, 
@@ -921,7 +931,7 @@
                                 { minSpend: 1000, rate: 0.04 }
                             ] 
                         },
-                        { category: "Other", rate: 0.002, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", daysOnly: "", tiers: [] }
+                        { category: "Other", standardCategory: "Other Spending", rate: 0.002, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", daysOnly: "", tiers: [] }
                     ]
                 },
                 { 
@@ -937,6 +947,7 @@
                     rules: [
                         { 
                             category: "AEON Shopping Days", 
+                            standardCategory: "Groceries",
                             rate: 0.08, 
                             minTxSpend: 0, 
                             categoryCap: 0, 
@@ -946,7 +957,7 @@
                             daysOnly: "20, 28",
                             tiers: [] 
                         },
-                        { category: "Other Spending", rate: 0.005, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", daysOnly: "", tiers: [] }
+                        { category: "Other Spending", standardCategory: "Other Spending", rate: 0.005, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", daysOnly: "", tiers: [] }
                     ]
                 }
             ],
@@ -954,7 +965,8 @@
                 internalCategories: ["Dining", "Groceries", "Utilities", "Shopping", "Transport", "Investment"],
                 sspnChannels: ["PTPTN Portal", "Bank Transfer", "Salary Deduction"],
                 sspnDevices: ["Mobile Phone", "Web Browser", "Counter Kiosk"],
-                sspnMethods: ["FPX Online", "Credit Card Route", "Direct Debit"]
+                sspnMethods: ["FPX Online", "Credit Card Route", "Direct Debit"],
+                optimizerCategories: ["Dining", "Groceries", "Utilities", "Petrol", "Online/Contactless", "Other Spending"]
             }
         };
 
@@ -962,6 +974,7 @@
         let sspnSignIsPositive = true;
         let trendChartObj = null, cardPieChartObj = null, catPieChartObj = null;
         let sspnTrendChartObj = null, sspnChannelPieChartObj = null;
+        let balanceGaugeCollapsed = true; // Default state
 
         window.onload = function() {
             loadFromLocalStorage();
@@ -1006,6 +1019,20 @@
                 menu.classList.add("hidden");
                 menu.classList.remove("flex");
                 icon.className = "fa-solid fa-bars text-lg";
+            }
+        }
+
+        function toggleBalanceGauge() {
+            const grid = document.getElementById("sweetSpotIndicatorsGrid");
+            const icon = document.getElementById("balanceGaugeToggleIcon");
+            if (grid.classList.contains("hidden")) {
+                grid.classList.remove("hidden");
+                icon.className = "fa-solid fa-chevron-up text-xs";
+                balanceGaugeCollapsed = false;
+            } else {
+                grid.classList.add("hidden");
+                icon.className = "fa-solid fa-chevron-down text-xs";
+                balanceGaugeCollapsed = true;
             }
         }
 
@@ -1464,17 +1491,12 @@
         }
 
         function populateOptimizerDropdowns() {
-            const categories = new Set();
-            database.cards.forEach(card => {
-                if (card.rules) {
-                    card.rules.forEach(r => categories.add(r.category));
-                }
-            });
             const optCat = document.getElementById("optCategory");
             if (optCat) {
                 const prevVal = optCat.value;
-                optCat.innerHTML = Array.from(categories).map(cat => `<option value="${cat}">${cat}</option>`).join('');
-                if (prevVal && Array.from(optCat.options).some(o => o.value === prevVal)) {
+                const categories = database.settings.optimizerCategories || ["Other Spending"];
+                optCat.innerHTML = categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
+                if (prevVal && categories.includes(prevVal)) {
                     optCat.value = prevVal;
                 }
             }
@@ -1533,16 +1555,23 @@
                 let bestMatchedRule = null;
                 let ruleSource = "exact";
 
-                // Merchant-first matching
+                // 1. Merchant-first matching
                 if (merchantSearch) {
                     bestMatchedRule = c.rules.find(r => r.merchants && r.merchants.toLowerCase().includes(merchantSearch));
                     if (bestMatchedRule) ruleSource = "merchant";
                 }
 
+                // 2. Standard Category Map matching (MAPPED Mappings take absolute precedence)
                 if (!bestMatchedRule) {
-                    bestMatchedRule = c.rules.find(r => r.category === selectedCat);
+                    bestMatchedRule = c.rules.find(r => r.standardCategory === selectedCat);
                 }
 
+                // 3. Fallback: Custom Category naming keyword matching
+                if (!bestMatchedRule) {
+                    bestMatchedRule = c.rules.find(r => r.category.toLowerCase().includes(selectedCat.toLowerCase()));
+                }
+
+                // 4. Default baseline spending matching
                 if (!bestMatchedRule) {
                     bestMatchedRule = c.rules.find(r => r.category.toLowerCase().includes("other") || r.category.toLowerCase().includes("spending") || r.category.toLowerCase().includes("base"));
                 }
@@ -1679,7 +1708,6 @@
                                 <div class="text-[9px] text-slate-500 flex flex-wrap items-center gap-1.5">
                                     <span>${overallQuotaText}</span>
                                     ${catQuotaText ? `<span>•</span> <span>${catQuotaText}</span>` : ''}
-                                }
                                 </div>
                             </div>
                         </div>
@@ -1804,6 +1832,15 @@
             });
 
             container.innerHTML = html;
+
+            // Retain display state on refresh
+            if (balanceGaugeCollapsed) {
+                container.classList.add("hidden");
+                document.getElementById("balanceGaugeToggleIcon").className = "fa-solid fa-chevron-down text-xs";
+            } else {
+                container.classList.remove("hidden");
+                document.getElementById("balanceGaugeToggleIcon").className = "fa-solid fa-chevron-up text-xs";
+            }
         }
 
         function refreshLedgerAndCalculations() {
@@ -2154,7 +2191,7 @@
                 body.innerHTML = database.cards.map(c => {
                     const styles = getThemeStyles(c.theme);
                     const minSpendText = c.cycleMinSpend > 0 ? `RM ${c.cycleMinSpend}` : 'None';
-                    const capText = c.cycleCashbackCap > 0 ? `RM ${c.cycleCashbackCap}` : 'Unlimited';
+                    const textCap = c.cycleCashbackCap > 0 ? `RM ${c.cycleCashbackCap}` : 'Unlimited';
                     const networkIcon = c.network ? getNetworkIcon(c.network) : '';
                     const last4Text = c.last4 ? `•••• ${c.last4}` : '';
                     const bankText = c.bank && !c.name.toLowerCase().startsWith(c.bank.toLowerCase()) ? `[${c.bank}] ` : '';
@@ -2174,7 +2211,7 @@
                             <td class="py-3 px-4 text-slate-400 font-semibold">Day ${c.billingDay}</td>
                             <td class="py-3 px-4 text-slate-400">
                                 <span class="text-xs block font-bold text-slate-300">Min: ${minSpendText}</span>
-                                <span class="text-[9px] block font-semibold text-indigo-400">Cap: ${capText}</span>
+                                <span class="text-[9px] block font-semibold text-indigo-400">Cap: ${textCap}</span>
                             </td>
                             <td class="py-3 px-4 text-center">
                                 <div class="flex gap-1.5 justify-center">
@@ -2202,14 +2239,14 @@
             document.getElementById("editCardMinSpend").value = "0";
             document.getElementById("editCardCashbackCap").value = "100";
             document.getElementById("rulesListContainer").innerHTML = "";
-            addRuleRow("Other", 0.002, 0, false, [], 0, false, "", "");
+            addRuleRow("Other Spending", 0.002, 0, false, [], 0, false, "", "", "Other Spending");
         }
 
         function hideCardEditor() {
             document.getElementById("cardEditorPanel").classList.add("hidden");
         }
 
-        function addRuleRow(category = "", rate = 0, minTx = 0, tiered = false, tiers = [], categoryCap = 0, weekendOnly = false, merchants = "", daysOnly = "") {
+        function addRuleRow(category = "", rate = 0, minTx = 0, tiered = false, tiers = [], categoryCap = 0, weekendOnly = false, merchants = "", daysOnly = "", standardCategory = "") {
             const container = document.getElementById("rulesListContainer");
             const ruleId = "rule-" + Date.now() + Math.random().toString(36).substr(2, 4);
             const row = document.createElement("div");
@@ -2218,39 +2255,58 @@
 
             const ratePct = (rate * 100).toFixed(1);
 
+            // Match fallback helper for standard mapping categories
+            if (!standardCategory) {
+                standardCategory = (database.settings.optimizerCategories || []).find(c => category.toLowerCase().includes(c.toLowerCase())) || "Other Spending";
+            }
+
+            const standardMappingOptions = (database.settings.optimizerCategories || ["Other Spending"]).map(cat => 
+                `<option value="${cat}" ${cat === standardCategory ? 'selected' : ''}>${cat}</option>`
+            ).join('');
+
             row.innerHTML = `
-                <div class="flex flex-wrap gap-2 items-center justify-between">
-                    <input type="text" placeholder="Category e.g. Dining" value="${category}" required class="rule-category flex-1 min-w-[120px] bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-[11px] text-slate-100 focus:outline-none focus:border-indigo-500 font-semibold">
+                <div class="flex flex-wrap gap-2.5 items-center justify-between">
+                    <div class="flex flex-col gap-0.5 flex-1 min-w-[120px]">
+                        <label class="text-[9px] uppercase font-bold text-slate-500">Custom Category Name</label>
+                        <input type="text" placeholder="Category e.g. Weekend Dining" value="${category}" required class="rule-category bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-[11px] text-slate-100 focus:outline-none focus:border-indigo-500 font-semibold">
+                    </div>
+
+                    <div class="flex flex-col gap-0.5 min-w-[110px]">
+                        <label class="text-[9px] uppercase font-bold text-indigo-400">Standard Mapping</label>
+                        <select class="rule-standard-category bg-slate-950 border border-slate-800 rounded-lg px-2 py-1.5 text-[11px] text-slate-100 focus:outline-none focus:border-indigo-500 font-semibold cursor-pointer">
+                            ${standardMappingOptions}
+                        </select>
+                    </div>
                     
-                    <div class="flex gap-1.5 items-center">
+                    <div class="flex gap-1.5 items-center mt-3">
                         <label class="text-[9px] uppercase font-bold text-slate-400">Min Tx (RM)</label>
                         <input type="number" value="${minTx}" placeholder="0" class="rule-min-spend-tx w-14 bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-[11px] text-slate-100 text-right">
                     </div>
 
-                    <div class="flex gap-1.5 items-center">
+                    <div class="flex gap-1.5 items-center mt-3">
                         <label class="text-[9px] uppercase font-bold text-indigo-400">Cat Cap (RM)</label>
                         <input type="number" value="${categoryCap}" placeholder="0" class="rule-category-cap w-14 bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-[11px] text-slate-100 text-right font-mono">
                     </div>
 
-                    <div class="flex gap-1 items-center">
+                    <div class="flex gap-1 items-center mt-3">
                         <label class="text-[9px] uppercase font-bold text-amber-400">Weekend?</label>
                         <input type="checkbox" ${weekendOnly ? 'checked' : ''} class="rule-weekend-checkbox rounded border-slate-800 text-amber-500 focus:ring-amber-500 cursor-pointer">
                     </div>
 
-                    <div class="flex gap-1.5 items-center">
+                    <div class="flex gap-1.5 items-center mt-3">
                         <label class="text-[9px] uppercase font-bold text-cyan-400">Days Only</label>
                         <input type="text" value="${daysOnly}" placeholder="e.g. 20, 28" class="rule-days-only w-16 bg-slate-950 border border-slate-800 rounded-lg px-2 py-0.5 text-[11px] text-slate-100 text-center font-mono focus:outline-none focus:border-cyan-500">
                     </div>
 
-                    <div class="flex gap-1 items-center">
+                    <div class="flex gap-1 items-center mt-3">
                         <label class="text-[9px] uppercase font-bold text-indigo-400">Is Tiered?</label>
                         <input type="checkbox" ${tiered ? 'checked' : ''} onchange="toggleTieredRow(this, '${ruleId}')" class="rule-tiered-checkbox rounded border-slate-800 text-indigo-500 focus:ring-indigo-500 cursor-pointer">
                     </div>
                     
-                    <button type="button" onclick="this.parentElement.parentElement.remove()" class="text-rose-500 hover:text-rose-400 p-1 text-[11px]"><i class="fa-solid fa-trash"></i></button>
+                    <button type="button" onclick="this.parentElement.parentElement.remove()" class="text-rose-500 hover:text-rose-400 p-1 text-[11px] mt-3"><i class="fa-solid fa-trash"></i></button>
                 </div>
 
-                <!-- Eligible merchants entry -->
+                <!-- Eligible retailers -->
                 <div class="grid grid-cols-1 gap-1 border-t border-slate-800/50 pt-2.5">
                     <label class="text-[9px] uppercase font-bold text-indigo-300 flex items-center gap-1"><i class="fa-solid fa-store"></i> Eligible Merchants / Retailers (Comma Separated)</label>
                     <input type="text" placeholder="e.g. AEON, AEON BIG, Lotus's, Giant" value="${merchants}" class="rule-merchants w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-[11px] text-slate-100 focus:outline-none focus:border-indigo-500">
@@ -2368,7 +2424,7 @@
             
             if (card.rules) {
                 card.rules.forEach(r => {
-                    addRuleRow(r.category, r.rate, r.minTxSpend, r.tiered, r.tiers, r.categoryCap || 0, r.weekendOnly || false, r.merchants || "", r.daysOnly || "");
+                    addRuleRow(r.category, r.rate, r.minTxSpend, r.tiered, r.tiers, r.categoryCap || 0, r.weekendOnly || false, r.merchants || "", r.daysOnly || "", r.standardCategory || "");
                 });
             }
         }
@@ -2406,6 +2462,7 @@
             const rules = [];
             document.querySelectorAll(".rule-item-row").forEach(row => {
                 const categoryInput = row.querySelector(".rule-category");
+                const standardCategorySelect = row.querySelector(".rule-standard-category");
                 const minTxInput = row.querySelector(".rule-min-spend-tx");
                 const categoryCapInput = row.querySelector(".rule-category-cap");
                 const tieredCheckbox = row.querySelector(".rule-tiered-checkbox");
@@ -2416,6 +2473,7 @@
                 if (categoryInput && categoryInput.value.trim()) {
                     const ruleData = {
                         category: categoryInput.value.trim(),
+                        standardCategory: standardCategorySelect ? standardCategorySelect.value : "Other Spending",
                         minTxSpend: parseFloat(minTxInput.value) || 0,
                         categoryCap: parseFloat(categoryCapInput.value) || 0,
                         tiered: tieredCheckbox.checked,
@@ -2490,6 +2548,7 @@
                 .filter(item => item.length > 0);
 
             database.settings.internalCategories = parseCsv("settingsPersonalTags");
+            database.settings.optimizerCategories = parseCsv("settingsOptimizerCategories");
             database.settings.sspnChannels = parseCsv("settingsSspnChannels");
             database.settings.sspnDevices = parseCsv("settingsSspnDevices");
             database.settings.sspnMethods = parseCsv("settingsSspnMethods");
@@ -2752,6 +2811,11 @@
             
             if (database.settings) {
                 document.getElementById("settingsPersonalTags").value = (database.settings.internalCategories || []).join(', ');
+                
+                if (!database.settings.optimizerCategories) {
+                    database.settings.optimizerCategories = ["Dining", "Groceries", "Utilities", "Petrol", "Online/Contactless", "Other Spending"];
+                }
+                document.getElementById("settingsOptimizerCategories").value = (database.settings.optimizerCategories || []).join(', ');
                 document.getElementById("settingsSspnChannels").value = (database.settings.sspnChannels || []).join(', ');
                 document.getElementById("settingsSspnDevices").value = (database.settings.sspnDevices || []).join(', ');
                 document.getElementById("settingsSspnMethods").value = (database.settings.sspnMethods || []).join(', ');
@@ -2767,7 +2831,6 @@
             showToast("Gateway proxy endpoints updated.");
         }
 
-        /* Reconstructed & Fixed Non-Breaking Cloud Sync WebDAV Implementation */
         async function handleCloudSync(action) {
             const url = localStorage.getItem("koofr_endpoint");
 
