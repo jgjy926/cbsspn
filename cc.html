@@ -29,13 +29,11 @@
             border-color: #6366f1 !important;
             box-shadow: 0 0 12px rgba(99, 102, 241, 0.25);
         }
+        
+        /* 10 Premium Theme Gradients & Borders */
         .grad-purple-glow {
             background: linear-gradient(135deg, #0e131f 0%, #151c2e 50%, #2e1e4f 100%);
             border: 1px solid rgba(124, 58, 237, 0.3);
-        }
-        .grad-obsidian {
-            background: linear-gradient(135deg, #090d16 0%, #111724 60%, #1c2536 100%);
-            border: 1px solid rgba(148, 163, 184, 0.15);
         }
         .grad-emerald {
             background: linear-gradient(135deg, #03211c 0%, #063c32 55%, #03211c 100%);
@@ -45,6 +43,35 @@
             background: linear-gradient(135deg, #101626 0%, #1a233d 60%, #1d254c 100%);
             border: 1px solid rgba(99, 102, 241, 0.3);
         }
+        .grad-obsidian {
+            background: linear-gradient(135deg, #090d16 0%, #111724 60%, #1c2536 100%);
+            border: 1px solid rgba(148, 163, 184, 0.15);
+        }
+        .grad-crimson {
+            background: linear-gradient(135deg, #150a0f 0%, #241119 50%, #4a1525 100%);
+            border: 1px solid rgba(225, 29, 72, 0.3);
+        }
+        .grad-amber {
+            background: linear-gradient(135deg, #161007 0%, #241a0d 50%, #4f3513 100%);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+        }
+        .grad-teal {
+            background: linear-gradient(135deg, #041d1a 0%, #0b2d29 50%, #0d4f45 100%);
+            border: 1px solid rgba(20, 184, 166, 0.35);
+        }
+        .grad-electric {
+            background: linear-gradient(135deg, #07152d 0%, #0c2045 50%, #11367a 100%);
+            border: 1px solid rgba(59, 130, 246, 0.35);
+        }
+        .grad-rose {
+            background: linear-gradient(135deg, #1a0b12 0%, #2d1220 50%, #5c1e41 100%);
+            border: 1px solid rgba(236, 72, 153, 0.3);
+        }
+        .grad-bronze {
+            background: linear-gradient(135deg, #180f0a 0%, #2a1910 50%, #542f1b 100%);
+            border: 1px solid rgba(217, 119, 6, 0.35);
+        }
+
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -318,6 +345,11 @@
                             <i class="fa-solid fa-store text-indigo-400 mt-0.5"></i>
                             <span>Eligible: <span id="txCategoryMerchantsVal"></span></span>
                         </div>
+                        <!-- Dynamic Specific Days Warning for Mobile Logging -->
+                        <div id="txCategoryDaysBadge" class="text-[10px] font-semibold mt-1 select-none hidden flex items-start gap-1 p-2 rounded-lg">
+                            <i class="fa-solid fa-calendar-day mt-0.5"></i>
+                            <span id="txCategoryDaysVal"></span>
+                        </div>
                     </div>
 
                     <div>
@@ -557,6 +589,12 @@
                                         <option value="emerald">Emerald</option>
                                         <option value="indigo">Indigo</option>
                                         <option value="obsidian">Obsidian / Gray</option>
+                                        <option value="crimson">Crimson Glow</option>
+                                        <option value="amber">Amber Flame</option>
+                                        <option value="teal">Teal Lagoon</option>
+                                        <option value="electric">Electric Blue</option>
+                                        <option value="rose">Rose Quartz</option>
+                                        <option value="bronze">Sunset Bronze</option>
                                     </select>
                                 </div>
                                 <div>
@@ -765,9 +803,9 @@
                     cycleMinSpend: 0,
                     cycleCashbackCap: 50,
                     rules: [
-                        { category: "Weekend Dining", rate: 0.05, minTxSpend: 0, categoryCap: 50, tiered: false, weekendOnly: true, merchants: "McDonald's, Starbucks, Pizza Hut, KFC, Nando's", tiers: [] },
-                        { category: "Utilities", rate: 0.01, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "TNB, Syabas, Telekom Malaysia, Celcom, Maxis", tiers: [] },
-                        { category: "Other", rate: 0.002, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", tiers: [] }
+                        { category: "Weekend Dining", rate: 0.05, minTxSpend: 0, categoryCap: 50, tiered: false, weekendOnly: true, merchants: "McDonald's, Starbucks, Pizza Hut, KFC, Nando's", daysOnly: "", tiers: [] },
+                        { category: "Utilities", rate: 0.01, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "TNB, Syabas, Telekom Malaysia, Celcom, Maxis", daysOnly: "", tiers: [] },
+                        { category: "Other", rate: 0.002, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", daysOnly: "", tiers: [] }
                     ]
                 },
                 { 
@@ -781,8 +819,8 @@
                     cycleMinSpend: 0,
                     cycleCashbackCap: 30,
                     rules: [
-                        { category: "Online/Contactless", rate: 0.02, minTxSpend: 30, categoryCap: 30, tiered: false, weekendOnly: false, merchants: "Shopee, Lazada, Grab, Foodpanda, Touch 'n Go, Taobao", tiers: [] },
-                        { category: "Other", rate: 0.003, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", tiers: [] }
+                        { category: "Online/Contactless", rate: 0.02, minTxSpend: 30, categoryCap: 30, tiered: false, weekendOnly: false, merchants: "Shopee, Lazada, Grab, Foodpanda, Touch 'n Go, Taobao", daysOnly: "", tiers: [] },
+                        { category: "Other", rate: 0.003, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", daysOnly: "", tiers: [] }
                     ]
                 },
                 { 
@@ -804,12 +842,38 @@
                             tiered: true, 
                             weekendOnly: false,
                             merchants: "Aeon, Aeon Big, Lotus's, Giant, Jaya Grocer, Village Grocer",
+                            daysOnly: "",
                             tiers: [
                                 { minSpend: 500, rate: 0.02 },
                                 { minSpend: 1000, rate: 0.04 }
                             ] 
                         },
-                        { category: "Other", rate: 0.002, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", tiers: [] }
+                        { category: "Other", rate: 0.002, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", daysOnly: "", tiers: [] }
+                    ]
+                },
+                { 
+                    id: "AeonMemberPlus", 
+                    name: "AEON Member Plus Visa Gold", 
+                    bank: "AEON",
+                    network: "Visa",
+                    last4: "9988",
+                    theme: "purple", 
+                    billingDay: 20, 
+                    cycleMinSpend: 0,
+                    cycleCashbackCap: 100,
+                    rules: [
+                        { 
+                            category: "AEON Shopping Days", 
+                            rate: 0.08, 
+                            minTxSpend: 0, 
+                            categoryCap: 0, 
+                            tiered: false, 
+                            weekendOnly: false,
+                            merchants: "Aeon, Aeon Big, Aeon MaxValu",
+                            daysOnly: "20, 28",
+                            tiers: [] 
+                        },
+                        { category: "Other Spending", rate: 0.005, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", daysOnly: "", tiers: [] }
                     ]
                 }
             ],
@@ -838,6 +902,13 @@
                 case 'purple': return { bg: 'grad-purple-glow', badge: 'bg-purple-500/10 text-purple-400 border-purple-500/20' };
                 case 'emerald': return { bg: 'grad-emerald', badge: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' };
                 case 'indigo': return { bg: 'grad-indigo', badge: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' };
+                case 'obsidian': return { bg: 'grad-obsidian', badge: 'bg-slate-500/10 text-slate-400 border-slate-500/20' };
+                case 'crimson': return { bg: 'grad-crimson', badge: 'bg-rose-500/10 text-rose-400 border-rose-500/20' };
+                case 'amber': return { bg: 'grad-amber', badge: 'bg-amber-500/10 text-amber-400 border-amber-550/20' };
+                case 'teal': return { bg: 'grad-teal', badge: 'bg-teal-500/10 text-teal-400 border-teal-500/20' };
+                case 'electric': return { bg: 'grad-electric', badge: 'bg-blue-500/10 text-blue-400 border-blue-500/20' };
+                case 'rose': return { bg: 'grad-rose', badge: 'bg-pink-500/10 text-pink-400 border-pink-500/20' };
+                case 'bronze': return { bg: 'grad-bronze', badge: 'bg-orange-500/10 text-orange-400 border-orange-500/20' };
                 default: return { bg: 'grad-obsidian', badge: 'bg-slate-500/10 text-slate-400 border-slate-500/20' };
             }
         }
@@ -1015,20 +1086,51 @@
         function updateQuickLogMerchantBadge() {
             const cardId = document.getElementById("txCard").value;
             const catKey = document.getElementById("txCategory").value;
+            const txDateVal = document.getElementById("txDate").value;
             const card = database.cards.find(c => c.id === cardId);
-            const badge = document.getElementById("txCategoryMerchantsBadge");
-            const valSpan = document.getElementById("txCategoryMerchantsVal");
+            
+            const mBadge = document.getElementById("txCategoryMerchantsBadge");
+            const mValSpan = document.getElementById("txCategoryMerchantsVal");
+            const dBadge = document.getElementById("txCategoryDaysBadge");
+            const dValSpan = document.getElementById("txCategoryDaysVal");
 
-            if (card && badge && valSpan) {
+            if (card) {
                 const rule = card.rules ? card.rules.find(r => r.category === catKey) : null;
+                
+                // Handle merchant list badge
                 if (rule && rule.merchants) {
-                    valSpan.innerText = rule.merchants;
-                    badge.classList.remove("hidden");
+                    mValSpan.innerText = rule.merchants;
+                    mBadge.classList.remove("hidden");
                 } else {
-                    badge.classList.add("hidden");
+                    mBadge.classList.add("hidden");
                 }
-            } else if (badge) {
-                badge.classList.add("hidden");
+
+                // Handle date restriction matching warning / success feedback
+                if (rule && rule.daysOnly) {
+                    const allowedDays = rule.daysOnly.split(',').map(d => parseInt(d.trim())).filter(d => !isNaN(d));
+                    if (allowedDays.length > 0) {
+                        const currentDay = txDateVal ? new Date(txDateVal.replace(/-/g, "/")).getDate() : null;
+                        const isMatch = currentDay && allowedDays.includes(currentDay);
+                        
+                        dValSpan.innerHTML = `${rule.daysOnly} (Selected Day: <strong>${currentDay || '--'}</strong>)`;
+                        
+                        if (isMatch) {
+                            dBadge.className = "text-[10px] text-emerald-300 font-semibold mt-1 select-none flex items-start gap-1 p-2 rounded-lg bg-emerald-950/20 border border-emerald-900/30";
+                            dBadge.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400 mt-0.5"></i> <span>Perfect Match! Active Promo Day (yield applied).</span>`;
+                        } else {
+                            dBadge.className = "text-[10px] text-amber-300 font-semibold mt-1 select-none flex items-start gap-1 p-2 rounded-lg bg-amber-950/20 border border-amber-900/30";
+                            dBadge.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-amber-400 mt-0.5"></i> <span>Blocked: Only eligible on day ${rule.daysOnly} of the month!</span>`;
+                        }
+                        dBadge.classList.remove("hidden");
+                    } else {
+                        dBadge.classList.add("hidden");
+                    }
+                } else {
+                    dBadge.classList.add("hidden");
+                }
+            } else {
+                mBadge.classList.add("hidden");
+                dBadge.classList.add("hidden");
             }
         }
 
@@ -1206,6 +1308,17 @@
                             if (day !== 0 && day !== 6) {
                                 eligible = false;
                                 statusMsg = "Blocked: Weekday Tx";
+                            }
+                        }
+
+                        // Checking if cashback is restricted strictly to specific days of the month (e.g., 20th and 28th)
+                        if (eligible && rule.daysOnly) {
+                            const dateObj = new Date(t.date.replace(/-/g, "/"));
+                            const transDay = dateObj.getDate();
+                            const allowedDays = rule.daysOnly.split(',').map(d => parseInt(d.trim())).filter(d => !isNaN(d));
+                            if (allowedDays.length > 0 && !allowedDays.includes(transDay)) {
+                                eligible = false;
+                                statusMsg = `Blocked: Requires Day ${rule.daysOnly}`;
                             }
                         }
 
@@ -1520,11 +1633,25 @@
                         capHeader = `<span>Rule: ${r.category} (Yield: RM ${catCB.toFixed(2)})</span>`;
                     }
 
+                    // Dynamic Details Badge
+                    let restrictionDetails = "";
+                    if (r.weekendOnly) {
+                        restrictionDetails += `<span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 px-1 py-0.2 rounded text-[8px]">Weekends</span> `;
+                    }
+                    if (r.daysOnly) {
+                        restrictionDetails += `<span class="bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 px-1 py-0.2 rounded text-[8px]">Days: ${r.daysOnly}</span> `;
+                    }
+
                     // World-class inline merchant representation inside the active cycle summary blocks
-                    const merchantLine = r.merchants ? `
-                        <div class="text-[9px] text-slate-400 mt-1 flex items-start gap-1">
-                            <i class="fa-solid fa-store text-indigo-400 mt-0.5"></i>
-                            <span>Eligible: <strong class="text-indigo-300 font-medium">${r.merchants}</strong></span>
+                    const merchantLine = r.merchants || restrictionDetails ? `
+                        <div class="text-[9px] text-slate-400 mt-1 flex flex-wrap items-center gap-1.5">
+                            ${restrictionDetails}
+                            ${r.merchants ? `
+                                <div class="flex items-start gap-1">
+                                    <i class="fa-solid fa-store text-indigo-400 mt-0.5"></i>
+                                    <span>Eligible: <strong class="text-indigo-300 font-medium">${r.merchants}</strong></span>
+                                </div>
+                            ` : ''}
                         </div>
                     ` : '';
 
@@ -1654,14 +1781,14 @@
             document.getElementById("editCardMinSpend").value = "0";
             document.getElementById("editCardCashbackCap").value = "100";
             document.getElementById("rulesListContainer").innerHTML = "";
-            addRuleRow("Other", 0.002, 0, false, [], 0, false, "");
+            addRuleRow("Other", 0.002, 0, false, [], 0, false, "", "");
         }
 
         function hideCardEditor() {
             document.getElementById("cardEditorPanel").classList.add("hidden");
         }
 
-        function addRuleRow(category = "", rate = 0, minTx = 0, tiered = false, tiers = [], categoryCap = 0, weekendOnly = false, merchants = "") {
+        function addRuleRow(category = "", rate = 0, minTx = 0, tiered = false, tiers = [], categoryCap = 0, weekendOnly = false, merchants = "", daysOnly = "") {
             const container = document.getElementById("rulesListContainer");
             const ruleId = "rule-" + Date.now() + Math.random().toString(36).substr(2, 4);
             const row = document.createElement("div");
@@ -1687,6 +1814,11 @@
                     <div class="flex gap-1 items-center">
                         <label class="text-[9px] uppercase font-bold text-amber-400">Weekend?</label>
                         <input type="checkbox" ${weekendOnly ? 'checked' : ''} class="rule-weekend-checkbox rounded border-slate-800 text-amber-500 focus:ring-amber-500 cursor-pointer">
+                    </div>
+
+                    <div class="flex gap-1.5 items-center">
+                        <label class="text-[9px] uppercase font-bold text-cyan-400">Days Only</label>
+                        <input type="text" value="${daysOnly}" placeholder="e.g. 20, 28" class="rule-days-only w-16 bg-slate-950 border border-slate-800 rounded-lg px-2 py-0.5 text-[11px] text-slate-100 text-center font-mono focus:outline-none focus:border-cyan-500">
                     </div>
 
                     <div class="flex gap-1 items-center">
@@ -1815,7 +1947,7 @@
             
             if (card.rules) {
                 card.rules.forEach(r => {
-                    addRuleRow(r.category, r.rate, r.minTxSpend, r.tiered, r.tiers, r.categoryCap || 0, r.weekendOnly || false, r.merchants || "");
+                    addRuleRow(r.category, r.rate, r.minTxSpend, r.tiered, r.tiers, r.categoryCap || 0, r.weekendOnly || false, r.merchants || "", r.daysOnly || "");
                 });
             }
         }
@@ -1858,6 +1990,7 @@
                 const tieredCheckbox = row.querySelector(".rule-tiered-checkbox");
                 const weekendCheckbox = row.querySelector(".rule-weekend-checkbox");
                 const merchantsInput = row.querySelector(".rule-merchants");
+                const daysOnlyInput = row.querySelector(".rule-days-only");
 
                 if (categoryInput && categoryInput.value.trim()) {
                     const ruleData = {
@@ -1867,6 +2000,7 @@
                         tiered: tieredCheckbox.checked,
                         weekendOnly: weekendCheckbox ? weekendCheckbox.checked : false,
                         merchants: merchantsInput ? merchantsInput.value.trim() : "",
+                        daysOnly: daysOnlyInput ? daysOnlyInput.value.trim() : "",
                         rate: 0,
                         tiers: []
                     };
