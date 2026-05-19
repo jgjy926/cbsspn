@@ -274,6 +274,8 @@
                             <option value="month">By Month</option>
                             <option value="year">By Year</option>
                             <option value="status">By Eligibility / Status</option>
+                            <option value="amount">By Amount Range</option>
+                            <option value="dayOfWeek">By Day of Week</option>
                             <option value="description">By Description / Vendor</option>
                         </select>
                     </div>
@@ -403,74 +405,41 @@
             </div>
         </section>
 
-        <!-- Standalone Cashback Optimizer Tab -->
-        <section id="tabContent-cashbackOptimizer" class="hidden space-y-6">
-            <div class="grid grid-cols-1 xl:grid-cols-12 gap-6">
-                <!-- Smart Optimizer Simulator (7 Columns) -->
-                <div class="xl:col-span-7 glass-card rounded-2xl p-6 space-y-4 bg-gradient-to-br from-slate-950 via-[#0a0c16] to-slate-950 border-indigo-500/15">
-                    <div class="flex items-center justify-between border-b border-gray-800 pb-3">
-                        <div class="flex items-center gap-2">
-                            <i class="fa-solid fa-calculator text-indigo-400 text-sm"></i>
-                            <span class="text-xs font-bold text-slate-200 uppercase tracking-wider">Dynamic Spend Recommendation</span>
-                        </div>
-                        <span class="text-[8px] bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 px-2 py-0.5 rounded font-bold uppercase">Real-Time</span>
+        <!-- Standalone Cashback Optimizer Tab (Sleek Clean Centered Mobile Optimized Column) -->
+        <section id="tabContent-cashbackOptimizer" class="hidden max-w-3xl mx-auto space-y-6">
+            <!-- Smart Optimizer Simulator -->
+            <div class="glass-card rounded-2xl p-6 space-y-4 bg-gradient-to-br from-slate-950 via-[#0a0c16] to-slate-950 border-indigo-500/15">
+                <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-calculator text-indigo-400 text-sm"></i>
+                        <span class="text-xs font-bold text-slate-200 uppercase tracking-wider">Dynamic Spend Recommendation</span>
                     </div>
+                    <span class="text-[8px] bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 px-2 py-0.5 rounded font-bold uppercase">Real-Time</span>
+                </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div>
-                            <label class="block text-[9px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Simulated Spend (RM)</label>
-                            <div class="relative">
-                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-semibold">RM</span>
-                                <input type="number" id="optAmount" value="100" step="0.01" min="0.01" oninput="runCashbackOptimization()" class="w-full bg-gray-900 border border-gray-800 rounded-xl pl-9 pr-4 py-2 text-slate-100 text-xs focus:outline-none focus:border-indigo-500">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-[9px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Standardized Category</label>
-                            <select id="optCategory" onchange="runCashbackOptimization()" class="w-full bg-gray-900 border border-gray-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 cursor-pointer font-semibold">
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[9px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Retailer / Merchant (Optional)</label>
-                            <input type="text" id="optMerchant" placeholder="e.g. Aeon Big, Starbucks" oninput="runCashbackOptimization()" class="w-full bg-gray-900 border border-gray-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 font-semibold">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-[9px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Simulated Spend (RM)</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-semibold">RM</span>
+                            <input type="number" id="optAmount" value="100" step="0.01" min="0.01" oninput="runCashbackOptimization()" class="w-full bg-gray-900 border border-gray-800 rounded-xl pl-9 pr-4 py-2 text-slate-100 text-xs focus:outline-none focus:border-indigo-500">
                         </div>
                     </div>
-
-                    <div class="space-y-3 pt-2">
-                        <span class="text-[9px] uppercase tracking-widest text-slate-400 font-bold block">Ranked Card Options (Eligible Card Stacks First)</span>
-                        <div id="optimizerRecommendations" class="space-y-3">
-                            <!-- Populated dynamically with mobile optimized cards -->
-                        </div>
+                    <div>
+                        <label class="block text-[9px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Standardized Category</label>
+                        <select id="optCategory" onchange="runCashbackOptimization()" class="w-full bg-gray-900 border border-gray-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 cursor-pointer font-semibold">
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[9px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Retailer / Merchant (Optional)</label>
+                        <input type="text" id="optMerchant" placeholder="e.g. Aeon Big, Starbucks" oninput="runCashbackOptimization()" class="w-full bg-gray-900 border border-gray-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 font-semibold">
                     </div>
                 </div>
 
-                <!-- Interactive Cheat Sheet & Wallet Matrix (5 Columns) -->
-                <div class="xl:col-span-5 glass-card rounded-2xl p-6 bg-gradient-to-br from-slate-950 via-[#0a0c16] to-slate-950 border-indigo-500/15 flex flex-col justify-between space-y-4">
-                    <div>
-                        <div class="flex items-center justify-between border-b border-gray-800 pb-3 mb-4">
-                            <div class="flex items-center gap-2">
-                                <i class="fa-solid fa-map text-indigo-400 text-sm"></i>
-                                <span class="text-xs font-bold text-slate-200 uppercase tracking-wider">Wallet Matrix Matrix</span>
-                            </div>
-                            <span class="text-[8px] bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 px-1.5 py-0.5 rounded font-mono font-bold">Heatmap Active</span>
-                        </div>
-                        
-                        <div class="overflow-x-auto max-h-[420px] overflow-y-auto pr-1">
-                            <table class="w-full text-left text-[10px] text-slate-300 border-collapse">
-                                <thead class="bg-gray-900 uppercase text-[8px] tracking-widest text-slate-500 font-bold sticky top-0 z-10">
-                                    <tr id="cheatSheetHeaders">
-                                        <!-- Dynamically generated headers -->
-                                    </tr>
-                                </thead>
-                                <tbody id="cheatSheetBody" class="divide-y divide-gray-800 font-mono">
-                                    <!-- Dynamic rows -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <div class="bg-indigo-950/20 border border-indigo-500/10 rounded-xl p-3 text-[10px] leading-relaxed text-slate-400">
-                        <i class="fa-solid fa-circle-question text-indigo-400 mr-1.5"></i>
-                        <strong>Matrix Interaction:</strong> Click on any cell within the mapping matrix to automatically load that respective category parameters into the simulation engine.
+                <div class="space-y-3 pt-2">
+                    <span class="text-[9px] uppercase tracking-widest text-slate-400 font-bold block">Ranked Card Options (Eligible Card Stacks First)</span>
+                    <div id="optimizerRecommendations" class="space-y-3">
+                        <!-- Populated dynamically with mobile optimized cards -->
                     </div>
                 </div>
             </div>
@@ -1444,7 +1413,7 @@
                         const ruleMinTx = rule.minTxSpend || 0;
                         if (t.amount < ruleMinTx) {
                             eligible = false;
-                            statusMsg = `Blocked: Tx < RM ${ruleMinTx}`;
+                            statusMsg = `Blocked: Tx < Min RM ${ruleMinTx}`;
                         }
                         
                         if (eligible && totalCycleSpend < cycleMinRequired) {
@@ -1610,35 +1579,27 @@
                 const stats = cardBillingCycleStats[c.id];
                 const totalSpendWithNew = stats.accumSpend + spendAmount;
 
-                let bestMatchedRule = null;
+                // FIXED QA BUG: Filter rules where the selected category is explicitly found inside standardCategories. Avoid irrelevant fallbacks!
+                const matchedRules = (c.rules || []).filter(r => {
+                    const activeCats = Array.isArray(r.standardCategories) ? r.standardCategories : (r.standardCategory ? [r.standardCategory] : []);
+                    return activeCats.includes(selectedCat);
+                });
+
+                if (matchedRules.length === 0) {
+                    // Omit this card completely if no exact rule configuration matches this selected category!
+                    return;
+                }
+
+                let bestMatchedRule = matchedRules[0];
                 let ruleSource = "exact";
 
                 if (merchantSearch) {
-                    bestMatchedRule = c.rules.find(r => r.merchants && r.merchants.toLowerCase().includes(merchantSearch));
-                    if (bestMatchedRule) ruleSource = "merchant";
+                    const merchantMatch = matchedRules.find(r => r.merchants && r.merchants.toLowerCase().includes(merchantSearch));
+                    if (merchantMatch) {
+                        bestMatchedRule = merchantMatch;
+                        ruleSource = "merchant";
+                    }
                 }
-
-                // Upgraded Multi-Select Rule Search: Checks if selected category is within the standardCategories array
-                if (!bestMatchedRule) {
-                    bestMatchedRule = c.rules.find(r => {
-                        const activeCats = Array.isArray(r.standardCategories) ? r.standardCategories : (r.standardCategory ? [r.standardCategory] : []);
-                        return activeCats.includes(selectedCat);
-                    });
-                }
-
-                if (!bestMatchedRule) {
-                    bestMatchedRule = c.rules.find(r => r.category.toLowerCase().includes(selectedCat.toLowerCase()));
-                }
-
-                if (!bestMatchedRule) {
-                    bestMatchedRule = c.rules.find(r => r.category.toLowerCase().includes("other") || r.category.toLowerCase().includes("spending") || r.category.toLowerCase().includes("base"));
-                }
-
-                if (!bestMatchedRule && c.rules.length > 0) {
-                    bestMatchedRule = c.rules[c.rules.length - 1];
-                }
-
-                if (!bestMatchedRule) return;
 
                 let eligible = true;
                 let rejectReason = "";
@@ -1750,6 +1711,18 @@
             });
 
             let html = "";
+            
+            if (results.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 bg-gray-900/25 border border-dashed border-gray-800 rounded-xl space-y-2">
+                        <i class="fa-solid fa-face-frown text-slate-500 text-xl"></i>
+                        <p class="text-xs text-slate-400 font-semibold">No specialized card config rules found mapping explicitly to "${selectedCat}".</p>
+                        <p class="text-[10px] text-slate-500 leading-relaxed max-w-sm mx-auto">Please add a standard category mapping rule under system settings to analyze prospective cashback on this wallet stack.</p>
+                    </div>
+                `;
+                return;
+            }
+
             results.forEach((res, idx) => {
                 const styles = getThemeStyles(res.card.theme);
                 const netIcon = res.card.network ? getNetworkIcon(res.card.network) : '';
@@ -1843,87 +1816,7 @@
         }
 
         function renderCashbackCheatSheet() {
-            const headerRow = document.getElementById("cheatSheetHeaders");
-            const body = document.getElementById("cheatSheetBody");
-            if (!headerRow || !body) return;
-
-            const categories = database.settings.optimizerCategories || ["Other Spending"];
-            const cards = database.cards || [];
-
-            let headerHtml = `<th class="py-2.5 px-3">Category</th>`;
-            cards.forEach(c => {
-                const networkIcon = c.network ? getNetworkIcon(c.network) : '';
-                headerHtml += `
-                    <th class="py-2.5 px-2 text-center font-bold text-[8px]" title="${c.name}">
-                        <div class="flex flex-col items-center">
-                            <span>${networkIcon}</span>
-                            <span class="text-slate-300 truncate max-w-[65px]">${c.id}</span>
-                        </div>
-                    </th>
-                `;
-            });
-            headerRow.innerHTML = headerHtml;
-
-            const bestRatesMap = {};
-            categories.forEach(cat => {
-                let maxRateVal = -1;
-                cards.forEach(c => {
-                    const r = c.rules ? c.rules.find(rule => {
-                        const activeCats = Array.isArray(rule.standardCategories) ? rule.standardCategories : (rule.standardCategory ? [rule.standardCategory] : []);
-                        return activeCats.includes(cat);
-                    }) : null;
-                    if (r) {
-                        const rate = r.rate || 0;
-                        if (rate > maxRateVal) maxRateVal = rate;
-                    }
-                });
-                bestRatesMap[cat] = maxRateVal;
-            });
-
-            let bodyHtml = "";
-            categories.forEach(cat => {
-                bodyHtml += `<tr class="hover:bg-indigo-950/20 transition duration-100 border-b border-gray-900">`;
-                bodyHtml += `<td class="py-2.5 px-3 text-slate-300 font-bold select-none text-[10px]">${cat}</td>`;
-
-                cards.forEach(c => {
-                    const rule = c.rules ? c.rules.find(r => {
-                        const activeCats = Array.isArray(r.standardCategories) ? r.standardCategories : (r.standardCategory ? [r.standardCategory] : []);
-                        return activeCats.includes(cat);
-                    }) : null;
-                    let displayValue = "-";
-                    let isDominant = false;
-
-                    if (rule) {
-                        displayValue = `${(rule.rate * 100).toFixed(1)}%`;
-                        if (rule.tiered) displayValue = "Tiered";
-                        if (rule.rate > 0 && rule.rate === bestRatesMap[cat]) {
-                            isDominant = true;
-                        }
-                    }
-
-                    const clickAction = `onclick="autofillOptimizer('${cat}')"`;
-                    const cursorStyle = "cursor-pointer";
-
-                    if (isDominant) {
-                        bodyHtml += `
-                            <td ${clickAction} class="py-2.5 px-2 text-center ${cursorStyle} font-black text-emerald-400 bg-emerald-950/20 border-x border-emerald-500/20 relative group" title="Best match category!">
-                                <span class="relative z-10">${displayValue}</span>
-                                <div class="absolute inset-0 border border-emerald-500/40 rounded opacity-0 group-hover:opacity-100 transition duration-150"></div>
-                            </td>
-                        `;
-                    } else {
-                        bodyHtml += `
-                            <td ${clickAction} class="py-2.5 px-2 text-center ${cursorStyle} text-slate-400 group relative">
-                                <span class="relative z-10">${displayValue}</span>
-                                <div class="absolute inset-0 border border-indigo-500/10 rounded opacity-0 group-hover:opacity-100 transition duration-150"></div>
-                            </td>
-                        `;
-                    }
-                });
-                bodyHtml += `</tr>`;
-            });
-
-            body.innerHTML = bodyHtml;
+            // Matrix Cheat-sheet UI Removed per QA request to declutter mobile workspace!
         }
 
         function autofillOptimizer(categoryName) {
@@ -1936,7 +1829,7 @@
             }
         }
 
-        /* Direct Bidirectional Interface with Filter Deck (Replaced Redundant Quick Selector) */
+        /* Direct Bidirectional Interface with Filter Deck */
         function renderInteractiveSelectorDeck() {
             renderInteractiveInspectorContent();
         }
@@ -2059,11 +1952,11 @@
                             <div class="bg-gray-950/60 p-4 rounded-xl border border-gray-800/80 space-y-1">
                                 <span class="text-[9px] font-semibold uppercase tracking-wider text-slate-400">Average Wallet Yield</span>
                                 <h2 class="text-xl font-bold text-violet-400 font-mono">${averageYield.toFixed(2)}%</h2>
-                                <p class="text-[8px] text-slate-500">Combined efficiency rating</p>
+                                <p class="text-[8px] text-slate-500 font-sans">Combined efficiency rating</p>
                             </div>
                         </div>
 
-                        <div class="p-3 bg-gray-950 border border-gray-800 rounded-xl flex items-center gap-1.5 text-[10px] text-slate-400 leading-relaxed">
+                        <div class="p-3 bg-gray-950 border border-gray-800 rounded-xl flex items-center gap-1.5 text-[10px] text-slate-400 leading-relaxed font-sans">
                             <i class="fa-solid fa-circle-info text-indigo-400"></i>
                             <span>You are looking at high-level consolidated metrics. Expand the "Filter Workspace View" above and tap any single card to isolate individual parameters.</span>
                         </div>
@@ -2180,7 +2073,7 @@
                     </div>
 
                     <div class="p-3 bg-gray-950 border border-gray-800 rounded-xl">
-                        <p class="text-[10px] text-slate-300 italic flex items-center gap-1.5 leading-relaxed">
+                        <p class="text-[10px] text-slate-300 italic flex items-center gap-1.5 leading-relaxed font-sans">
                             <i class="fa-solid fa-lightbulb text-amber-400"></i>
                             ${rangeSuggestion}
                         </p>
@@ -2276,7 +2169,6 @@
             renderFilterDecks(simulatedTxs);
             renderCardsVault();
             renderInteractiveSelectorDeck();
-            renderCashbackCheatSheet();
 
             populateOptimizerDropdowns();
             runCashbackOptimization();
@@ -2492,7 +2384,7 @@
             document.getElementById("editCardMinSpend").value = "0";
             document.getElementById("editCardCashbackCap").value = "100";
             document.getElementById("rulesListContainer").innerHTML = "";
-            addRuleRow("Other Spending", 0.002, 0, false, [], 0, false, "", "", "Other Spending");
+            addRuleRow("Other Spending", 0.002, 0, false, [], 0, false, "", "", ["Other Spending"]);
         }
 
         function hideCardEditor() {
@@ -2510,7 +2402,7 @@
             }
         }
 
-        function addRuleRow(category = "", rate = 0, minTx = 0, tiered = false, tiers = [], categoryCap = 0, weekendOnly = false, merchants = "", daysOnly = "", standardCategory = "", monthsOnly = "") {
+        function addRuleRow(category = "", rate = 0, minTx = 0, tiered = false, tiers = [], categoryCap = 0, weekendOnly = false, merchants = "", daysOnly = "", activeCategories = [], monthsOnly = "") {
             const container = document.getElementById("rulesListContainer");
             const ruleId = "rule-" + Date.now() + Math.random().toString(36).substr(2, 4);
             const row = document.createElement("div");
@@ -2519,14 +2411,9 @@
 
             const ratePct = (rate * 100).toFixed(1);
 
-            // Backwards compatibility migration to standardCategories Array
-            let activeCategories = [];
-            if (arguments[9] && Array.isArray(arguments[9])) {
-                activeCategories = arguments[9];
-            } else if (standardCategory) {
-                activeCategories = [standardCategory];
-            } else {
-                activeCategories = ["Other Spending"];
+            // Backwards compatibility normalization
+            if (!activeCategories || !Array.isArray(activeCategories)) {
+                activeCategories = activeCategories ? [activeCategories] : ["Other Spending"];
             }
 
             // Standard Categories Multi-Select interactive pill elements
@@ -2544,7 +2431,7 @@
             }).join('');
 
             row.innerHTML = `
-                <div class="flex flex-col gap-3">
+                <div class="flex flex-col gap-3 font-sans">
                     <div class="flex flex-wrap gap-2.5 items-center justify-between">
                         <div class="flex flex-col gap-0.5 flex-1 min-w-[120px]">
                             <label class="text-[9px] uppercase font-bold text-slate-500">Custom Category Name</label>
@@ -2552,12 +2439,12 @@
                         </div>
 
                         <div class="flex gap-1.5 items-center mt-3 font-mono">
-                            <label class="text-[9px] uppercase font-bold text-slate-400">Min Tx</label>
+                            <label class="text-[9px] uppercase font-bold text-slate-400 font-sans">Min Tx</label>
                             <input type="number" value="${minTx}" placeholder="0" class="rule-min-spend-tx w-14 bg-gray-950 border border-gray-800 rounded-lg px-2 py-1 text-[11px] text-slate-100 text-right">
                         </div>
 
                         <div class="flex gap-1.5 items-center mt-3 font-mono">
-                            <label class="text-[9px] uppercase font-bold text-indigo-400">Cat Cap</label>
+                            <label class="text-[9px] uppercase font-bold text-indigo-400 font-sans">Cat Cap</label>
                             <input type="number" value="${categoryCap}" placeholder="0" class="rule-category-cap w-14 bg-gray-950 border border-gray-800 rounded-lg px-2 py-1 text-[11px] text-slate-100 text-right font-mono">
                         </div>
 
@@ -2567,18 +2454,18 @@
                         </div>
 
                         <div class="flex gap-1.5 items-center mt-3 font-mono">
-                            <label class="text-[9px] uppercase font-bold text-cyan-400">Days Only</label>
+                            <label class="text-[9px] uppercase font-bold text-cyan-400 font-sans">Days Only</label>
                             <input type="text" value="${daysOnly}" placeholder="e.g. 20, 28" class="rule-days-only w-16 bg-gray-950 border border-gray-800 rounded-lg px-2 py-0.5 text-[11px] text-slate-100 text-center focus:outline-none focus:border-cyan-500">
                         </div>
 
                         <!-- Configurable Months Profile supporting Maybank Ikhwan month-dependent rate layers -->
                         <div class="flex gap-1.5 items-center mt-3 font-mono">
-                            <label class="text-[9px] uppercase font-bold text-teal-400">Months Only</label>
+                            <label class="text-[9px] uppercase font-bold text-teal-400 font-sans">Months Only</label>
                             <input type="text" value="${monthsOnly}" placeholder="e.g. 05, 06" class="rule-months-only w-16 bg-gray-950 border border-gray-800 rounded-lg px-2 py-0.5 text-[11px] text-slate-100 text-center focus:outline-none focus:border-teal-500" title="Comma separated month numbers, e.g. 05, 06 for May & June">
                         </div>
 
                         <div class="flex gap-1 items-center mt-3">
-                            <label class="text-[9px] uppercase font-bold text-indigo-400">Tiered?</label>
+                            <label class="text-[9px] uppercase font-bold text-indigo-400 font-sans">Tiered?</label>
                             <input type="checkbox" ${tiered ? 'checked' : ''} onchange="toggleTieredRow(this, '${ruleId}')" class="rule-tiered-checkbox rounded border-gray-800 text-indigo-500 focus:ring-indigo-500 cursor-pointer">
                         </div>
                         
@@ -2587,7 +2474,7 @@
 
                     <!-- Multi-Select Categories Container -->
                     <div class="space-y-1">
-                        <label class="text-[9px] uppercase font-bold text-indigo-400 block mb-1">Standard Mapping Categories (Tap Multiple)</label>
+                        <label class="text-[9px] uppercase font-bold text-indigo-400 block mb-1 font-sans">Standard Mapping Categories (Tap Multiple)</label>
                         <div class="flex flex-wrap gap-1.5 bg-gray-950/40 p-2 rounded-xl border border-gray-800/80">
                             ${pillContainerHtml}
                         </div>
@@ -2595,13 +2482,13 @@
                 </div>
 
                 <div class="grid grid-cols-1 gap-1 border-t border-gray-850 pt-2.5">
-                    <label class="text-[9px] uppercase font-bold text-indigo-300 flex items-center gap-1"><i class="fa-solid fa-store"></i> Eligible Retailers (Comma Separated)</label>
-                    <input type="text" placeholder="e.g. AEON, AEON BIG, Lotus's, Giant" value="${merchants}" class="rule-merchants w-full bg-gray-950 border border-gray-850 rounded-lg px-3 py-1.5 text-[11px] text-slate-100 focus:outline-none focus:border-indigo-500">
+                    <label class="text-[9px] uppercase font-bold text-indigo-300 flex items-center gap-1 font-sans"><i class="fa-solid fa-store"></i> Eligible Retailers (Comma Separated)</label>
+                    <input type="text" placeholder="e.g. AEON, AEON BIG, Lotus's, Giant" value="${merchants}" class="rule-merchants w-full bg-gray-950 border border-gray-850 rounded-lg px-3 py-1.5 text-[11px] text-slate-100 focus:outline-none focus:border-indigo-500 font-sans">
                 </div>
 
                 <div class="rate-config-panel" id="ratePanel-${ruleId}">
                     ${tiered ? renderTiersInputs(tiers) : `
-                        <div class="flex gap-2 items-center">
+                        <div class="flex gap-2 items-center font-sans">
                             <span class="text-[9px] uppercase font-bold text-slate-500">Flat Cashback Rate:</span>
                             <div class="relative w-24">
                                 <input type="number" step="0.1" value="${ratePct}" placeholder="5" class="rule-flat-rate w-full bg-gray-950 border border-gray-800 rounded-lg pl-2 pr-5 py-1 text-[11px] text-slate-100 focus:outline-none text-right font-mono">
@@ -2620,7 +2507,7 @@
                 panel.innerHTML = renderTiersInputs([]);
             } else {
                 panel.innerHTML = `
-                    <div class="flex gap-2 items-center">
+                    <div class="flex gap-2 items-center font-sans">
                         <span class="text-[9px] uppercase font-bold text-slate-500">Flat Cashback Rate:</span>
                         <div class="relative w-24">
                             <input type="number" step="0.1" value="1.0" placeholder="5" class="rule-flat-rate w-full bg-gray-950 border border-gray-800 rounded-lg pl-2 pr-5 py-1 text-[11px] text-slate-100 focus:outline-none text-right font-mono">
@@ -2635,8 +2522,8 @@
             let html = `
                 <div class="space-y-1.5 bg-gray-950/60 p-2 rounded-lg border border-gray-850">
                     <div class="flex justify-between items-center mb-1">
-                        <span class="text-[9px] uppercase font-black text-indigo-400 tracking-wider">Statement Spending Tiers</span>
-                        <button type="button" onclick="addTierInputRow(this)" class="text-[8px] bg-slate-900 hover:bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded font-bold border border-gray-800">
+                        <span class="text-[9px] uppercase font-black text-indigo-400 tracking-wider font-sans">Statement Spending Tiers</span>
+                        <button type="button" onclick="addTierInputRow(this)" class="text-[8px] bg-slate-900 hover:bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded font-bold border border-gray-800 font-sans">
                             + Add Tier
                         </button>
                     </div>
@@ -2647,9 +2534,9 @@
                 tiers.forEach(t => {
                     html += `
                         <div class="flex gap-2 items-center tier-row">
-                            <span class="text-[9px] text-slate-400">If cycle spend &ge; RM</span>
+                            <span class="text-[9px] text-slate-400 font-sans">If cycle spend &ge; RM</span>
                             <input type="number" value="${t.minSpend}" class="rule-tier-min-spend w-16 bg-gray-950 border border-gray-800 rounded px-1.5 py-0.5 text-[10px] text-slate-100 font-mono">
-                            <span class="text-[9px] text-slate-400">rate is</span>
+                            <span class="text-[9px] text-slate-400 font-sans">rate is</span>
                             <input type="number" step="0.1" value="${(t.rate*100).toFixed(1)}" class="rule-tier-rate w-12 bg-gray-950 border border-gray-800 rounded px-1.5 py-0.5 text-[10px] text-slate-100 text-right font-mono">%
                             <button type="button" onclick="this.parentElement.remove()" class="text-rose-500 hover:text-rose-400 text-[10px] ml-auto"><i class="fa-solid fa-trash"></i></button>
                         </div>
@@ -2658,9 +2545,9 @@
             } else {
                 html += `
                     <div class="flex gap-2 items-center tier-row">
-                        <span class="text-[9px] text-slate-400">If cycle spend &ge; RM</span>
+                        <span class="text-[9px] text-slate-400 font-sans">If cycle spend &ge; RM</span>
                         <input type="number" value="1000" class="rule-tier-min-spend w-16 bg-gray-950 border border-gray-800 rounded px-1.5 py-0.5 text-[10px] text-slate-100 font-mono">
-                        <span class="text-[9px] text-slate-400">rate is</span>
+                        <span class="text-[9px] text-slate-400 font-sans">rate is</span>
                         <input type="number" step="0.1" value="5.0" class="rule-tier-rate w-12 bg-gray-950 border border-gray-800 rounded px-1.5 py-0.5 text-[10px] text-slate-100 text-right font-mono">%
                         <button type="button" onclick="this.parentElement.remove()" class="text-rose-500 hover:text-rose-400 text-[10px] ml-auto"><i class="fa-solid fa-trash"></i></button>
                     </div>
@@ -2676,9 +2563,9 @@
             const div = document.createElement("div");
             div.className = "flex gap-2 items-center tier-row";
             div.innerHTML = `
-                <span class="text-[9px] text-slate-400">If cycle spend &ge; RM</span>
+                <span class="text-[9px] text-slate-400 font-sans">If cycle spend &ge; RM</span>
                 <input type="number" value="1000" class="rule-tier-min-spend w-16 bg-gray-950 border border-gray-800 rounded px-1.5 py-0.5 text-[10px] text-slate-100 font-mono">
-                <span class="text-[9px] text-slate-400">rate is</span>
+                <span class="text-[9px] text-slate-400 font-sans">rate is</span>
                 <input type="number" step="0.1" value="5.0" class="rule-tier-rate w-12 bg-gray-950 border border-gray-800 rounded px-1.5 py-0.5 text-[10px] text-slate-100 text-right font-mono">%
                 <button type="button" onclick="this.parentElement.remove()" class="text-rose-500 hover:text-rose-400 text-[10px] ml-auto"><i class="fa-solid fa-trash"></i></button>
             `;
@@ -2992,6 +2879,16 @@
                     key = t.date.substring(0, 4) || "Unknown Year";
                 } else if (metric === "status") {
                     key = t.statusMessage || "Unprocessed";
+                } else if (metric === "amount") {
+                    const val = t.amount;
+                    if (val < 50) key = "< RM50";
+                    else if (val <= 100) key = "RM50 - RM100";
+                    else if (val <= 500) key = "RM100 - RM500";
+                    else key = "> RM500";
+                } else if (metric === "dayOfWeek") {
+                    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                    const dayIndex = new Date(t.date).getDay();
+                    key = days[dayIndex] || "Unknown Day";
                 } else if (metric === "description") {
                     key = t.description || "General Expense";
                 }
