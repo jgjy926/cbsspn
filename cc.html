@@ -213,50 +213,101 @@
                 </div>
             </div>
 
-            <!-- Smart Cashback Optimizer (Mobile-First Card Selector) -->
-            <div class="glass-card rounded-2xl p-5 border border-indigo-500/20 bg-gradient-to-r from-slate-950/80 via-[#0d1222]/80 to-slate-950/80 space-y-4">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-2">
-                        <div class="h-8 w-8 bg-indigo-500/10 text-indigo-400 rounded-lg flex items-center justify-center">
-                            <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
+            <!-- 🌟 Smart Cashback Optimizer & Wallet Mapping Matrix (Collapsible Panel - Default Hidden) -->
+            <div class="glass-card rounded-2xl p-6 border border-indigo-500/15 bg-gradient-to-br from-slate-950 via-[#0b0e1a] to-slate-950 space-y-4">
+                <div class="flex items-center justify-between cursor-pointer select-none" onclick="toggleOptimizerPanel()">
+                    <div class="flex items-center gap-3">
+                        <div class="h-9 w-9 bg-indigo-500/10 text-indigo-400 rounded-xl flex items-center justify-center">
+                            <i class="fa-solid fa-wand-magic-sparkles text-lg animate-pulse"></i>
                         </div>
                         <div>
-                            <h4 class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Smart Cash Back Optimizer</h4>
-                            <p class="text-[10px] text-slate-400">Instantly find the best card to use for your next purchase</p>
+                            <h3 class="text-xs font-bold text-indigo-400 uppercase tracking-widest">Smart Cash Back Optimizer & Wallet Matrix</h3>
+                            <p class="text-[10px] text-slate-400">Instantly find the best card to use for your purchases & view your wallet coverage heatmap.</p>
                         </div>
                     </div>
-                    <span class="text-[9px] bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 px-2 py-0.5 rounded font-mono font-bold uppercase">Real-Time Suggestion</span>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <!-- Amount Input -->
-                    <div>
-                        <label class="block text-[9px] font-semibold uppercase tracking-wider text-slate-400 mb-1">How much are you spending?</label>
-                        <div class="relative">
-                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-semibold">RM</span>
-                            <input type="number" id="optAmount" value="100" step="0.01" min="0.01" oninput="runCashbackOptimization()" class="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-4 py-2 text-slate-100 text-xs focus:outline-none focus:border-indigo-500">
-                        </div>
-                    </div>
-                    <!-- Category Selector -->
-                    <div>
-                        <label class="block text-[9px] font-semibold uppercase tracking-wider text-slate-400 mb-1">What category is this?</label>
-                        <select id="optCategory" onchange="runCashbackOptimization()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 cursor-pointer">
-                        </select>
-                    </div>
-                    <!-- Optional Merchant Matcher -->
-                    <div>
-                        <label class="block text-[9px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Merchant Name (Optional)</label>
-                        <div class="relative">
-                            <input type="text" id="optMerchant" placeholder="e.g. Aeon Big, Starbucks" oninput="runCashbackOptimization()" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-100 text-xs focus:outline-none focus:border-indigo-500">
-                        </div>
+                    <div class="flex items-center gap-2.5">
+                        <span class="text-[9px] bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 px-2 py-0.5 rounded font-mono font-bold uppercase hidden sm:inline-block">Real-Time Suggestion Tool</span>
+                        <button class="h-8 w-8 bg-slate-900 border border-slate-850 hover:border-indigo-500 text-indigo-400 rounded-lg flex items-center justify-center transition duration-150">
+                            <i id="optimizerToggleIcon" class="fa-solid fa-chevron-down text-xs transition-transform duration-250"></i>
+                        </button>
                     </div>
                 </div>
 
-                <!-- Recommendations Container -->
-                <div class="space-y-2 pt-1">
-                    <span class="text-[9px] uppercase tracking-widest text-slate-500 font-bold block">Ranked Card Options (Eligible cards shown first)</span>
-                    <div id="optimizerRecommendations" class="space-y-2">
-                        <!-- Dynamically populated world-class mobile optimized recommendation cards -->
+                <!-- Dynamic Optimizer and Matrix Container (Collapsible Dual Grid) -->
+                <div id="optimizerAndMatrixGrid" class="grid grid-cols-1 xl:grid-cols-12 gap-6 hidden">
+                    <!-- Smart Cashback Optimizer Input/Results (7 Columns) -->
+                    <div class="xl:col-span-7 bg-slate-950/40 p-5 rounded-xl border border-slate-900/60 space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-850/60 pb-3">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-calculator text-indigo-400 text-xs"></i>
+                                <span class="text-[10px] font-bold text-slate-300 uppercase tracking-wider">Simulation Inputs</span>
+                            </div>
+                            <span class="text-[8px] bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 px-1.5 py-0.5 rounded font-bold">Autofill Supported</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- Amount Input -->
+                            <div>
+                                <label class="block text-[9px] font-semibold uppercase tracking-wider text-slate-400 mb-1">How much are you spending?</label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-semibold">RM</span>
+                                    <input type="number" id="optAmount" value="100" step="0.01" min="0.01" oninput="runCashbackOptimization()" class="w-full bg-slate-950 border border-slate-850 rounded-xl pl-9 pr-4 py-2 text-slate-100 text-xs focus:outline-none focus:border-indigo-500">
+                                </div>
+                            </div>
+                            <!-- Category Selector -->
+                            <div>
+                                <label class="block text-[9px] font-semibold uppercase tracking-wider text-slate-400 mb-1">What category is this?</label>
+                                <select id="optCategory" onchange="runCashbackOptimization()" class="w-full bg-slate-950 border border-slate-850 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 cursor-pointer">
+                                </select>
+                            </div>
+                            <!-- Optional Merchant Matcher -->
+                            <div>
+                                <label class="block text-[9px] font-semibold uppercase tracking-wider text-slate-400 mb-1">Merchant Name (Optional)</label>
+                                <div class="relative">
+                                    <input type="text" id="optMerchant" placeholder="e.g. Aeon Big, Starbucks" oninput="runCashbackOptimization()" class="w-full bg-slate-950 border border-slate-850 rounded-xl px-3 py-2 text-slate-100 text-xs focus:outline-none focus:border-indigo-500">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recommendations Container -->
+                        <div class="space-y-2 pt-1">
+                            <span class="text-[9px] uppercase tracking-widest text-slate-500 font-bold block">Ranked Card Options (Eligible cards shown first)</span>
+                            <div id="optimizerRecommendations" class="space-y-2">
+                                <!-- Dynamically populated world-class mobile optimized recommendation cards -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 🌟 Ultimate Wallet Coverage Matrix & Cheat-Sheet (5 Columns) -->
+                    <div class="xl:col-span-5 bg-slate-950/40 p-5 rounded-xl border border-slate-900/60 flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-center justify-between mb-3 border-b border-slate-850/60 pb-2.5">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-map text-indigo-400 text-xs"></i>
+                                    <span class="text-[10px] font-bold text-slate-300 uppercase tracking-wider">Wallet Mapping Matrix</span>
+                                </div>
+                                <span class="text-[8px] bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 px-1.5 py-0.5 rounded font-mono font-bold uppercase">Dynamic Map</span>
+                            </div>
+                            
+                            <!-- Coverage Grid Table -->
+                            <div class="overflow-x-auto max-h-[350px] overflow-y-auto pr-1">
+                                <table class="w-full text-left text-[10px] text-slate-300 border-collapse">
+                                    <thead class="bg-slate-950 uppercase text-[9px] tracking-widest text-slate-500 font-bold sticky top-0 z-10">
+                                        <tr id="cheatSheetHeaders">
+                                            <!-- Populated dynamically -->
+                                        </tr>
+                                    </thead>
+                                    <tbody id="cheatSheetBody" class="divide-y divide-slate-900 font-mono">
+                                        <!-- Populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="bg-indigo-950/20 border border-indigo-500/10 rounded-xl p-3 text-[10px] leading-relaxed text-slate-400">
+                            <i class="fa-solid fa-lightbulb text-indigo-400 mr-1.5"></i>
+                            <strong>Pro-Tip:</strong> Use standard mapping configuration in the <em>Maintenance Hub</em> to group customized, complex bank rules under unified categories.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -685,7 +736,7 @@
                                 <input type="number" step="1" id="editCardCashbackCap" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-indigo-500" placeholder="100">
                             </div>
 
-                            <!-- Dynamic Cashback Rules Area -->
+                            <!-- Cashback Rules Builder Area -->
                             <div class="space-y-2 border-t border-slate-800 pt-3">
                                 <div class="flex justify-between items-center">
                                     <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Cashback Rules</span>
@@ -887,7 +938,7 @@
                     rules: [
                         { category: "Weekend Dining", standardCategory: "Dining", rate: 0.05, minTxSpend: 0, categoryCap: 50, tiered: false, weekendOnly: true, merchants: "McDonald's, Starbucks, Pizza Hut, KFC, Nando's", daysOnly: "", tiers: [] },
                         { category: "Utilities", standardCategory: "Utilities", rate: 0.01, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "TNB, Syabas, Telekom Malaysia, Celcom, Maxis", daysOnly: "", tiers: [] },
-                        { category: "Other", standardCategory: "Other Spending", rate: 0.002, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", daysOnly: "", tiers: [] }
+                        { category: "Other spending", standardCategory: "Other Spending", rate: 0.002, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", daysOnly: "", tiers: [] }
                     ]
                 },
                 { 
@@ -902,7 +953,7 @@
                     cycleCashbackCap: 30,
                     rules: [
                         { category: "Online/Contactless", standardCategory: "Online/Contactless", rate: 0.02, minTxSpend: 30, categoryCap: 30, tiered: false, weekendOnly: false, merchants: "Shopee, Lazada, Grab, Foodpanda, Touch 'n Go, Taobao", daysOnly: "", tiers: [] },
-                        { category: "Other", standardCategory: "Other Spending", rate: 0.003, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", daysOnly: "", tiers: [] }
+                        { category: "Other spending", standardCategory: "Other Spending", rate: 0.003, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", daysOnly: "", tiers: [] }
                     ]
                 },
                 { 
@@ -931,7 +982,7 @@
                                 { minSpend: 1000, rate: 0.04 }
                             ] 
                         },
-                        { category: "Other", standardCategory: "Other Spending", rate: 0.002, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", daysOnly: "", tiers: [] }
+                        { category: "Other spending", standardCategory: "Other Spending", rate: 0.002, minTxSpend: 0, categoryCap: 0, tiered: false, weekendOnly: false, merchants: "", daysOnly: "", tiers: [] }
                     ]
                 },
                 { 
@@ -975,6 +1026,7 @@
         let trendChartObj = null, cardPieChartObj = null, catPieChartObj = null;
         let sspnTrendChartObj = null, sspnChannelPieChartObj = null;
         let balanceGaugeCollapsed = true; // Default state
+        let optimizerPanelCollapsed = true; // Default state
 
         window.onload = function() {
             loadFromLocalStorage();
@@ -1033,6 +1085,20 @@
                 grid.classList.add("hidden");
                 icon.className = "fa-solid fa-chevron-down text-xs";
                 balanceGaugeCollapsed = true;
+            }
+        }
+
+        function toggleOptimizerPanel() {
+            const grid = document.getElementById("optimizerAndMatrixGrid");
+            const icon = document.getElementById("optimizerToggleIcon");
+            if (grid.classList.contains("hidden")) {
+                grid.classList.remove("hidden");
+                icon.className = "fa-solid fa-chevron-up text-xs";
+                optimizerPanelCollapsed = false;
+            } else {
+                grid.classList.add("hidden");
+                icon.className = "fa-solid fa-chevron-down text-xs";
+                optimizerPanelCollapsed = true;
             }
         }
 
@@ -1586,8 +1652,15 @@
                 let rejectReason = "";
                 let potentialRate = bestMatchedRule.rate || 0;
 
+                // Diagnostics checklist
+                let hasMinSpendMatch = true;
+                let hasCategoryCapMatch = true;
+                let hasOverallCapMatch = true;
+                let hasDayConstraintMatch = true;
+
                 if (spendAmount < (bestMatchedRule.minTxSpend || 0)) {
                     eligible = false;
+                    hasMinSpendMatch = false;
                     rejectReason = `Tx < Min RM ${bestMatchedRule.minTxSpend}`;
                 }
 
@@ -1598,12 +1671,14 @@
                         potentialRate = matchedTier ? matchedTier.rate : (bestMatchedRule.rate || 0);
                     } else {
                         eligible = false;
+                        hasMinSpendMatch = false;
                         rejectReason = `Cycle < RM ${c.cycleMinSpend}`;
                     }
                 }
 
                 if (eligible && bestMatchedRule.weekendOnly && !isWeekend) {
                     eligible = false;
+                    hasDayConstraintMatch = false;
                     rejectReason = "Weekends only";
                 }
 
@@ -1611,6 +1686,7 @@
                     const allowedDays = bestMatchedRule.daysOnly.split(',').map(d => parseInt(d.trim())).filter(d => !isNaN(d));
                     if (allowedDays.length > 0 && !allowedDays.includes(currentDayOfMonth)) {
                         eligible = false;
+                        hasDayConstraintMatch = false;
                         rejectReason = `Requires Day ${bestMatchedRule.daysOnly}`;
                     }
                 }
@@ -1635,6 +1711,9 @@
 
                     cashbackEarned = Math.min(rawPotentialCB, allowedByCat, allowedByCard);
 
+                    if (allowedByCat <= 0) hasCategoryCapMatch = false;
+                    if (allowedByCard <= 0) hasOverallCapMatch = false;
+
                     if (cashbackEarned <= 0 && rawPotentialCB > 0) {
                         eligible = false;
                         rejectReason = allowedByCat <= 0 ? "Category Cap reached" : "Overall Cap reached";
@@ -1650,7 +1729,13 @@
                     cashbackEarned: cashbackEarned,
                     eligible: eligible,
                     rejectReason: rejectReason,
-                    ruleSource: ruleSource
+                    ruleSource: ruleSource,
+                    diagnostics: {
+                        minSpend: hasMinSpendMatch,
+                        catCap: hasCategoryCapMatch,
+                        overallCap: hasOverallCapMatch,
+                        dayRule: hasDayConstraintMatch
+                    }
                 });
             });
 
@@ -1687,48 +1772,177 @@
                 const remainingCat = maxCat > 0 ? Math.max(0, maxCat - currentCatCB) : Infinity;
                 const catQuotaText = maxCat > 0 ? `Category: RM ${remainingCat.toFixed(2)} left` : '';
 
+                // Diagnostic Checkmarks UI
+                const getDiagIcon = (status) => status 
+                    ? '<i class="fa-solid fa-circle-check text-emerald-400"></i>' 
+                    : '<i class="fa-solid fa-circle-xmark text-rose-400"></i>';
+
                 html += `
-                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between p-3.5 rounded-xl border bg-[#0d1222]/60 hover:bg-[#0d1222]/90 transition duration-150 gap-3 ${idx === 0 && res.eligible && res.cashbackEarned > 0 ? 'border-indigo-500/50 shadow-md shadow-indigo-500/5' : 'border-slate-800/40'}">
-                        <div class="flex items-center gap-3 flex-1 min-w-0">
-                            <div class="w-1.5 h-10 rounded-full ${styles.bg}"></div>
-                            
-                            <div class="space-y-0.5 flex-1 min-w-0">
-                                <div class="flex flex-wrap items-center gap-1.5">
-                                    ${netIcon}
-                                    <span class="text-xs font-bold text-slate-200 truncate">${bankPrefix}${res.card.name}</span>
-                                    <span class="text-[9px] font-mono text-slate-500">${last4Text}</span>
-                                    ${recBadge}
+                    <div class="flex flex-col p-3.5 rounded-xl border bg-[#0d1222]/40 hover:bg-[#0d1222]/70 transition duration-150 gap-3 ${idx === 0 && res.eligible && res.cashbackEarned > 0 ? 'border-indigo-500/50 shadow-md shadow-indigo-500/5' : 'border-slate-800/40'}">
+                        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                            <div class="flex items-center gap-3 flex-1 min-w-0">
+                                <div class="w-1.5 h-10 rounded-full ${styles.bg}"></div>
+                                
+                                <div class="space-y-0.5 flex-1 min-w-0">
+                                    <div class="flex flex-wrap items-center gap-1.5">
+                                        ${netIcon}
+                                        <span class="text-xs font-bold text-slate-200 truncate">${bankPrefix}${res.card.name}</span>
+                                        <span class="text-[9px] font-mono text-slate-500">${last4Text}</span>
+                                        ${recBadge}
+                                    </div>
+                                    <div class="text-[10px] text-slate-400 flex flex-wrap items-center gap-1.5">
+                                        <span class="font-semibold text-indigo-400">Match rule: "${res.rule.category}"</span>
+                                        <span class="text-slate-500">•</span>
+                                        <span class="font-medium text-slate-300">Rate: ${rateText}</span>
+                                        ${res.ruleSource === 'merchant' ? '<span class="text-[8px] bg-indigo-500/10 text-indigo-300 px-1 rounded">Merchant Promo</span>' : ''}
+                                    </div>
+                                    <div class="text-[9px] text-slate-500 flex flex-wrap items-center gap-1.5">
+                                        <span>${overallQuotaText}</span>
+                                        ${catQuotaText ? `<span>•</span> <span>${catQuotaText}</span>` : ''}
+                                    </div>
                                 </div>
-                                <div class="text-[10px] text-slate-400 flex flex-wrap items-center gap-1.5">
-                                    <span class="font-semibold text-indigo-400">Match rule: "${res.rule.category}"</span>
-                                    <span class="text-slate-500">•</span>
-                                    <span class="font-medium text-slate-300">Rate: ${rateText}</span>
-                                    ${res.ruleSource === 'merchant' ? '<span class="text-[8px] bg-indigo-500/10 text-indigo-300 px-1 rounded">Merchant Promo</span>' : ''}
-                                </div>
-                                <div class="text-[9px] text-slate-500 flex flex-wrap items-center gap-1.5">
-                                    <span>${overallQuotaText}</span>
-                                    ${catQuotaText ? `<span>•</span> <span>${catQuotaText}</span>` : ''}
-                                </div>
+                            </div>
+
+                            <div class="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center border-t sm:border-t-0 border-slate-900 pt-2 sm:pt-0 gap-1.5 min-w-[100px]">
+                                ${res.eligible 
+                                    ? `
+                                        <span class="text-xs text-slate-500 sm:block hidden font-medium">Est. Yield</span>
+                                        <span class="text-sm font-black text-emerald-400">${yieldVal}</span>
+                                      ` 
+                                    : `
+                                        <span class="text-xs text-slate-500 sm:block hidden font-medium">Ineligible</span>
+                                        <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 border border-rose-500/20 max-w-full truncate" title="${res.rejectReason}">${res.rejectReason}</span>
+                                      `
+                                }
                             </div>
                         </div>
 
-                        <div class="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center border-t sm:border-t-0 border-slate-900 pt-2 sm:pt-0 gap-1.5 min-w-[100px]">
-                            ${res.eligible 
-                                ? `
-                                    <span class="text-xs text-slate-500 sm:block hidden font-medium">Est. Yield</span>
-                                    <span class="text-sm font-black text-emerald-400">${yieldVal}</span>
-                                  ` 
-                                : `
-                                    <span class="text-xs text-slate-500 sm:block hidden font-medium">Ineligible</span>
-                                    <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 border border-rose-500/20 max-w-full truncate" title="${res.rejectReason}">${res.rejectReason}</span>
-                                  `
-                            }
+                        <!-- Diagnostic Insights Expansion -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-slate-900/60 text-[9px] text-slate-400 font-mono">
+                            <div class="flex items-center gap-1.5">
+                                ${getDiagIcon(res.diagnostics.minSpend)}
+                                <span>Spend Thresholds</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                ${getDiagIcon(res.diagnostics.catCap)}
+                                <span>Category Cap Quota</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                ${getDiagIcon(res.diagnostics.overallCap)}
+                                <span>Overall Card Cap</span>
+                            </div>
+                            <div class="flex items-center gap-1.5">
+                                ${getDiagIcon(res.diagnostics.dayRule)}
+                                <span>Constraint Valid</span>
+                            </div>
                         </div>
                     </div>
                 `;
             });
 
             container.innerHTML = html;
+        }
+
+        /* 🌟 Premium Wallet Coverage Matrix Cheat Sheet Populator */
+        function renderCashbackCheatSheet() {
+            const headerRow = document.getElementById("cheatSheetHeaders");
+            const body = document.getElementById("cheatSheetBody");
+            if (!headerRow || !body) return;
+
+            const categories = database.settings.optimizerCategories || ["Other Spending"];
+            const cards = database.cards || [];
+
+            // 1. Build Header row
+            let headerHtml = `<th class="py-2.5 px-3">Category</th>`;
+            cards.forEach(c => {
+                const networkIcon = c.network ? getNetworkIcon(c.network) : '';
+                headerHtml += `
+                    <th class="py-2.5 px-2 text-center font-bold text-[9px]" title="${c.name}">
+                        <div class="flex flex-col items-center">
+                            <span>${networkIcon}</span>
+                            <span class="text-slate-300 truncate max-w-[65px]">${c.id}</span>
+                        </div>
+                    </th>
+                `;
+            });
+            headerRow.innerHTML = headerHtml;
+
+            // 2. Calculate category best rates first to highlight premium dominance
+            const bestRatesMap = {};
+            categories.forEach(cat => {
+                let maxRateVal = -1;
+                cards.forEach(c => {
+                    const r = c.rules ? c.rules.find(rule => rule.standardCategory === cat) : null;
+                    if (r) {
+                        const rate = r.rate || 0;
+                        if (rate > maxRateVal) maxRateVal = rate;
+                    }
+                });
+                bestRatesMap[cat] = maxRateVal;
+            });
+
+            // 3. Build Grid Rows
+            let bodyHtml = "";
+            categories.forEach(cat => {
+                bodyHtml += `<tr class="hover:bg-indigo-950/20 transition duration-100 border-b border-slate-900/40">`;
+                bodyHtml += `<td class="py-2.5 px-3 text-slate-300 font-bold select-none text-[10px]">${cat}</td>`;
+
+                cards.forEach(c => {
+                    const rule = c.rules ? c.rules.find(r => r.standardCategory === cat) : null;
+                    let displayValue = "-";
+                    let isDominant = false;
+
+                    if (rule) {
+                        displayValue = `${(rule.rate * 100).toFixed(1)}%`;
+                        if (rule.tiered) displayValue = "Tiered";
+                        if (rule.rate > 0 && rule.rate === bestRatesMap[cat]) {
+                            isDominant = true;
+                        }
+                    }
+
+                    // Onclick logic to auto populate optimizer
+                    const clickAction = `onclick="autofillOptimizer('${cat}')"`;
+                    const cursorStyle = "cursor-pointer";
+
+                    if (isDominant) {
+                        bodyHtml += `
+                            <td ${clickAction} class="py-2.5 px-2 text-center ${cursorStyle} font-black text-emerald-400 bg-emerald-950/20 border-x border-emerald-500/20 relative group" title="Click to optimize this category!">
+                                <span class="relative z-10">${displayValue}</span>
+                                <div class="absolute inset-0 border border-emerald-500/40 rounded opacity-0 group-hover:opacity-100 transition duration-150"></div>
+                            </td>
+                        `;
+                    } else {
+                        bodyHtml += `
+                            <td ${clickAction} class="py-2.5 px-2 text-center ${cursorStyle} text-slate-400 group relative" title="Click to simulate this category!">
+                                <span class="relative z-10">${displayValue}</span>
+                                <div class="absolute inset-0 border border-indigo-500/10 rounded opacity-0 group-hover:opacity-100 transition duration-150"></div>
+                            </td>
+                        `;
+                    }
+                });
+                bodyHtml += `</tr>`;
+            });
+
+            body.innerHTML = bodyHtml;
+        }
+
+        /* Autofills Optimizer from Cheat-Sheet Cell clicks */
+        function autofillOptimizer(categoryName) {
+            // First open optimizer if it's collapsed
+            const grid = document.getElementById("optimizerAndMatrixGrid");
+            const icon = document.getElementById("optimizerToggleIcon");
+            if (grid.classList.contains("hidden")) {
+                grid.classList.remove("hidden");
+                icon.className = "fa-solid fa-chevron-up text-xs";
+                optimizerPanelCollapsed = false;
+            }
+
+            const catInput = document.getElementById("optCategory");
+            if (catInput) {
+                catInput.value = categoryName;
+                runCashbackOptimization();
+                showToast(`Optimizer matched to standard category: "${categoryName}"`);
+            }
         }
 
         /* Balance Awareness & Sweet Spot Logic Generator */
@@ -1924,10 +2138,22 @@
             renderCardsVault();
             renderActiveBillingProgress(simulatedTxs);
             renderSweetSpotIndicators(simulatedTxs); // Render balance sweet spot alert cards
+            renderCashbackCheatSheet(); // Render Wallet Mapping Grid
 
             // Trigger Real-Time Smart Optimizer suggestions inside CC Dashboard
             populateOptimizerDropdowns();
             runCashbackOptimization();
+
+            // Handle display logic for Collapsible Optimizer and Matrix Container
+            const optGrid = document.getElementById("optimizerAndMatrixGrid");
+            const optIcon = document.getElementById("optimizerToggleIcon");
+            if (optimizerPanelCollapsed) {
+                optGrid.classList.add("hidden");
+                optIcon.className = "fa-solid fa-chevron-down text-xs";
+            } else {
+                optGrid.classList.remove("hidden");
+                optIcon.className = "fa-solid fa-chevron-up text-xs";
+            }
 
             let filteredSspn = database.sspnRecords.filter(r => {
                 const txYear = r.date.substring(0, 4);
